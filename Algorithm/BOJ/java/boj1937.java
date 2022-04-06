@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class boj1937{
+public class boj1937{ //욕심쟁이 판다
     static Scanner sc = new Scanner(System.in);
     static int[][] map;
     static int[][] dp;
@@ -10,6 +10,8 @@ public class boj1937{
         if(a>b)return a;
         else return b;
     }
+    /*일정 칸에서 최대 몇칸까지 더 이동할 수 있는지 정보를 dp배열에 저장하고,
+    dfs에서 그 칸을 재호출하면 중복탐색하지 않고 dp를 불러와서 그 값을 사용*/
     static int dfs(int x,int y, int n){
         if(dp[x][y]!=-1) return dp[x][y];
         int ret = 1;
