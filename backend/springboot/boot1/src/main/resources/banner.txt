@@ -1,0 +1,11 @@
+=======================================================================
+${AnsiColor.RED}  ____       ____       ____                     _   _        ____
+${AnsiColor.BRIGHT_YELLOW} / __"| u  U|  _"\ u U |  _"\ u       ___       | \ |"|    U /"___|u
+${AnsiColor.BRIGHT_GREEN}<\___ \/   \| |_) |/  \| |_) |/      |_"_|     <|  \| |>   \| |  _ /
+${AnsiColor.GREEN} u___) |    |  __/     |  _ <         | |      U| |\  |u    | |_| |
+${AnsiColor.CYAN} |____/>>   |_|        |_| \_\      U/| |\u     |_| \_|      \____|
+${AnsiColor.BLUE} )(  (__)  ||>>_      //   \\_  .-,_|___|_,-.  ||   \\,-.   _)(|_
+${AnsiColor.MAGENTA} (__)      (__)__)    (__)  (__)  \_)-' '-(_/   (_")  (_/   (__)__)
+${AnsiColor.BRIGHT_WHITE}${application.title} ${application.version}
+Powered by Spring Boot ${spring-boot.version}
+======================================================================
