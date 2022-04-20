@@ -4,24 +4,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter{
+public class RecyclerAdapter extends RecyclerView.Adapter {
+
     private static ArrayList<String> list = new ArrayList<>();
+
     static class ViewHolder extends RecyclerView.ViewHolder {
-        static TextView tv;
+        private static TextView tv;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv = (TextView) itemView.findViewById(R.id.tv);
         }
-        static void onBind(String s){
+
+        static void onBind(String s) {
             tv.setText(s);
         }
     }
 
-    RecyclerAdapter(ArrayList<String> input){
+    RecyclerAdapter(ArrayList<String> input) {
         list = input;
     }
 
