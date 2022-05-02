@@ -8,7 +8,6 @@ import java.util.*;
 
 @Repository
 public class MemoryMemberRepository extends MemberRepository {
-
     private static Map<Long, Member> store = new HashMap<>();
     private static long sequence = 0L;
     @Override

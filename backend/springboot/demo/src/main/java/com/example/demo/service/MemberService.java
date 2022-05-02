@@ -7,12 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-@Service
 public class MemberService {
     private final MemberRepository memberRepository;
-
-    @Autowired
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
         /*서비스에서 repository를 new로 인스턴스해놓고 test에서 또 new로 새로 만들어주면

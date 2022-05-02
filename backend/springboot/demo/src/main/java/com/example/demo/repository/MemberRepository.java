@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public abstract class MemberRepository {
     public abstract Member save(Member member);
     public abstract Optional<Member> findById(Long id);
