@@ -1,13 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.domain.Member;
-import org.junit.jupiter.api.AfterEach;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-
 @Repository
-public class MemoryMemberRepository extends MemberRepository {
+public class MemoryMemberRepository implements MemberRepository {
     private static Map<Long, Member> store = new HashMap<>();
     private static long sequence = 0L;
     @Override

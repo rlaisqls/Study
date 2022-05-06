@@ -7,10 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.sql.SQLException;
 import java.util.List;
-@Controller
+
 /*@Component가 Controller 안에 붙어있음
 저 어노테이션 덕분에 스프링 빈으로 등록되서 spring contain에 인식됨*/
+@Controller
 public class MemberController {
     private final MemberService memberService;
     @Autowired
@@ -20,14 +23,13 @@ public class MemberController {
         * 이건 생성자 주입*/
         this.memberService = memberService;
     }
-
     @GetMapping("/members/new")
     public String createForm() {
         return "members/createMemberform";
     }
 
     @PostMapping("/members/new")
-    public String create(MemberForm memberForm){
+    public String create(MemberForm memberForm) throws SQLException {
         Member member = new Member();
         member.setName(memberForm.getName());
         memberService.join(member);

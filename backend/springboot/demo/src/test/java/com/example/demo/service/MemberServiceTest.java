@@ -1,42 +1,44 @@
 package com.example.demo.service;
-
+import com.example.demo.SpringConfig;
 import com.example.demo.domain.Member;
 import com.example.demo.repository.MemberRepository;
-import com.example.demo.repository.MemoryMemberRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
+import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
+@SpringBootTest
+@ContextConfiguration(classes = { SpringConfig.class}, loader = AnnotationConfigContextLoader.class)
+@PersistenceContext
+@Transactional
+@TestExecutionListeners({})
 class MemberServiceTest {
-
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;
-
-    @BeforeEach
-    public void beforeEach() {
-        //Dependency Injection
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
-
-    @AfterEach
-    public void afterEach(){
-        memberRepository.clearStore();
-    }
+    @Autowired MemberService memberService;
+    @Autowired MemberRepository memberRepository;
     @Test
-    void 회원가입() {
+    void signup() throws SQLException {
         //given
         Member member = new Member();
-        member.setName("hello");
+        member.setName("helpme");
+        member.setId(123L);
+        System.out.println(member.getName()+" "+member.getId()+"^~^");
         //when
-        Long saveId = memberService.join(member);
+        Long saveId = 123L;
+
+        memberRepository.save(member);
+        //memberService.join(member);
         //then
-        Member findMember = memberService.findOne(saveId).get();
-        assertThat(findMember.getName()).isEqualTo(member.getName()); //alt enter -> static import
+        Member findMember = memberService.findOne(123L).get();
+        assertThat(findMember.getName()).isEqualTo(findMember.getName()); //alt enter -> static import
     }
 
     /*
