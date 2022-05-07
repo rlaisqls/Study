@@ -3,16 +3,17 @@ package com.example.demo.service;
 import com.example.demo.domain.Member;
 import com.example.demo.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-@Transactional
+
 @Service
 public class MemberService {
-    private MemberRepository memberRepository;
+    @Autowired MemberRepository memberRepository;
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
         /*서비스에서 repository를 new로 인스턴스해놓고 test에서 또 new로 새로 만들어주면

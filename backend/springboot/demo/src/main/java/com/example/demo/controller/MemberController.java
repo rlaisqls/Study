@@ -16,6 +16,7 @@ import java.util.List;
 @Controller
 public class MemberController {
     private final MemberService memberService;
+
     @Autowired
     public MemberController(MemberService memberService) {
         /*DI 디펜던시 인젝션

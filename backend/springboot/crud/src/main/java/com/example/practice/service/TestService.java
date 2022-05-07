@@ -13,10 +13,8 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class TestService {
-
     @Autowired
     DocumentRepository documentRepository;
-
     public void createDocument(CreateDocumentDto documentDto){
         Document document = new Document(documentDto);
         documentRepository.save(document);
