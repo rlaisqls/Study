@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'jpabook'
+group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -19,10 +19,11 @@ repositories {
 }
 
 dependencies {
+    implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
+    implementation 'org.hibernate:hibernate-spatial'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframeword.boot:spring-boot-devtools'
+    implementation 'com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.5.6'
     implementation 'junit:junit:4.13.1'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
