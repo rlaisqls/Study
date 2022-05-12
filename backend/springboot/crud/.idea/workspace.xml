@@ -30,7 +30,7 @@
       <map>
         <entry key="com.haulmont.jpb.jpaInspector" value="true" />
         <entry key="com.haulmont.jpb.jpaPalette" value="true" />
-        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
       </map>
     </option>
   </component>
@@ -78,6 +78,7 @@
       <workItem from="1651902136651" duration="1185000" />
       <workItem from="1651903369489" duration="367000" />
       <workItem from="1651920366201" duration="240000" />
+      <workItem from="1652168852899" duration="1018000" />
     </task>
     <servers />
   </component>

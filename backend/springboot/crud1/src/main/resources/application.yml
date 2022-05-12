@@ -12,7 +12,6 @@ spring:
     url: jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul
     username: root
     password: Mydptmzbdpf!1
-
   jpa:
     hibernate:
       ddl-auto: create
@@ -22,3 +21,11 @@ spring:
     show-sql: true
     properties:
       hibernate.format_sql: true
+  mvc:
+    view:
+      prefix: /webapp/
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    activate:
+      on-profile: dev
