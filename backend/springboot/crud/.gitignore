@@ -4,6 +4,7 @@
 *.iws
 *.jar
 *.sw?
+*.yml
 *~
 .#*
 .*.md.html
