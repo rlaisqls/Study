@@ -1,12 +1,12 @@
 package com.study.jwtlogin.repository;
 
-import com.study.jwtlogin.entity.User;
+import com.study.jwtlogin.entity.Account;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface AccountRepository extends JpaRepository<Account, Long> {
     @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByUsername(String username);
+    Optional<Account> findOneWithAuthoritiesByUsername(String username);
 }

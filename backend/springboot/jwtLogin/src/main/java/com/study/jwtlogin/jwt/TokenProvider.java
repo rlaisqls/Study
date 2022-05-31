@@ -24,14 +24,10 @@ import java.util.stream.Collectors;
 public class TokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-
     private static final String AUTHORITIES_KEY = "auth";
-
     private final String secret;
     private final long tokenValidityInMilliseconds;
-
     private Key key;
-
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
@@ -39,13 +35,11 @@ public class TokenProvider implements InitializingBean {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
     }
-
     @Override
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
-
     public String createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Account {
 
     @Id
     @Column(name = "user_id")
@@ -24,9 +24,6 @@ public class User {
 
     @Column(name = "password", length = 100)
     private String password;
-
-    @Column(name = "nickname", length = 50)
-    private String nickname;
 
     @Column(name = "activated")
     private boolean activated;
