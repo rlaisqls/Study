@@ -15,24 +15,22 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountDto {
-
     @NotNull
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 20)
     private String username;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
     @Size(min = 3, max = 100)
     private String password;
-    private Set<AuthorityDto> authorityDtoSet;
+
+    private String authority;
 
     public static AccountDto from(Account account) {
-        if(account == null) return null;
-
+        if (account == null) return null;
         return AccountDto.builder()
                 .username(account.getUsername())
-                .authorityDtoSet(account.getAuthorities().stream()
-                        .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
-                        .collect(Collectors.toSet()))
+                .authority(String.valueOf(account.getAuthority()))
                 .build();
     }
 }

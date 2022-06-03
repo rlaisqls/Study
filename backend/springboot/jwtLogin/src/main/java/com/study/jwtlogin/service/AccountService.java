@@ -17,35 +17,33 @@ import java.util.Collections;
 public class AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+
     @Transactional
-    public AccountDto signup(AccountDto accountDto) {
-        if (accountRepository.findOneWithAuthoritiesByUsername(accountDto.getUsername()).orElse(null) != null) {
+    public AccountDto register(AccountDto accountDto) {
+
+        if(accountRepository.findByUsername(accountDto.getUsername()).orElse(null) != null) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
-
-        Authority authority = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
 
         Account account = Account.builder()
                 .username(accountDto.getUsername())
                 .password(passwordEncoder.encode(accountDto.getPassword()))
-                .authorities(Collections.singleton(authority))
+                .authority(Authority.valueOf("ROLE_USER"))
                 .activated(true)
                 .build();
 
         return AccountDto.from(accountRepository.save(account));
+
     }
 
     @Transactional(readOnly = true)
-    public AccountDto getUserWithAuthorities(String username) {
-        Account account = Account.builder()
-                .username("no").build();
-        return AccountDto.from(accountRepository.findOneWithAuthoritiesByUsername(username).orElse(account));
+    public AccountDto getUserInfo(String username) {
+        Account account = Account.builder().username(username).build();
+        return AccountDto.from(accountRepository.findByUsername(username).orElse(account));
     }
 
     @Transactional(readOnly = true)
-    public AccountDto getMyUserWithAuthorities() {
-        return AccountDto.from(SecurityUtil.getCurrentUsername().flatMap(accountRepository::findOneWithAuthoritiesByUsername).orElse(null));
+    public AccountDto getMyInfo() {
+        return AccountDto.from(SecurityUtil.getCurrentUsername().flatMap(accountRepository::findByUsername).orElse(null));
     }
 }

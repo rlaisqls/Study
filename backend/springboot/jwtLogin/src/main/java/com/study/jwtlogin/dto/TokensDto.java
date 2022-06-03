@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorityDto {
-    private String authorityName;
+public class TokensDto {
+    private String accessToken;
+    private String refreshToken;
 }

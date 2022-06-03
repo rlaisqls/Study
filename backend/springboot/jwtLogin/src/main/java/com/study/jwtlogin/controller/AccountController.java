@@ -2,29 +2,30 @@ package com.study.jwtlogin.controller;
 
 import com.study.jwtlogin.dto.AccountDto;
 import com.study.jwtlogin.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
+@RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+
     @PostMapping("/register")
-    public ResponseEntity<AccountDto> signup(@Valid @RequestBody AccountDto accountDto) {
-        return ResponseEntity.ok(accountService.signup(accountDto));
+    public AccountDto signup(@Valid @RequestBody AccountDto accountDto) {
+        return accountService.register(accountDto);
     }
+
     @GetMapping("/user")
-    public ResponseEntity<AccountDto> getMyUserInfo(HttpServletRequest request) {
-        return ResponseEntity.ok(accountService.getMyUserWithAuthorities());
+    public AccountDto getMyInfo(HttpServletRequest request) {
+        return accountService.getMyInfo();
     }
+
     @GetMapping("/user/{username}")
-    public ResponseEntity<AccountDto> getUserInfo(@PathVariable String username) {
-        return ResponseEntity.ok(accountService.getUserWithAuthorities(username));
+    public AccountDto getUserInfo(@PathVariable String username) {
+        return accountService.getUserInfo(username);
     }
 }

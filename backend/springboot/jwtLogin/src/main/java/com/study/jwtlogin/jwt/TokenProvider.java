@@ -3,56 +3,62 @@ package com.study.jwtlogin.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
+    @Value("${jwt.secret}") private String secret;
+    @Value("${jwt.exp.token}") private Long tokenValidTime;
+    @Value("${jwt.exp.refresh}")private Long refreshTokenValidTime;
+    @Value("${jwt.header}") public static final String AUTHORIZATION_HEADER = "Authorization";
+    private final CustomUserDetailsService customUserDetailsService;
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-    private static final String AUTHORITIES_KEY = "auth";
-    private final String secret;
-    private final long tokenValidityInMilliseconds;
     private Key key;
 
-    public TokenProvider(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
-        this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
-    }
     @Override
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
-    public String createToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
-
+    public String createAccessToken(String username) {
+        /* 원래 여기서 파라미터를 Authentication 클래스로 받은 다음에
+         * authorities 정보를 claim으로 같이 토큰에 넣어줬었는데
+         * 나중에 UserDetailService에서
+         * loadUserByUsername 메서드로 찾아서 쓸거라서 그냥 유저 네임만 넣어줌*/
+        Date now = new Date();
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
+                .setSubject(username)
+                .claim("type", "access") //엑세스토큰임을 명시하는 정보 추가
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + tokenValidTime))
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createRefreshToken(String username){
+        Date now = new Date();
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("type", "refresh") //리프레시 토큰임을 명시하는 정보 추가
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -63,31 +69,32 @@ public class TokenProvider implements InitializingBean {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
-        User principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(claims.getSubject()); //
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        //스프링 시큐리티에서 인증할때 쓰이는 형태의 토큰으로 변환해서 return
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            logger.info("잘못된 JWT 서명입니다.");
-        } catch (ExpiredJwtException e) {
-            logger.info("만료된 JWT 토큰입니다.");
-        } catch (UnsupportedJwtException e) {
-            logger.info("지원되지 않는 JWT 토큰입니다.");
-        } catch (IllegalArgumentException e) {
-            logger.info("JWT 토큰이 잘못되었습니다.");
+    public String getUsername(String token){
+        try{
+            return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+        }catch (Exception e){
+            throw new IllegalStateException();//토큰에 유저아이디가 없음, 인증 안된토큼임
         }
-        return false;
     }
 
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    public boolean isRefreshToken(String token) {
+        try {
+            return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("type").equals("refresh");
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

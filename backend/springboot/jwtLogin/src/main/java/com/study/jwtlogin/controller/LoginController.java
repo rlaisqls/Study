@@ -1,48 +1,26 @@
 package com.study.jwtlogin.controller;
 
 import com.study.jwtlogin.dto.LoginDto;
-import com.study.jwtlogin.dto.TokenDto;
-import com.study.jwtlogin.jwt.JwtFilter;
-import com.study.jwtlogin.jwt.TokenProvider;
+import com.study.jwtlogin.dto.TokensDto;
+import com.study.jwtlogin.service.LoginService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
+@RequiredArgsConstructor
 public class LoginController {
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final LoginService loginService;
 
-    public LoginController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
-        System.out.println("login");
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+    public TokensDto login(@Valid @RequestBody LoginDto loginDto) {
+        return loginService.login(loginDto);
+    }
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = tokenProvider.createToken(authentication);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-        System.out.println("로그인 성공 : "+authentication.toString()+" "+jwt.toString());
-        return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+    @PutMapping("/reissue")
+    public TokensDto reissue(@RequestHeader(name = "X-Refresh-Token") String refreshToken) {
+        System.out.println("reissue 할떄 쓸 리프레시 토큰: "+refreshToken);
+        return loginService.reissue(refreshToken);
     }
 }
