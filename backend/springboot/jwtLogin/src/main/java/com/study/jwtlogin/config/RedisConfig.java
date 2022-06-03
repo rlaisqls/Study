@@ -1,6 +1,7 @@
 package com.study.jwtlogin.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,14 +15,17 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @RequiredArgsConstructor
 @Configuration
 @EnableRedisRepositories
-@EnableTransactionManagement
 public class RedisConfig {
-    private final RedisProperties redisProperties;
+    @Value("${spring.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.redis.port}")
+    private String redisPort;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(){
         RedisStandaloneConfiguration redisConfig =
-                new RedisStandaloneConfiguration(redisProperties.getHost(),redisProperties.getPort());
+                new RedisStandaloneConfiguration(redisHost,Integer.parseInt(redisPort));
         return new LettuceConnectionFactory(redisConfig);
     }
 

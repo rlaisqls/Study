@@ -78,7 +78,7 @@ public class TokenProvider implements InitializingBean {
         try{
             return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
         }catch (Exception e){
-            throw new IllegalStateException();//토큰에 유저아이디가 없음, 인증 안된토큼임
+            throw new IllegalStateException("유저아이디 정보가 안들어있음");//토큰에 유저아이디가 없음, 인증 안된토큼임
         }
     }
 

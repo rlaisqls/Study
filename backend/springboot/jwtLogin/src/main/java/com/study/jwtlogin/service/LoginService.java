@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class LoginService {
@@ -31,35 +33,33 @@ public class LoginService {
         accountRepository.findByUsername(loginDto.getUsername())
                 .filter(a -> passwordEncoder.matches(loginDto.getPassword(),a.getPassword())) //패스워드 입력과 데이터 비교
                 .orElseThrow(IllegalStateException::new);
-        RefreshToken refreshToken = RefreshToken.builder()
+
+        RefreshToken refreshToken = refreshTokenRepository.save(
+                RefreshToken.builder()
                 .username(loginDto.getUsername())
                 .refreshToken(tokenProvider.createRefreshToken(loginDto.getUsername()))
                 .expiration(refreshTokenValidTime)
-                .build();
-        System.out.println("*************"+loginDto.getUsername()+" "+loginDto.getPassword());
+                .build());
 
-        refreshTokenRepository.save(refreshToken);
-        System.out.println("로그인 할때 생성한 리프레시 토큰 : "+refreshToken.getRefreshToken());
-        System.out.println("&&&&&&&&&&&&&&위에서 getUsername"+tokenProvider.getUsername(refreshToken.getRefreshToken()));
         return TokensDto.builder()
-                .refreshToken(refreshToken.getRefreshToken()) //리프레시 토큰
-                .accessToken(tokenProvider.createAccessToken(loginDto.getUsername())) //엑세스 토큰 생성
+                .accessToken(tokenProvider.createAccessToken(loginDto.getUsername()))
+                .refreshToken(refreshToken.getRefreshToken())
                 .build();
     }
 
     @Transactional
     public TokensDto reissue(String refreshToken) {
+
         String username = tokenProvider.getUsername(refreshToken);
-        if(!tokenProvider.isRefreshToken(refreshToken)) throw new IllegalStateException("");
 
-        RefreshToken newRefreshToken = refreshTokenRepository.findById(username)
+        refreshTokenRepository.findById(username)
                 .filter(token -> token.getRefreshToken().equals(refreshToken)) //저장한 토큰과 동일한지 확인
-                .orElseThrow(IllegalStateException::new);
-
-        refreshTokenRepository.findByRefreshToken(refreshToken)
                 .map(refresh -> refresh.updateExpiration(refreshTokenValidTime)) //유효시간 갱신
                 .orElseThrow(IllegalStateException::new);
 
-        return new TokensDto(tokenProvider.createAccessToken(newRefreshToken.getUsername()),refreshToken);
+        return TokensDto.builder()
+                .accessToken(tokenProvider.createAccessToken(username))
+                .refreshToken(refreshToken)
+                .build();
     }
 }
