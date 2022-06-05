@@ -23,7 +23,6 @@ public class LoginController {
 
     @PutMapping("/reissue")
     public TokensDto reissue(@RequestHeader(name = "X-Refresh-Token") String refreshToken) {
-        System.out.println("reissue 할떄 쓸 리프레시 토큰: "+refreshToken);
         return loginService.reissue(refreshToken);
     }
 }
