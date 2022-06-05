@@ -49,12 +49,12 @@ public class LoginService {
 
     @Transactional
     public TokensDto reissue(String refreshToken) {
-
+        if(!tokenProvider.isRefreshToken(refreshToken)) throw new IllegalStateException();
         String username = tokenProvider.getUsername(refreshToken);
 
         refreshTokenRepository.findById(username)
                 .filter(token -> token.getRefreshToken().equals(refreshToken)) //저장한 토큰과 동일한지 확인
-                .map(refresh -> refresh.updateExpiration(refreshTokenValidTime)) //유효시간 갱신
+                .map(token -> token.updateExpiration(refreshTokenValidTime)) //유효시간 갱신
                 .orElseThrow(IllegalStateException::new);
 
         return TokensDto.builder()

@@ -1,6 +1,5 @@
-package jpabook.jpashop.domain;
+package jpabook.jpashop.domain.item;
 
-import jpabook.jpashop.domain.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +32,7 @@ public class Category {
     private List<Category> child = new ArrayList<>();
 
     //연관관계 메서드
-    public  void addChildCategory(Category child){
+    public void addChildCategory(Category child){
         this.child.add(child);
         child.setParent(this);
     }

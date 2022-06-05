@@ -1,10 +1,10 @@
-package jpabook.jpashop.domain;
+package jpabook.jpashop.domain.delivery;
 
+import jpabook.jpashop.domain.order.Order;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.awt.*;
 
 @Entity
 @Getter

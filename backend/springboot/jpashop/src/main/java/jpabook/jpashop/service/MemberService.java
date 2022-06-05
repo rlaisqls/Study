@@ -1,10 +1,8 @@
 package jpabook.jpashop.service;
 
-import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.member.Member;
 import jpabook.jpashop.repository.MemberRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +20,11 @@ public class MemberService {
     } */
     @Transactional(readOnly = false)
     public Long join(Member member){
-        validataDuplicateMember(member);
+        validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
     }
-    private void validataDuplicateMember(Member member){
+    private void validateDuplicateMember(Member member){
         List<Member> findMembers = memberRepository.findByName(member.getName());
         if(!findMembers.isEmpty()){
             throw new IllegalStateException("이미 존재하는 회원입니다");
@@ -37,7 +35,7 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId){
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
 }
