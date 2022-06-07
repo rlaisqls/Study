@@ -1,5 +1,9 @@
 package com.study.jwtlogin.jwt;
 
+import com.study.jwtlogin.exception.ExpiredAccessTokenException;
+import com.study.jwtlogin.exception.ExpiredRefreshTokenException;
+import com.study.jwtlogin.exception.IncorrectTokenException;
+import com.study.jwtlogin.exception.InvalidTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -22,10 +26,18 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
-    @Value("${jwt.secret}") private String secret;
-    @Value("${jwt.exp.token}") private Long tokenValidTime;
-    @Value("${jwt.exp.refresh}")private Long refreshTokenValidTime;
-    @Value("${jwt.header}") public static final String AUTHORIZATION_HEADER = "Authorization";
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.exp.token}")
+    private Long tokenValidTime;
+
+    @Value("${jwt.exp.refresh}")
+    private Long refreshTokenValidTime;
+
+    @Value("${jwt.header}")
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+
     private final CustomUserDetailsService customUserDetailsService;
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     private Key key;
@@ -77,8 +89,12 @@ public class TokenProvider implements InitializingBean {
     public String getUsername(String token){
         try{
             return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
-        }catch (Exception e){
-            throw new IllegalStateException(); //토큰에 유저아이디가 없음, 인증 안된토큼임
+        } catch (MalformedJwtException | UnsupportedJwtException e) {
+            throw new IncorrectTokenException();
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredAccessTokenException();
+        } catch (Exception e) {
+            throw new InvalidTokenException();
         }
     }
 
@@ -92,9 +108,16 @@ public class TokenProvider implements InitializingBean {
 
     public boolean isRefreshToken(String token) {
         try {
-            return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("type").equals("refresh");
+            return Jwts.parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(token)
+                    .getBody().get("type").equals("refresh");
+        } catch (MalformedJwtException | UnsupportedJwtException e) {
+            throw new IncorrectTokenException();
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredRefreshTokenException();
         } catch (Exception e) {
-            return false;
+            throw new InvalidTokenException();
         }
     }
 }

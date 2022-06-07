@@ -1,6 +1,5 @@
 package com.study.jwtlogin.config;
 
-import com.study.jwtlogin.jwt.JwtSecurityConfig;
 import com.study.jwtlogin.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/reissue").permitAll()
                 .antMatchers("/user").hasRole("USER")
-                .antMatchers("/user/{username}").hasRole("ADMIN")
+                .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));

@@ -22,7 +22,7 @@ public class RefreshToken implements Serializable {
     @Indexed
     private String refreshToken;
 
-    @TimeToLive //객체가 데이터베이스에 저장된 후 시간이 지나면 엔티티가 삭제된다?????
+    @TimeToLive //객체가 redis에 저장된 후 시간이 지나면 엔티티가 삭제된다?
     private Long expiration;
 
     public RefreshToken updateExpiration(Long expiration) {
