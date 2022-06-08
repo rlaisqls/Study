@@ -1,10 +1,11 @@
 package com.practice.board.entity.Board;
 
+import com.practice.board.entity.comment.Comment;
 import com.practice.board.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,4 +25,7 @@ public class Board {
     private String title;
 
     private String content;
+
+    @OneToMany(mappedBy = "board") //default가 LAZY
+    private List<Comment> comments;
 }

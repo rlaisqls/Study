@@ -2,6 +2,7 @@ package com.practice.board.entity.user;
 
 
 import com.practice.board.entity.Board.Board;
+import com.practice.board.entity.comment.Comment;
 import com.practice.board.entity.user.Authority;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -42,9 +43,13 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Board> boards;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(authority.name()));
     }
+
 
     @Override
     public boolean isAccountNonExpired() { return true; }

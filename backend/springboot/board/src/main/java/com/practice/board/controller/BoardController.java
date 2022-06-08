@@ -1,10 +1,7 @@
 package com.practice.board.controller;
 
 import com.practice.board.dto.request.BoardRequest;
-import com.practice.board.dto.request.LoginRequest;
 import com.practice.board.dto.response.BoardResponse;
-import com.practice.board.dto.response.TokensResponse;
-import com.practice.board.service.AuthService;
 import com.practice.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,32 +15,37 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @PostMapping("/board")
-    public void write(@Valid @RequestBody BoardRequest request) {
-        boardService.boardPosting(request);
+    @PostMapping("/board") //글 작성
+    public void boardWrite(@Valid @RequestBody BoardRequest request) {
+        boardService.boardWrite(request);
     }
 
-    @PutMapping("/board/{boardId}")
-    public void edit(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
-        boardService.boardEdit(boardId, request);
+    @PatchMapping ("/board/{boardId}") //글 수정
+    public void boardModify(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
+        boardService.boardModify(boardId, request);
     }
 
-    @DeleteMapping("/board/{boardId}")
-    public void boardDelete(@PathVariable String boardId, @Valid @RequestBody BoardRequest request) {
+    @DeleteMapping("/board/{boardId}") //글 삭제
+    public void boardDelete(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
         boardService.boardDelete(boardId);
     }
 
-    @GetMapping("/board/all")
+    @GetMapping("/board/{boardId}") //글 조회
+    public BoardResponse boardShow(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
+        return boardService.boardShow(boardId);
+    }
+
+    @GetMapping("/board/all") //전체 글 조회
     public List<BoardResponse> findBoardAll() {
         return boardService.findBoardAll();
     }
 
-    @GetMapping("/board")
+    @GetMapping("/board") //내 글 조회
     public List<BoardResponse> findMyBoard() {
         return boardService.findMyBoard();
     }
 
-    @GetMapping("/board/{title}")
+    @GetMapping("/board/{title}") //글 제목으로  검색
     public List<BoardResponse> searchBoard(@PathVariable String title){
         return boardService.searchBoard(title);
     }

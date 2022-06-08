@@ -16,11 +16,11 @@ public class BoardRequest {
     @NotNull
     private String content;
 
-    public static Board toBoard(User user, String title, String content){
+    public static Board toBoard(User user, BoardRequest request){
         return Board.builder()
                 .user(user)
-                .title(title)
-                .content(content)
+                .title(request.getTitle())
+                .content(request.getContent())
                 .build();
     }
 
