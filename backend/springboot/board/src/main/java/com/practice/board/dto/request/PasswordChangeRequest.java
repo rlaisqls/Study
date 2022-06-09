@@ -12,5 +12,9 @@ import javax.validation.constraints.NotNull;
 public class PasswordChangeRequest {
     @NotNull
     @Column(length = 30)
+    private String currentPassword;
+
+    @NotNull
+    @Column(length = 30)
     private String password;
 }

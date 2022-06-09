@@ -6,7 +6,7 @@ spring:
     password: ${PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -18,12 +18,23 @@ spring:
     port: ${REDIS-PORT}
     host: ${REDIS-HOST}
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT-ID}
+            client-secret: ${CLIENT-SECRET}
+            scope: profile,email
+
 jwt:
   header: ${HEADER}
-  secret: ${SECRET}
+  secret: ${JWT-SECRET}
   exp:
     token: ${TOKEN}
     refresh: ${REFRESH}
+
+
 
 logging:
   level:

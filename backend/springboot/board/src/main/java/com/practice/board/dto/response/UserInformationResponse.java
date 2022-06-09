@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserInformationResponse {
     private String username;
-    public static UserInformationResponse from(User user) {
-        return new UserInformationResponse(user.getUsername());
+    public UserInformationResponse(User user){
+        username = user.getUsername();
     }
 }

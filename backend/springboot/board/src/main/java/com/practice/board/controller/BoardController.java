@@ -31,8 +31,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/{boardId}") //글 조회
-    public BoardResponse boardShow(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
-        return boardService.boardShow(boardId);
+    public BoardResponse findBoard(@PathVariable Long boardId) {
+        return boardService.findBoard(boardId);
     }
 
     @GetMapping("/board/all") //전체 글 조회
@@ -45,7 +45,7 @@ public class BoardController {
         return boardService.findMyBoard();
     }
 
-    @GetMapping("/board/{title}") //글 제목으로  검색
+    @GetMapping("/board/search/{title}") //글 제목으로  검색
     public List<BoardResponse> searchBoard(@PathVariable String title){
         return boardService.searchBoard(title);
     }

@@ -2,6 +2,7 @@ package com.practice.board.dto.request;
 
 import com.practice.board.entity.Board.Board;
 import com.practice.board.entity.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

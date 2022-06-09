@@ -80,7 +80,6 @@ public class JwtTokenProvider implements InitializingBean {
                 .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
-        System.out.println(claims.getSubject()+"=================================");
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(claims.getSubject()); //
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         //스프링 시큐리티에서 인증할때 쓰이는 형태의 토큰으로 변환해서 return

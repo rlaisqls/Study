@@ -1,8 +1,6 @@
 package com.practice.board.entity.comment;
 
-import com.practice.board.dto.request.CommentRequest;
 import com.practice.board.entity.Board.Board;
-import com.practice.board.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,9 +16,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id", nullable = false)
-    private User user;
+    private String username;
 
     @ManyToOne
     @JoinColumn(name = "comment_id", nullable = false)

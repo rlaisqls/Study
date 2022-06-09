@@ -27,6 +27,8 @@ public class BoardResponse {
     @NotNull
     private String content;
 
+    private List<CommentResponse> comments;
+
     public static List<BoardResponse> from(List<Board> boards){
         return boards.stream().map(BoardResponse::from).collect(Collectors.toList());
     }
@@ -37,6 +39,7 @@ public class BoardResponse {
                 .username(board.getUser().getUsername())
                 .title(board.getTitle())
                 .content(board.getContent())
+                .comments(CommentResponse.ListFrom(board.getComments()))
                 .build();
     }
 }

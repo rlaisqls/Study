@@ -19,15 +19,15 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
+    //댓글 작성
     public void CommentWrite(CommentRequest request) {
-        boardRepository.findById(request.getBoardId())
-                .map(board->CommentRequest.toComment(getUser(),board,request))
+        Comment comment = boardRepository.findById(request.getBoardId())
+                .map(board -> Comment.builder()
+                        .username(SecurityUtil.getCurrentUsername().toString())
+                        .board(board)
+                        .comment(request.getComment())
+                        .build())
                 .orElseThrow(BoardNotExistException::new);
-    }
-
-    public User getUser(){
-        return SecurityUtil.getCurrentUsername()
-                .flatMap(userRepository::findByUsername)
-                .orElseThrow(WrongApproachException::new);
+        commentRepository.save(comment);
     }
 }
