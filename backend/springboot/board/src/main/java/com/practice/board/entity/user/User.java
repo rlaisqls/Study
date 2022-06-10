@@ -4,6 +4,7 @@ package com.practice.board.entity.user;
 import com.practice.board.entity.Board.Board;
 import com.practice.board.entity.user.Authority;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,13 +17,15 @@ import java.util.UUID;
 import java.util.List;
 
 @Entity
-@Table(name = "account")
+@Table(name = "user")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) //서브타입을 물리적으로 구현하는 전략 설정
+@DiscriminatorColumn(name = "dtype") //하위 클래스를 구분하는 용도의 컬럼
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails {
+public abstract class User implements UserDetails {
     @Id
     @Column(columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "uuid2")
@@ -35,10 +38,6 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    private String oauthId; //
-
-    private String password; //둘중 하나
-
     private boolean activated;
 
     @Enumerated(EnumType.STRING)
@@ -49,6 +48,11 @@ public class User implements UserDetails {
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(authority.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
     }
 
     @Override

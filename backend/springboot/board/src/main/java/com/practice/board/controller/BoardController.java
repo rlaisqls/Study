@@ -1,6 +1,7 @@
 package com.practice.board.controller;
 
 import com.practice.board.dto.request.BoardRequest;
+import com.practice.board.dto.response.BoardIdResponse;
 import com.practice.board.dto.response.BoardResponse;
 import com.practice.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,8 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/board") //글 작성
-    public void boardWrite(@Valid @RequestBody BoardRequest request) {
-        boardService.boardWrite(request);
+    public BoardIdResponse boardWrite(@Valid @RequestBody BoardRequest request) {
+        return boardService.boardWrite(request);
     }
 
     @PatchMapping ("/board/{boardId}") //글 수정

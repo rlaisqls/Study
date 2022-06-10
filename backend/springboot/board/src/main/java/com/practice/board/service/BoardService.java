@@ -2,6 +2,7 @@ package com.practice.board.service;
 
 import com.practice.board.dto.request.BoardRequest;
 import com.practice.board.dto.response.BoardResponse;
+import com.practice.board.dto.response.BoardIdResponse;
 import com.practice.board.entity.Board.Board;
 import com.practice.board.entity.Board.BoardRepository;
 import com.practice.board.entity.user.User;
@@ -11,7 +12,6 @@ import com.practice.board.exception.WrongApproachException;
 import com.practice.board.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,13 +26,13 @@ public class BoardService {
     private final UserRepository userRepository;
 
     //게시글 작성
-    public void boardWrite(BoardRequest request) {
-        boardRepository.save(Board.builder()
+    public BoardIdResponse boardWrite(BoardRequest request) {
+        return new BoardIdResponse(boardRepository.save(Board.builder()
                 .user(nowUser())
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build()
-        );
+        ).getId());
     }
 
     //게시글 수정
@@ -76,7 +76,8 @@ public class BoardService {
         return SecurityUtil.getCurrentUsername()
                 .map(boardRepository::findByUser_Username)
                 .map(BoardResponse::from)
-                .orElse(null);
+                .orElseThrow(InvalidTokenException::new);
+                    //얘가 SecurityUtill.getCurrentUsername에 대한 else가 맞을까?
     }
 
     //게시글 제목 검색

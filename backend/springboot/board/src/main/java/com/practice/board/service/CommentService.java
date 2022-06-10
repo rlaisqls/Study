@@ -20,10 +20,10 @@ public class CommentService {
     private final UserRepository userRepository;
 
     //댓글 작성
-    public void CommentWrite(CommentRequest request) {
-        Comment comment = boardRepository.findById(request.getBoardId())
+    public void CommentWrite(Long boardId, CommentRequest request) {
+        Comment comment = boardRepository.findById(boardId)
                 .map(board -> Comment.builder()
-                        .username(SecurityUtil.getCurrentUsername().toString())
+                        .username(SecurityUtil.getCurrentUsername().get())
                         .board(board)
                         .comment(request.getComment())
                         .build())

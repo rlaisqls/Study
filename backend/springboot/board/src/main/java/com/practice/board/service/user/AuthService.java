@@ -7,7 +7,7 @@ import com.practice.board.entity.refeshToken.RefreshTokenRepository;
 import com.practice.board.entity.user.User;
 import com.practice.board.entity.user.UserRepository;
 import com.practice.board.exception.IncorrectTokenException;
-import com.practice.board.exception.InvalidInformaionException;
+import com.practice.board.exception.InvalidInformationException;
 import com.practice.board.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +23,7 @@ public class AuthService {
     @Value("${jwt.exp.refresh}")
     private Long refreshTokenValidTime;
 
+    private final LoginService loginService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -32,7 +33,7 @@ public class AuthService {
     public TokensResponse login(LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername())
                 .filter(a -> passwordEncoder.matches(request.getPassword(),a.getPassword())) //패스워드 입력과 데이터 비교
-                .orElseThrow(InvalidInformaionException::new);
+                .orElseThrow(InvalidInformationException::new);
 
         RefreshToken refreshToken = refreshTokenRepository.save(
                 RefreshToken.builder()
@@ -41,10 +42,7 @@ public class AuthService {
                 .expiration(refreshTokenValidTime)
                 .build());
 
-        return TokensResponse.builder()
-                .accessToken(jwtTokenProvider.createAccessToken(String.valueOf(user.getUuid())))
-                .refreshToken(refreshToken.getRefreshToken())
-                .build();
+        return loginService.login(user);
     }
 
     @Transactional

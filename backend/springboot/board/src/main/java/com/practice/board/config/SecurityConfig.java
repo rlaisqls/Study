@@ -2,6 +2,7 @@ package com.practice.board.config;
 
 
 import com.practice.board.jwt.JwtTokenProvider;
+import com.practice.board.service.OAuth2SuccessHandler;
 import com.practice.board.service.user.OAuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuthUserService oAuthUserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .oauth2Login()
+                .successHandler(oAuth2SuccessHandler)
                 .userInfoEndpoint()
                 .userService(oAuthUserService);
 

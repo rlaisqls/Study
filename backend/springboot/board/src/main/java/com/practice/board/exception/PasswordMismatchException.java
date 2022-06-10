@@ -4,6 +4,7 @@ import com.practice.board.error.exception.BusinessException;
 import com.practice.board.error.exception.ErrorCode;
 
 public class PasswordMismatchException extends BusinessException {
-    public PasswordMismatchException(){super(ErrorCode.PASSWORD_MISMATCH);}
+    public static final BusinessException EXCEPTION = new PasswordMismatchException();
+    public PasswordMismatchException(){ super(ErrorCode.PASSWORD_MISMATCH); }
 
 }

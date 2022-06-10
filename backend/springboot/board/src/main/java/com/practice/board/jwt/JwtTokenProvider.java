@@ -49,10 +49,6 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public String createAccessToken(String uuid) {
-        /* 원래 여기서 파라미터를 Authentication 클래스로 받은 다음에
-         * authorities 정보를 claim으로 같이 토큰에 넣어줬었는데
-         * 나중에 UserDetailService에서
-         * loadUserByUsername 메서드로 찾아서 쓸거라서 그냥 유저 네임만 넣어줌*/
         Date now = new Date();
         return Jwts.builder()
                 .setSubject(uuid)

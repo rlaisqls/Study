@@ -4,12 +4,10 @@ import com.practice.board.dto.request.LoginRequest;
 import com.practice.board.dto.request.PasswordChangeRequest;
 import com.practice.board.dto.response.UserInformationResponse;
 import com.practice.board.entity.user.Authority;
+import com.practice.board.entity.user.GeneralUser;
 import com.practice.board.entity.user.User;
 import com.practice.board.entity.user.UserRepository;
-import com.practice.board.exception.InvalidTokenException;
-import com.practice.board.exception.PasswordMismatchException;
-import com.practice.board.exception.UserAlreadyExistException;
-import com.practice.board.exception.UserNotFoundException;
+import com.practice.board.exception.*;
 import com.practice.board.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +27,7 @@ public class UserService {
         if (userRepository.findByUsername(request.getUsername()).orElse(null) != null) {
             throw new UserAlreadyExistException();
         }
-        userRepository.save(User.builder()
+        userRepository.save(GeneralUser.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -54,7 +52,8 @@ public class UserService {
 
     //비밀번호 변경
     public void passwordChange(PasswordChangeRequest request) {
-        User user = nowUser();
+        GeneralUser user = (GeneralUser) nowUser();
+        if (user.getPassword() == null) throw new WrongApproachException();
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword()))
             throw new PasswordMismatchException();
         user.setPassword(passwordEncoder.encode(request.getPassword()));
