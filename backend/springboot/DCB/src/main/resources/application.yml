@@ -30,9 +30,6 @@ jwt:
   secret: ${JWT-SECRET}
   exp:
     token: ${TOKEN}
-    refresh: ${REFRESH}
-
-
 
 logging:
   level:

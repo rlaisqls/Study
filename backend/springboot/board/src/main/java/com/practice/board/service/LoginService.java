@@ -1,4 +1,4 @@
-package com.practice.board.service.user;
+package com.practice.board.service;
 
 import com.practice.board.dto.response.TokensResponse;
 import com.practice.board.entity.refeshToken.RefreshToken;

@@ -1,9 +1,7 @@
-package com.practice.board.config;
+package com.project.dcb.config;
 
 
-import com.practice.board.jwt.JwtTokenProvider;
-import com.practice.board.util.OAuth2SuccessHandler;
-import com.practice.board.service.OAuthUserService;
+import com.project.dcb.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,6 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -20,12 +21,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final OAuthUserService oAuthUserService;
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOrigin("http://localhost:5500/");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Override
@@ -36,9 +49,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
 
                 .and()
+                .httpBasic()
+                .disable()
+                .cors()
+                .configurationSource(corsConfigurationSource())
+
+                .and()
                 .headers()
-                .frameOptions()
-                .sameOrigin()
+                .frameOptions().disable()
 
                 .and()
                 .sessionManagement()
@@ -46,18 +64,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user","/board").hasRole("USER")
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("USER","MANAGER")
+                .antMatchers("/manager/**").hasRole("MANAGER")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
-                .and()
-                .apply(new JwtSecurityConfig(jwtTokenProvider))
 
                 .and()
-                .oauth2Login()
-                .successHandler(oAuth2SuccessHandler)
-                .userInfoEndpoint()
-                .userService(oAuthUserService);
-
+                .apply(new JwtSecurityConfig(jwtTokenProvider));
     }
+
 
 }

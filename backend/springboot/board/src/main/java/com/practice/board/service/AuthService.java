@@ -1,4 +1,4 @@
-package com.practice.board.service.user;
+package com.practice.board.service;
 
 import com.practice.board.dto.request.LoginRequest;
 import com.practice.board.dto.response.TokensResponse;
@@ -42,7 +42,10 @@ public class AuthService {
                 .expiration(refreshTokenValidTime)
                 .build());
 
-        return loginService.login(user);
+        return TokensResponse.builder()
+                .accessToken(jwtTokenProvider.createAccessToken(String.valueOf(user.getUuid())))
+                .refreshToken(refreshToken.getRefreshToken())
+                .build();
     }
 
     @Transactional

@@ -1,4 +1,4 @@
-package com.practice.board.service;
+package com.practice.board.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +61,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .queryParam("refreshToken", refreshToken)
                 .build().toUriString();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
-
     }
 }

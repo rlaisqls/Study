@@ -1,20 +1,10 @@
-package com.practice.board.service.user;
+package com.practice.board.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.oauth2.sdk.TokenResponse;
-import com.practice.board.dto.response.TokensResponse;
-import com.practice.board.entity.refeshToken.RefreshToken;
-import com.practice.board.entity.refeshToken.RefreshTokenRepository;
 import com.practice.board.entity.user.Authority;
 import com.practice.board.entity.user.GoogleUser;
 import com.practice.board.entity.user.User;
 import com.practice.board.entity.user.UserRepository;
-import com.practice.board.exception.UserAlreadyExistException;
-import com.practice.board.exception.UserNotFoundException;
-import com.practice.board.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;

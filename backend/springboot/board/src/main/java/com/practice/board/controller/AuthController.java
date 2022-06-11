@@ -2,7 +2,7 @@ package com.practice.board.controller;
 
 import com.practice.board.dto.request.LoginRequest;
 import com.practice.board.dto.response.TokensResponse;
-import com.practice.board.service.user.AuthService;
+import com.practice.board.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

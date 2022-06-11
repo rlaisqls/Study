@@ -1,5 +1,6 @@
 package com.practice.board.entity.user;
 
+import com.practice.board.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,6 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GeneralUser extends User{
+public class GeneralUser extends User {
     private String password;
 }

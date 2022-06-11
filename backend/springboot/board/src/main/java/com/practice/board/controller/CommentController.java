@@ -1,7 +1,7 @@
 package com.practice.board.controller;
 
 import com.practice.board.dto.request.CommentRequest;
-import com.practice.board.service.CommentService;
+import com.practice.board.service.board.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

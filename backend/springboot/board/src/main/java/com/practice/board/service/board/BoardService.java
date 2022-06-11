@@ -1,4 +1,4 @@
-package com.practice.board.service;
+package com.practice.board.service.board;
 
 import com.practice.board.dto.request.BoardRequest;
 import com.practice.board.dto.response.BoardResponse;

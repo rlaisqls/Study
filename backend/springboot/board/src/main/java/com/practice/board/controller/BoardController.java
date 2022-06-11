@@ -3,7 +3,7 @@ package com.practice.board.controller;
 import com.practice.board.dto.request.BoardRequest;
 import com.practice.board.dto.response.BoardIdResponse;
 import com.practice.board.dto.response.BoardResponse;
-import com.practice.board.service.BoardService;
+import com.practice.board.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

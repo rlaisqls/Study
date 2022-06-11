@@ -1,4 +1,4 @@
-package com.practice.board.service;
+package com.practice.board.service.board;
 
 import com.practice.board.dto.request.CommentRequest;
 import com.practice.board.entity.Board.BoardRepository;
