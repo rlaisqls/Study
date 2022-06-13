@@ -62,14 +62,4 @@ public class UserService {
                 .orElseThrow(InvalidInformationException::new);
         return new TokenResponse(jwtTokenProvider.createToken((user.getUsername())));
     }
-
-    public void adminRegister() {
-        userRepository.save(User.builder()
-                .name("관리자")
-                .username("admin")
-                .password(passwordEncoder.encode("admin"))
-                .gathering(Gathering.GENERAL)
-                .authority(Authority.valueOf("ROLE_ADMIN"))
-                .build());
-    }
 }

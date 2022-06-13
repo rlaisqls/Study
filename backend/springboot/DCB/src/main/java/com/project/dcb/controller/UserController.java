@@ -23,12 +23,12 @@ public class UserController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/register") //user 가입
+    @PostMapping("/register") //유저 가입
     public void register(@RequestBody RegisterRequest request) {
         userService.register(request);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login") //로그인
     public ResponseEntity<TokenResponse> login(HttpServletResponse response,@RequestBody LoginRequest request){
         System.out.println(request.getUsername()+" "+request.getPassword());
         TokenResponse tokenResponse = userService.login(request);
@@ -36,24 +36,19 @@ public class UserController {
         return new ResponseEntity<>(tokenResponse,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/logout") //로그아웃
     public void logout(HttpServletResponse response){
         Cookie cookie = new Cookie("accessToken", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
 
-    @PatchMapping ("/user") //user 정보 수정
+    @PatchMapping ("/user") //유저 정보 수정
     public void modify(@RequestBody RegisterRequest request) {userService.register(request);}
 
-    @GetMapping("/user") //user 정보조회
+    @GetMapping("/user") //유저 정보조회
     public ResponseEntity<UserInfoResponse> getUserInfo(HttpServletRequest request) {
         return new ResponseEntity<>(userService.getUserInfo(),new HttpHeaders(), HttpStatus.OK);
-    }
-
-    @GetMapping("/adminRegister") //admin 권한부여
-    public void adminRegister() {
-        userService.adminRegister();
     }
 
     @GetMapping("/admin/manager/{username}/{authority}") //admin 권한부여
