@@ -12,7 +12,6 @@ import java.io.Serializable;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @RedisHash
 public class RefreshToken implements Serializable {
     @Id
@@ -21,7 +20,7 @@ public class RefreshToken implements Serializable {
     @Indexed
     private String refreshToken;
 
-    @TimeToLive //객체가 redis에 저장된 후 시간이 지나면 엔티티가 삭제된다?
+    @TimeToLive
     private Long expiration;
 
     public RefreshToken updateExpiration(Long expiration) {

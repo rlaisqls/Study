@@ -24,9 +24,9 @@ public class UserService {
 
     //가입
     public void register(LoginRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).orElse(null) != null) {
-            throw new UserAlreadyExistException();
-        }
+        if(userRepository.findByUsername(request.getUsername()).isPresent())
+            throw UserAlreadyExistException.EXCEPTION;
+
         userRepository.save(GeneralUser.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -55,7 +55,7 @@ public class UserService {
         GeneralUser user = (GeneralUser) nowUser();
         if (user.getPassword() == null) throw new WrongApproachException();
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword()))
-            throw new PasswordMismatchException();
+            throw PasswordMismatchException.EXCEPTION;
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
     }

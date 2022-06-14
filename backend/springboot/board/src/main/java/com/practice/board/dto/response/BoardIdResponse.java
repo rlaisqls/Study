@@ -11,5 +11,5 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class BoardIdResponse {
     @NotNull
-    Long Id; //이정도면 그냥 inner 클래스로 만드는게 낫지 않나 싶지만 통일을 위해서 그냥 따로 만들어줬다.
+    Long Id;
 }

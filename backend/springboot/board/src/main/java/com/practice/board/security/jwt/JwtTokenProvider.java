@@ -4,6 +4,7 @@ import com.practice.board.exception.ExpiredAccessTokenException;
 import com.practice.board.exception.ExpiredRefreshTokenException;
 import com.practice.board.exception.IncorrectTokenException;
 import com.practice.board.exception.InvalidTokenException;
+import com.practice.board.setting.SecurityProperty;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -26,25 +27,14 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider implements InitializingBean {
 
-    @Value("${jwt.secret}")
-    private String secret;
-
-    @Value("${jwt.exp.token}")
-    private Long tokenValidTime;
-
-    @Value("${jwt.exp.refresh}")
-    private Long refreshTokenValidTime;
-
-    @Value("${jwt.header}")
-    public static final String AUTHORIZATION_HEADER = "Authorization";
+    private final SecurityProperty securityProperty;
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
     private Key key;
 
     @Override
     public void afterPropertiesSet() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        byte[] keyBytes = Decoders.BASE64.decode(securityProperty.getSecret());
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -54,7 +44,7 @@ public class JwtTokenProvider implements InitializingBean {
                 .setSubject(uuid)
                 .claim("type", "access") //엑세스토큰임을 명시하는 정보 추가
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidTime))
+                .setExpiration(new Date(now.getTime() + securityProperty.getExp().getToken()))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -65,7 +55,7 @@ public class JwtTokenProvider implements InitializingBean {
                 .setSubject(uuid)
                 .claim("type", "refresh") //리프레시 토큰임을 명시하는 정보 추가
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
+                .setExpiration(new Date(now.getTime() + securityProperty.getExp().getRefresh()))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -85,16 +75,16 @@ public class JwtTokenProvider implements InitializingBean {
         try{
             return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
         } catch (MalformedJwtException | UnsupportedJwtException e) {
-            throw new IncorrectTokenException();
+            throw IncorrectTokenException.EXCEPTION;
         } catch (ExpiredJwtException e) {
-            throw new ExpiredAccessTokenException();
+            throw ExpiredAccessTokenException.EXCEPTION;
         } catch (Exception e) {
-            throw new InvalidTokenException();
+            throw InvalidTokenException.EXCEPTION;
         }
     }
 
     public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        String bearerToken = request.getHeader(securityProperty.getHeader());
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
@@ -108,11 +98,11 @@ public class JwtTokenProvider implements InitializingBean {
                     .parseClaimsJws(token)
                     .getBody().get("type").equals("refresh");
         } catch (MalformedJwtException | UnsupportedJwtException e) {
-            throw new IncorrectTokenException();
+            throw IncorrectTokenException.EXCEPTION;
         } catch (ExpiredJwtException e) {
-            throw new ExpiredRefreshTokenException();
+            throw ExpiredRefreshTokenException.EXCEPTION;
         } catch (Exception e) {
-            throw new InvalidTokenException();
+            throw InvalidTokenException.EXCEPTION;
         }
     }
 }

@@ -5,7 +5,7 @@ import com.practice.board.error.exception.ErrorCode;
 
 public class UserAlreadyExistException extends BusinessException {
     public static final BusinessException EXCEPTION = new UserAlreadyExistException();
-    public UserAlreadyExistException(){
+    private UserAlreadyExistException(){
         super(ErrorCode.USER_ALREADY_EXISTS);
     }
 }

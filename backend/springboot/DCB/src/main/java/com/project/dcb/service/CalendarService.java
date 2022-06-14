@@ -22,65 +22,41 @@ public class CalendarService {
     private final UserRepository userRepository;
     private final CalendarRepository calendarRepository;
 
+    //일정 조회
     public List<CalendarResponse> findMyCalendar() {
-        User user = nowUser();
-        return calendarRepository.findByUsernameAndGathering(user.getUsername(), Gathering.INDIVIDUAL).stream()
-                .map(CalendarResponse::new)
-                .collect(Collectors.toList());
+        User user = currentUser();
+        return findCalendar(calendarRepository.findByNameAndGathering(user.getUsername(), Gathering.INDIVIDUAL));
     }
 
     public List<CalendarResponse> findClassCalendar() {
-        User user = nowUser();
-        return calendarRepository.findByGathering(user.getGathering()).stream()
-                .map(CalendarResponse::new)
-                .collect(Collectors.toList());
+        User user = currentUser();
+        return findCalendar(calendarRepository.findByGathering(user.getGathering()));
     }
 
     public List<CalendarResponse> findGeneralCalendar() {
-        return calendarRepository.findByGathering(Gathering.GENERAL).stream()
+        return findCalendar(calendarRepository.findByGathering(Gathering.GENERAL));
+    }
+
+    private List<CalendarResponse> findCalendar(List<Calendar> calendarRepository) {
+        return calendarRepository.stream()
                 .map(CalendarResponse::new)
                 .collect(Collectors.toList());
     }
 
+    //일정 생성
     public void writeMyCalendar(CalendarRequest request) {
-        User user = nowUser();
-        calendarRepository.save(
-                Calendar.builder()
-                        .username(user.getUsername())
-                        .gathering(Gathering.INDIVIDUAL)
-                        .date(Date.valueOf(request.getDate()))
-                        .title(request.getTitle())
-                        .build()
-        );
+        User user = currentUser();
+        calendarRepository.save(new Calendar(request, Gathering.INDIVIDUAL, user));
     }
 
     public void writeClassCalendar(CalendarRequest request) {
-        User user = nowUser();
-        calendarRepository.save(
-                Calendar.builder()
-                        .username(user.getUsername())
-                        .gathering(user.getGathering())
-                        .date(Date.valueOf(request.getDate()))
-                        .title(request.getTitle())
-                        .build()
-        );
+        User user = currentUser();
+        calendarRepository.save(new Calendar(request, user.getGathering(), user));
     }
 
-    public void writeGeneralCalendar(CalendarRequest request) {
-        User user = nowUser();
-        calendarRepository.save(
-                Calendar.builder()
-                        .username(user.getUsername())
-                        .gathering(Gathering.GENERAL)
-                        .date(Date.valueOf(request.getDate()))
-                        .title(request.getTitle())
-                        .build()
-        );
-    }
-
-    public User nowUser(){
-        return SecurityUtil.getCurrentUsername()
-                .flatMap(userRepository::findByUsername)
+    //현재 유저 가져오기
+    public User currentUser() {
+        return userRepository.findByUsername(SecurityUtil.getCurrentUsername())
                 .orElseThrow(InvalidTokenException::new);
     }
 }

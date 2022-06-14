@@ -31,12 +31,6 @@ public class CalendarController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping("/admin/calendar") //전체 일정 생성
-    public ResponseEntity<Object> writeGeneralCalendar(@RequestBody CalendarRequest request){
-        calendarService.writeGeneralCalendar(request);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
     @GetMapping("/user/calendar") //개인 일정 조회
     public ResponseEntity<Object> findMyCalendar(){
         return new ResponseEntity<>

@@ -2,6 +2,7 @@ package com.practice.board.security.jwt;
 
 
 import com.practice.board.entity.user.UserRepository;
+import com.practice.board.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,8 +18,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String uuid) throws UsernameNotFoundException {
-        return userRepository.findByUuid(UUID.fromString(uuid))
-                .orElseThrow(() -> new UsernameNotFoundException(""));
+        return userRepository.findById(UUID.fromString(uuid))
+                .orElseThrow(UserNotFoundException::new);
     }
 
 }
