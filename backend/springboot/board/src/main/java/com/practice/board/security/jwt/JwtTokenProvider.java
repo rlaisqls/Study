@@ -1,4 +1,4 @@
-package com.practice.board.jwt;
+package com.practice.board.security.jwt;
 
 import com.practice.board.exception.ExpiredAccessTokenException;
 import com.practice.board.exception.ExpiredRefreshTokenException;

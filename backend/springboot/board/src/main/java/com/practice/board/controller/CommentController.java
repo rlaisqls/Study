@@ -13,7 +13,6 @@ public class CommentController {
 
     @PostMapping("/board/{boardId}/comment")
     public void CommentWrite(@PathVariable Long boardId, @RequestBody CommentRequest commentRequest){
-        System.out.println(boardId+" "+commentRequest.getComment());
         commentService.CommentWrite(boardId, commentRequest);
     }
 }

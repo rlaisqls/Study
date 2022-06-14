@@ -1,4 +1,4 @@
-package com.practice.board.jwt;
+package com.practice.board.security.jwt;
 
 
 import com.practice.board.entity.user.UserRepository;

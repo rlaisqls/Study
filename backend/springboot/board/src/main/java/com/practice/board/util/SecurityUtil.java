@@ -9,12 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Optional;
 
 public class SecurityUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
-
     public static Optional<String> getCurrentUsername() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) return Optional.empty();
-        else return Optional.ofNullable(((UserDetails)authentication.getPrincipal()).getUsername());
+        return Optional.ofNullable(((UserDetails)authentication.getPrincipal()).getUsername());
     }
 }
