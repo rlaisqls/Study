@@ -27,7 +27,7 @@ public class CommentService {
                         .board(board)
                         .comment(request.getComment())
                         .build())
-                .orElseThrow(BoardNotExistException::new);
+                .orElseThrow(()->BoardNotExistException.EXCEPTION);
         commentRepository.save(comment);
     }
 }

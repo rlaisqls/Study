@@ -13,10 +13,11 @@ public class UserInfoResponse {
     String name;
     String schoolClass;
     String authority;
-    public UserInfoResponse(User user){
+
+    public UserInfoResponse(User user) {
         this.username = user.getUsername();
         this.name = user.getName();
-        if(user.getGathering().equals(Gathering.GENERAL)) this.schoolClass = "";
+        if (user.getGathering().equals(Gathering.GENERAL)) this.schoolClass = "";
         else this.schoolClass = user.getGathering().toString().charAt(6) + "학년"
                 + user.getGathering().toString().charAt(8) + "반";
         this.authority = user.getAuthority().toString();

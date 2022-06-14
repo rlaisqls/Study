@@ -9,12 +9,13 @@ import lombok.Setter;
 public class BoardResponse {
     private String title;
 
-    private String username;
+    private String name;
 
     private String content;
-    public BoardResponse(Board board){
+
+    public BoardResponse(Board board) {
         title = board.getTitle();
-        username = board.getUsername();
+        name = board.getName();
         content = board.getContent();
     }
 }

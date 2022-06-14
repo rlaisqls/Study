@@ -19,7 +19,7 @@ public class CalendarResponse {
     @Enumerated(EnumType.STRING)
     private Gathering gathering;
 
-    public CalendarResponse(Calendar calendar){
+    public CalendarResponse(Calendar calendar) {
         date = calendar.getDate();
         title = calendar.getTitle();
         gathering = calendar.getGathering();

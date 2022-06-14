@@ -19,7 +19,7 @@ public class Comment {
     private String username;
 
     @ManyToOne
-    @JoinColumn(name = "comment_id", nullable = false)
+    @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
     private String comment;

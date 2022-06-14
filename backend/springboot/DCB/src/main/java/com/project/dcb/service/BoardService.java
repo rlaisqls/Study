@@ -11,6 +11,7 @@ import com.project.dcb.exception.InvalidTokenException;
 import com.project.dcb.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,47 +21,46 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
+    //게시글 작성
     public void writeClassBoard(BoardRequest request) {
-        User user = nowUser();
-        boardRepository.save(Board.builder()
-                .gathering(user.getGathering())
-                .username(user.getUsername())
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build()
-        );
+        User user = currentUser();
+        writeBoard(user.getGathering(), user, request);
     }
 
     public void writeGeneralBoard(BoardRequest request) {
-        User user = nowUser();
+        User user = currentUser();
+        writeBoard(Gathering.GENERAL, user, request);
+    }
+
+    private void writeBoard(Gathering gathering, User user, BoardRequest request) {
         boardRepository.save(Board.builder()
-                .gathering(Gathering.GENERAL)
-                .username(user.getUsername())
+                .gathering(gathering)
+                .name(user.getName())
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build()
         );
     }
 
+    //게시글 조회
     public List<BoardResponse> findClassBoard() {
-        User user = nowUser();
-        return boardRepository.findByGathering(user.getGathering()).stream()
-                .map(BoardResponse::new)
-                .collect(Collectors.toList());
+        return findBoard(currentUser().getGathering());
     }
 
     public List<BoardResponse> findGeneralBoard() {
-        User user = nowUser();
-        return boardRepository.findByGathering(Gathering.GENERAL).stream()
+        return findBoard(Gathering.GENERAL);
+    }
+
+    public List<BoardResponse> findBoard(Gathering gathering) {
+        return boardRepository.findByGathering(gathering).stream()
                 .map(BoardResponse::new)
                 .collect(Collectors.toList());
     }
 
-    public User nowUser(){
-        return SecurityUtil.getCurrentUsername()
-                .flatMap(userRepository::findByUsername)
+    //현재 유저 가져오기
+    public User currentUser() {
+        return userRepository.findByUsername(SecurityUtil.getCurrentUsername())
                 .orElseThrow(InvalidTokenException::new);
     }
-
 
 }

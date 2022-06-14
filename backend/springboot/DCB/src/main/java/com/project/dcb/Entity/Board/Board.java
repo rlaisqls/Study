@@ -1,6 +1,7 @@
 package com.project.dcb.Entity.Board;
 
 import com.project.dcb.Entity.Gathering;
+import com.project.dcb.Entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,9 +20,11 @@ public class Board {
     @Enumerated(EnumType.STRING)
     private Gathering gathering;
 
-    private String username;
+    private String name;
 
     private String title;
 
     private String content;
+
+
 }

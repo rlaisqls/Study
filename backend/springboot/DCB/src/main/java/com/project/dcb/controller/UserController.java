@@ -29,30 +29,31 @@ public class UserController {
     }
 
     @PostMapping("/login") //로그인
-    public ResponseEntity<TokenResponse> login(HttpServletResponse response,@RequestBody LoginRequest request){
-        System.out.println(request.getUsername()+" "+request.getPassword());
+    public ResponseEntity<TokenResponse> login(HttpServletResponse response, @RequestBody LoginRequest request) {
         TokenResponse tokenResponse = userService.login(request);
-        response.addCookie(new Cookie("accessToken",tokenResponse.getAccessToken()));
-        return new ResponseEntity<>(tokenResponse,new HttpHeaders(), HttpStatus.OK);
+        response.addCookie(new Cookie("accessToken", tokenResponse.getAccessToken()));
+        return new ResponseEntity<>(tokenResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping("/logout") //로그아웃
-    public void logout(HttpServletResponse response){
+    public void logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("accessToken", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
 
-    @PatchMapping ("/user") //유저 정보 수정
-    public void modify(@RequestBody RegisterRequest request) {userService.register(request);}
+    @PatchMapping("/user") //유저 정보 수정
+    public void modify(@RequestBody RegisterRequest request) {
+        userService.register(request);
+    }
 
     @GetMapping("/user") //유저 정보조회
     public ResponseEntity<UserInfoResponse> getUserInfo(HttpServletRequest request) {
-        return new ResponseEntity<>(userService.getUserInfo(),new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserInfo(), new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/admin/manager/{username}/{authority}") //admin 권한부여
-    public void authorization(@PathVariable String username,@PathVariable String authority) {
+    public void authorization(@PathVariable String username, @PathVariable String authority) {
         userService.authorization(username, authority);
     }
 

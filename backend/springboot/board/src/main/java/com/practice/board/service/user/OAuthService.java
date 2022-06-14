@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class OAuthUserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
+public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
 
     private final UserRepository userRepository;
     private final LoginService loginService;

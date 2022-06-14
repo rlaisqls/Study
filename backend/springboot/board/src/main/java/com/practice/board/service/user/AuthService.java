@@ -32,19 +32,19 @@ public class AuthService {
     public TokensResponse login(LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername())
                 .filter(a -> passwordEncoder.matches(request.getPassword(),a.getPassword())) //패스워드 입력과 데이터 비교
-                .orElseThrow(InvalidInformationException::new);
+                .orElseThrow(()->InvalidInformationException.EXCEPTION);
         return loginService.login(user);
     }
 
     @Transactional
     public TokensResponse reissue(String refreshToken) {
-        if(!jwtTokenProvider.isRefreshToken(refreshToken)) throw new IncorrectTokenException();
+        if(!jwtTokenProvider.isRefreshToken(refreshToken)) throw IncorrectTokenException.EXCEPTION;
         String uuid = jwtTokenProvider.getId(refreshToken);
 
         refreshTokenRepository.findById(uuid)
                 .filter(token -> token.getRefreshToken().equals(refreshToken)) //저장한 토큰과 동일한지 확인
                 .map(token -> token.updateExpiration(refreshTokenValidTime)) //유효시간 갱신
-                .orElseThrow(IncorrectTokenException::new);
+                .orElseThrow(()->IncorrectTokenException.EXCEPTION);
 
         return TokensResponse.builder()
                 .accessToken(jwtTokenProvider.createAccessToken(uuid))

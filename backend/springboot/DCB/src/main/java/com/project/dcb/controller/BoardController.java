@@ -35,16 +35,16 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/user/board")
-    public ResponseEntity<Object> findClassBoard(){
-        return new ResponseEntity<>
-                (new ResultListResponse<>(boardService.findClassBoard()), HttpStatus.OK);
-    }
-
     @GetMapping("/board")
     public ResponseEntity<Object> findGeneralBoard(){
         return new ResponseEntity<>
                 (new ResultListResponse<>(boardService.findGeneralBoard()), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/board")
+    public ResponseEntity<Object> findClassBoard(){
+        return new ResponseEntity<>
+                (new ResultListResponse<>(boardService.findClassBoard()), HttpStatus.OK);
     }
 
 }

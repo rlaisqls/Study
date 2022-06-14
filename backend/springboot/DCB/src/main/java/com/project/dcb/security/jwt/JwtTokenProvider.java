@@ -9,7 +9,9 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -32,17 +34,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtTokenProvider implements InitializingBean {
 
+    @Value("${jwt.header}")
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+
+    private final CustomUserDetailsService customUserDetailsService;
+
     @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.exp.token}")
     private Long tokenValidTime;
 
-    @Value("${jwt.header}")
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-
-    private final CustomUserDetailsService customUserDetailsService;
-    private final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
     private Key key;
 
     @Override
@@ -63,8 +65,7 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts
-                .parser()
+        Claims claims = Jwts.parser()
                 .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
@@ -72,23 +73,4 @@ public class JwtTokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getId(String token){
-        try{
-            return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
-        } catch (MalformedJwtException | UnsupportedJwtException e) {
-            throw new IncorrectTokenException();
-        } catch (ExpiredJwtException e) {
-            throw new ExpiredAccessTokenException();
-        } catch (Exception e) {
-            throw new InvalidTokenException();
-        }
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
 }

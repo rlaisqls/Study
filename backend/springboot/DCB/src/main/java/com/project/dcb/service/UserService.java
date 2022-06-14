@@ -28,28 +28,17 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserInfoResponse getUserInfo() {
-        System.out.println(SecurityUtil.getCurrentUsername());
-        User user = SecurityUtil.getCurrentUsername()
-                .flatMap(userRepository::findByUsername)
-                .orElseThrow(InvalidTokenException::new);
-        return new UserInfoResponse(user);
+        return new UserInfoResponse(currentUser());
     }
 
     public void register(RegisterRequest request) {
-        if(userRepository.findByUsername(request.getUsername()).orElse(null) != null) {
+        if (userRepository.findByUsername(request.getUsername()).orElse(null) != null)
             throw new UserAlreadyExistException();
-        }
-        userRepository.save(User.builder()
-                .name(request.getName())
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .gathering(Gathering.valueOf("CLASS_"+request.getGathering().charAt(0)+"_"+request.getGathering().charAt(2)))
-                .authority(Authority.valueOf("ROLE_USER"))
-                .build());
+        userRepository.save(new User(request, passwordEncoder));
     }
 
-    public void authorization(String username,String authority) {
-        userRepository.findByUsername(username).ifPresent(user->{
+    public void authorization(String username, String authority) {
+        userRepository.findByUsername(username).ifPresent(user -> {
             user.setAuthority(Authority.valueOf(authority));
             userRepository.save(user);
         });
@@ -57,9 +46,11 @@ public class UserService {
 
     @Transactional
     public TokenResponse login(LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
-                .filter(a -> passwordEncoder.matches(request.getPassword(),a.getPassword()))
-                .orElseThrow(InvalidInformationException::new);
-        return new TokenResponse(jwtTokenProvider.createToken((user.getUsername())));
+        return new TokenResponse(jwtTokenProvider.createToken(request.getUsername()));
+    }
+
+    public User currentUser() {
+        return userRepository.findByUsername(SecurityUtil.getCurrentUsername())
+                .orElseThrow(InvalidTokenException::new);
     }
 }
