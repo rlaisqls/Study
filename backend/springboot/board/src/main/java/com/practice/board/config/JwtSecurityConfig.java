@@ -1,8 +1,8 @@
 package com.practice.board.config;
 
 
-import com.practice.board.jwt.JwtFilter;
-import com.practice.board.jwt.JwtTokenProvider;
+import com.practice.board.security.jwt.JwtFilter;
+import com.practice.board.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

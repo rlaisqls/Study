@@ -1,9 +1,9 @@
 package com.practice.board.config;
 
 
-import com.practice.board.jwt.JwtTokenProvider;
-import com.practice.board.util.OAuth2SuccessHandler;
-import com.practice.board.service.OAuthUserService;
+import com.practice.board.security.jwt.JwtTokenProvider;
+import com.practice.board.security.OAuth2SuccessHandler;
+import com.practice.board.service.user.OAuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

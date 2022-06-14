@@ -1,10 +1,10 @@
-package com.practice.board.service;
+package com.practice.board.service.user;
 
 import com.practice.board.dto.response.TokensResponse;
 import com.practice.board.entity.refeshToken.RefreshToken;
 import com.practice.board.entity.refeshToken.RefreshTokenRepository;
 import com.practice.board.entity.user.User;
-import com.practice.board.jwt.JwtTokenProvider;
+import com.practice.board.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

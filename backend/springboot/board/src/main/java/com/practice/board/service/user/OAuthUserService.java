@@ -1,4 +1,4 @@
-package com.practice.board.service;
+package com.practice.board.service.user;
 
 import com.practice.board.entity.user.Authority;
 import com.practice.board.entity.user.GoogleUser;
@@ -43,12 +43,14 @@ public class OAuthUserService implements OAuth2UserService<OAuth2UserRequest, OA
                 .activated(true)
                 .build();
 
-        if(userRepository.findByEmail(user.getEmail()).isPresent()) loginService.login(user);
-        else userRepository.save(user);
+        if (!userRepository.findByEmail(user.getEmail()).isPresent()) userRepository.save(user);
+
+        loginService.login(user);
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getAuthority().toString())),
                 attributes,
                 userNameAttributeName);
     }
+
 }

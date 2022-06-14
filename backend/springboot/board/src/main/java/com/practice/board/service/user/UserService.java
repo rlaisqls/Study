@@ -1,4 +1,4 @@
-package com.practice.board.service;
+package com.practice.board.service.user;
 
 import com.practice.board.dto.request.LoginRequest;
 import com.practice.board.dto.request.PasswordChangeRequest;

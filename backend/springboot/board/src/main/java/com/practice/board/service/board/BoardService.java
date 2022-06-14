@@ -28,7 +28,7 @@ public class BoardService {
     //게시글 작성
     public BoardIdResponse boardWrite(BoardRequest request) {
         return new BoardIdResponse(boardRepository.save(Board.builder()
-                .user(nowUser())
+                .user(currentUser())
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build()
@@ -38,10 +38,10 @@ public class BoardService {
     //게시글 수정
     public void boardModify(Long boardId, BoardRequest request) {
         boardWriterCheck(boardId);
-        boardRepository.findById(boardId).ifPresent(selectDocument -> {
-            selectDocument.setTitle(request.getTitle());
-            selectDocument.setContent(request.getContent());
-            boardRepository.save(selectDocument);
+        boardRepository.findById(boardId).ifPresent(board -> {
+            board.setTitle(request.getTitle());
+            board.setContent(request.getContent());
+            boardRepository.save(board);
         });
     }
 
@@ -54,11 +54,11 @@ public class BoardService {
     //본인 게시글인지 확인
     public void boardWriterCheck(Long boardId) {
         Optional<Board> board = boardRepository.findById(boardId);
-        board.filter(b -> b.getUser().getUuid().equals(nowUser().getUuid()))
+        board.filter(b -> b.getUser().getUuid().equals(currentUser().getUuid()))
                 .orElseThrow(WrongApproachException::new);
     }
 
-    //게시글 조회
+    //게시글 ID로 조회
     public BoardResponse findBoard(Long id) {
         return boardRepository.findById(id).map(BoardResponse::from)
                 .orElseThrow(WrongApproachException::new);
@@ -77,7 +77,6 @@ public class BoardService {
                 .map(boardRepository::findByUser_Username)
                 .map(BoardResponse::from)
                 .orElseThrow(InvalidTokenException::new);
-                    //얘가 SecurityUtill.getCurrentUsername에 대한 else가 맞을까?
     }
 
     //게시글 제목 검색
@@ -88,7 +87,7 @@ public class BoardService {
     }
 
     //유저정보 토큰에서 받기
-    public User nowUser() {
+    public User currentUser() {
         return SecurityUtil.getCurrentUsername()
                 .flatMap(userRepository::findByUsername)
                 .orElseThrow(InvalidTokenException::new);
