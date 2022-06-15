@@ -16,10 +16,6 @@ public class LoginRequest {
     private String username;
 
     @NotNull
-    @Email
-    private String email;
-
-    @NotNull
     @Column(length = 30)
     //@Pattern(regexp="(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}") //특수기호 포함 8~20자
     private String password;

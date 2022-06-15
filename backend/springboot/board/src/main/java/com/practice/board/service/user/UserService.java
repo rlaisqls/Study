@@ -2,6 +2,7 @@ package com.practice.board.service.user;
 
 import com.practice.board.dto.request.LoginRequest;
 import com.practice.board.dto.request.PasswordChangeRequest;
+import com.practice.board.dto.request.RegisterRequest;
 import com.practice.board.dto.response.UserInformationResponse;
 import com.practice.board.entity.user.Authority;
 import com.practice.board.entity.user.GeneralUser;
@@ -23,7 +24,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     //가입
-    public void register(LoginRequest request) {
+    public void register(RegisterRequest request) {
         if(userRepository.findByUsername(request.getUsername()).isPresent())
             throw UserAlreadyExistException.EXCEPTION;
 

@@ -3,6 +3,7 @@ package com.practice.board.controller;
 
 import com.practice.board.dto.request.LoginRequest;
 import com.practice.board.dto.request.PasswordChangeRequest;
+import com.practice.board.dto.request.RegisterRequest;
 import com.practice.board.dto.response.UserInformationResponse;
 import com.practice.board.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register") //user 가입
-    public void signup(@Valid @RequestBody LoginRequest request) {
+    public void signup(@Valid @RequestBody RegisterRequest request) {
         userService.register(request);
     }
 
