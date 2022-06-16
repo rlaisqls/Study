@@ -1,0 +1,38 @@
+{
+  "groups": [
+    {
+      "name": "jwt",
+      "type": "com.practice.board.setting.SecurityProperty",
+      "sourceType": "com.practice.board.setting.SecurityProperty"
+    },
+    {
+      "name": "jwt.exp",
+      "type": "com.practice.board.setting.SecurityProperty$Exp",
+      "sourceType": "com.practice.board.setting.SecurityProperty",
+      "sourceMethod": "getExp()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "jwt.exp.refresh",
+      "type": "java.lang.Long",
+      "sourceType": "com.practice.board.setting.SecurityProperty$Exp"
+    },
+    {
+      "name": "jwt.exp.token",
+      "type": "java.lang.Long",
+      "sourceType": "com.practice.board.setting.SecurityProperty$Exp"
+    },
+    {
+      "name": "jwt.header",
+      "type": "java.lang.String",
+      "sourceType": "com.practice.board.setting.SecurityProperty"
+    },
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.practice.board.setting.SecurityProperty"
+    }
+  ],
+  "hints": []
+}
