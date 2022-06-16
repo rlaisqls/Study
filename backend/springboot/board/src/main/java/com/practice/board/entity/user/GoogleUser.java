@@ -15,4 +15,5 @@ import javax.persistence.Entity;
 @Setter
 public class GoogleUser extends User {
     private String oauthId;
+
 }

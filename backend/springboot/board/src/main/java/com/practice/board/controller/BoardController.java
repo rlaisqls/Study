@@ -18,6 +18,7 @@ public class BoardController {
 
     @PostMapping("/board") //글 작성
     public BoardIdResponse boardWrite(@Valid @RequestBody BoardRequest request) {
+        System.out.println("aaaa");
         return boardService.boardWrite(request);
     }
 

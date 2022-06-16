@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
+                .antMatchers("/").permitAll()
                 .antMatchers("/user","/board").hasRole("USER")
                 .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().permitAll()
@@ -56,7 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .successHandler(oAuth2SuccessHandler)
                 .userInfoEndpoint()
-                .userService(oAuthService);
+                .userService(oAuthService)
+
+                ;
 
     }
 
