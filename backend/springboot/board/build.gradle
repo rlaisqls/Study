@@ -30,7 +30,6 @@ dependencies {
     implementation 'junit:junit:4.13.1'
     implementation 'org.projectlombok:lombok:1.18.22'
 
-	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-sql-mysql'
 
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.10.7'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.10.7'

@@ -1,10 +1,12 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${URL}
-    username: ${USERNAME}
-    password: ${PASSWORD}
+    url: jdbc:mysql://34.64.119.52:3306/web_db?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: admin1214
+    password: admin1412
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
       naming:
@@ -15,24 +17,23 @@ spring:
         show_sql: true
     defer-datasource-initialization: true
   redis:
-    port: ${REDIS-PORT}
-    host: ${REDIS-HOST}
-
+    port: 6379
+    host: 10.52.170.155
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: ${CLIENT-ID}
-            client-secret: ${CLIENT-SECRET}
+            client-id: 656955062587-oup1gghlo7tgtbergtpd5rhjriud8vg0.apps.googleusercontent.com
+            client-secret: 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
             scope: profile,email
 
 jwt:
-  header: ${HEADER}
-  secret: ${JWT-SECRET}
+  header: Authorization
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   exp:
-    token: ${TOKEN}
-    refresh: ${REFRESH}
+    token: 600000
+    refresh: 86400000
 
 
 
