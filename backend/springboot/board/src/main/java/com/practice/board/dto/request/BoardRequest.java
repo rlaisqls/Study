@@ -11,18 +11,10 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class BoardRequest {
-    @NotNull
+    @NotNull(message = "제목을 입력하세요.")
     private String title;
 
-    @NotNull
+    @NotNull(message = "내용을 입력하세요.")
     private String content;
-
-    public static Board toBoard(User user, BoardRequest request){
-        return Board.builder()
-                .user(user)
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build();
-    }
 
 }

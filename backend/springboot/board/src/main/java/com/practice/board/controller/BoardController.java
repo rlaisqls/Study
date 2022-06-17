@@ -5,6 +5,9 @@ import com.practice.board.dto.response.BoardIdResponse;
 import com.practice.board.dto.response.BoardResponse;
 import com.practice.board.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,7 +21,6 @@ public class BoardController {
 
     @PostMapping("/board") //글 작성
     public BoardIdResponse boardWrite(@Valid @RequestBody BoardRequest request) {
-        System.out.println("aaaa");
         return boardService.boardWrite(request);
     }
 
@@ -38,17 +40,18 @@ public class BoardController {
     }
 
     @GetMapping("/board/all") //전체 글 조회
-    public List<BoardResponse> findBoardAll() {
-        return boardService.findBoardAll();
+    public Page<BoardResponse> findBoardAll(Pageable pageable) {
+        return boardService.findBoardAll(pageable);
     }
 
     @GetMapping("/board") //내 글 조회
-    public List<BoardResponse> findMyBoard() {
-        return boardService.findMyBoard();
+    public Page<BoardResponse> findMyBoard(@PageableDefault Pageable pageable) {
+        return boardService.findMyBoard(pageable);
     }
 
     @GetMapping("/board/search/{title}") //글 제목으로  검색
-    public List<BoardResponse> searchBoard(@PathVariable String title){
-        return boardService.searchBoard(title);
+    public Page<BoardResponse> searchBoard(@PathVariable String title
+            , @PageableDefault Pageable pageable){
+        return boardService.searchBoard(title, pageable);
     }
 }

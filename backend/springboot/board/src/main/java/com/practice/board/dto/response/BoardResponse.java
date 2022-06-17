@@ -2,6 +2,7 @@ package com.practice.board.dto.response;
 
 import com.practice.board.entity.Board.Board;
 import lombok.*;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardResponse {
     @NotNull
     private Long id;
@@ -29,17 +30,11 @@ public class BoardResponse {
 
     private List<CommentResponse> comments;
 
-    public static List<BoardResponse> from(List<Board> boards){
-        return boards.stream().map(BoardResponse::from).collect(Collectors.toList());
-    }
-
-    public static BoardResponse from(Board board) {
-        return BoardResponse.builder()
-                .id(board.getId())
-                .username(board.getUser().getUsername())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .comments(CommentResponse.ListFrom(board.getComments()))
-                .build();
+    public BoardResponse(Board board) {
+        id = board.getId();
+        username = board.getUser().getUsername();
+        title = board.getTitle();
+        content = board.getContent();
+        comments = CommentResponse.ListFrom(board.getComments());
     }
 }

@@ -1,9 +1,10 @@
-package com.practice.board.security;
+package com.practice.board.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.board.entity.refeshToken.RefreshToken;
 import com.practice.board.entity.refeshToken.RefreshTokenRepository;
 import com.practice.board.entity.user.GoogleUser;
+import com.practice.board.security.jwt.JwtProperties;
 import com.practice.board.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +23,11 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private final ObjectMapper objectMapper;
+
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    @Value("${jwt.exp.refresh}")
-    private Long refreshTokenValidTime;
+
+    private final JwtProperties jwtProperties;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -43,7 +44,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 RefreshToken.builder()
                         .uuid(String.valueOf(user.getUuid()))
                         .refreshToken(jwtTokenProvider.createRefreshToken(String.valueOf(user.getUuid())))
-                        .expiration(refreshTokenValidTime)
+                        .expiration(jwtProperties.getExp().getRefresh())
                         .build());
 
         response.addHeader("Authorization", jwtTokenProvider.createAccessToken(String.valueOf(user.getUuid())));

@@ -2,13 +2,13 @@
   "groups": [
     {
       "name": "jwt",
-      "type": "com.practice.board.setting.SecurityProperty",
-      "sourceType": "com.practice.board.setting.SecurityProperty"
+      "type": "com.practice.board.security.jwt.JwtProperties",
+      "sourceType": "com.practice.board.security.jwt.JwtProperties"
     },
     {
       "name": "jwt.exp",
-      "type": "com.practice.board.setting.SecurityProperty$Exp",
-      "sourceType": "com.practice.board.setting.SecurityProperty",
+      "type": "com.practice.board.security.jwt.JwtProperties$Exp",
+      "sourceType": "com.practice.board.security.jwt.JwtProperties",
       "sourceMethod": "getExp()"
     }
   ],
@@ -16,22 +16,22 @@
     {
       "name": "jwt.exp.refresh",
       "type": "java.lang.Long",
-      "sourceType": "com.practice.board.setting.SecurityProperty$Exp"
+      "sourceType": "com.practice.board.security.jwt.JwtProperties$Exp"
     },
     {
       "name": "jwt.exp.token",
       "type": "java.lang.Long",
-      "sourceType": "com.practice.board.setting.SecurityProperty$Exp"
+      "sourceType": "com.practice.board.security.jwt.JwtProperties$Exp"
     },
     {
       "name": "jwt.header",
       "type": "java.lang.String",
-      "sourceType": "com.practice.board.setting.SecurityProperty"
+      "sourceType": "com.practice.board.security.jwt.JwtProperties"
     },
     {
       "name": "jwt.secret",
       "type": "java.lang.String",
-      "sourceType": "com.practice.board.setting.SecurityProperty"
+      "sourceType": "com.practice.board.security.jwt.JwtProperties"
     }
   ],
   "hints": []
