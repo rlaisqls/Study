@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+
 public class CommentService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
@@ -19,6 +20,7 @@ public class CommentService {
 
     //댓글 작성
     public void CommentWrite(Long boardId, CommentRequest request) {
+
         Comment comment = boardRepository.findById(boardId)
                 .map(board -> Comment.builder()
                         .username(SecurityUtil.getCurrentUsername().get())
@@ -26,6 +28,7 @@ public class CommentService {
                         .comment(request.getComment())
                         .build())
                 .orElseThrow(()->BoardNotExistException.EXCEPTION);
+
         commentRepository.save(comment);
     }
 }

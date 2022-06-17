@@ -9,6 +9,7 @@ import com.practice.board.entity.user.GeneralUser;
 import com.practice.board.entity.user.User;
 import com.practice.board.entity.user.UserRepository;
 import com.practice.board.exception.*;
+import com.practice.board.facade.UserFacade;
 import com.practice.board.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,15 +21,19 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserFacade userFacade;
 
     //가입
     public void register(RegisterRequest request) {
+
         if(userRepository.findByUsername(request.getUsername()).isPresent())
             throw UserAlreadyExistException.EXCEPTION;
 
-        userRepository.save(GeneralUser.builder()
+        userRepository.save(GeneralUser
+                .builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -46,25 +51,27 @@ public class UserService {
 
     //전체 유저 정보 조회
     public List<UserInformationResponse> getAllUserInfo() {
-        return userRepository.findAll().stream()
+        return userRepository.findAll()
+                .stream()
                 .map(UserInformationResponse::new)
                 .collect(Collectors.toList());
     }
 
     //비밀번호 변경
     public void passwordChange(PasswordChangeRequest request) {
-        GeneralUser user = (GeneralUser) nowUser();
-        if (user.getPassword() == null) throw new HandleAccessDeniedException();
+
+        GeneralUser user = (GeneralUser) userFacade.nowUser();
+
+        if (user.getPassword() == null)
+            throw new HandleAccessDeniedException();
+
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
             throw PasswordMismatchException.EXCEPTION;
+
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
 
     //유저정보 토큰에서 받기
-    public User nowUser() {
-        return SecurityUtil.getCurrentUsername()
-                .flatMap(userRepository::findByUsername)
-                .orElseThrow(()->InvalidTokenException.EXCEPTION);
-    }
+
 }

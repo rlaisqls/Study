@@ -1,24 +1,18 @@
 package com.practice.board.security.jwt;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-@Setter
 @Getter
-@Configuration
+@AllArgsConstructor
+@ConstructorBinding
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
-
-    private String header;
-    private String secret;
-    private Exp exp;
-
-    @Getter
-    @Setter
-    public static class Exp {
-        private Long token;
-        private Long refresh;
-    }
+    private final String header;
+    private final String prefix;
+    private final String secret;
+    private final Long access;
+    private final Long refresh;
 }

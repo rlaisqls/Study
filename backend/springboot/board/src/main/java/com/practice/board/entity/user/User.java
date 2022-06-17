@@ -1,6 +1,5 @@
 package com.practice.board.entity.user;
 
-
 import com.practice.board.entity.Board.Board;
 import com.practice.board.entity.user.Authority;
 import lombok.*;

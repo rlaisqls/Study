@@ -4,6 +4,7 @@ import com.practice.board.dto.response.TokensResponse;
 import com.practice.board.entity.refeshToken.RefreshToken;
 import com.practice.board.entity.refeshToken.RefreshTokenRepository;
 import com.practice.board.entity.user.User;
+import com.practice.board.security.jwt.JwtProperties;
 import com.practice.board.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService {
 
-    @Value("${jwt.exp.refresh}")
-    private Long refreshTokenValidTime;
+    private final JwtProperties jwtProperties;
 
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -25,7 +25,7 @@ public class LoginService {
                 RefreshToken.builder()
                         .uuid(String.valueOf(user.getUuid()))
                         .refreshToken(jwtTokenProvider.createRefreshToken(String.valueOf(user.getUuid())))
-                        .expiration(refreshTokenValidTime)
+                        .expiration(jwtProperties.getRefresh())
                         .build());
 
         return TokensResponse.builder()

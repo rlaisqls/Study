@@ -111,6 +111,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.practice.board.config" />
       <recent name="com.practice.exception.service" />
       <recent name="com.practice.board.entity.Board" />
     </key>
@@ -240,10 +241,11 @@
         <env name="HEADER" value="Authorization" />
         <env name="JWT-SECRET" value="c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK" />
         <env name="PASSWORD" value="Mydptmzbdpf!1" />
+        <env name="PREFIX" value="Bearer" />
         <env name="REDIS-HOST" value="127.0.0.1" />
         <env name="REDIS-PORT" value="6379" />
-        <env name="REFRESH" value="86400000" />
-        <env name="TOKEN" value="600000" />
+        <env name="REFRESH-EXP" value="86400" />
+        <env name="TOKEN-EXP" value="600" />
         <env name="URL" value="jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul" />
         <env name="USERNAME" value="root" />
       </envs>
@@ -272,6 +274,9 @@
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpringBootOptions">
+    <option name="showAdditionalConfigNotification" value="false" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="f4b5bbd0-4f88-4eb1-806b-a7d7a16232ac" name="Changes" comment="" />
@@ -285,7 +290,7 @@
       <workItem from="1654849078063" duration="6492000" />
       <workItem from="1655163478703" duration="2125000" />
       <workItem from="1655190685388" duration="29301000" />
-      <workItem from="1655356469056" duration="23926000" />
+      <workItem from="1655356469056" duration="34067000" />
     </task>
     <servers />
   </component>

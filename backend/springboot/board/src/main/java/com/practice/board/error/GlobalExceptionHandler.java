@@ -51,20 +51,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    //메서드를 불법으로 호출?
+    //잘못된 메서드 호출
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException e) {
         ErrorCode errorCode = ErrorCode.INVALID_PARAMETER;
         ErrorResponse response = ErrorResponse.of(errorCode, errorCode.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    //권한없음
-    @ExceptionHandler(AccessDeniedException.class)
-    protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
-        ErrorCode errorCode = ErrorCode.HANDLE_ACCESS_DENIED;
-        final ErrorResponse response = ErrorResponse.of(errorCode,errorCode.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)

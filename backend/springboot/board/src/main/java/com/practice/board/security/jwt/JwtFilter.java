@@ -25,8 +25,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
-    private final ObjectMapper objectMapper;
-
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String token = jwtTokenProvider.resolveToken(request);
@@ -34,31 +32,6 @@ public class JwtFilter extends OncePerRequestFilter {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        /*
-        try{
-            String token = jwtTokenProvider.resolveToken(request);
-            if (token != null) {
-                Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-            filterChain.doFilter(request, response);
-        } catch (MalformedJwtException | UnsupportedJwtException e) {
-            throw IncorrectTokenException.EXCEPTION;
-            //setResponse(response, ErrorCode.INCORRECT_TOKEN);
-        } catch (ExpiredJwtException e) {
-            throw ExpiredTokenException.EXCEPTION;
-            //setResponse(response, ErrorCode.EXPIRED_ACCESS_TOKEN);
-        } catch (Exception e) {
-            throw InvalidTokenException.EXCEPTION;
-            //setResponse(response, ErrorCode.INVALID_TOKEN);
-        }*/
-    }
-
-    private void setResponse(HttpServletResponse response, ErrorCode incorrectToken) throws IOException {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
-        final ErrorResponse errorResponse = ErrorResponse.of(incorrectToken, incorrectToken.getMessage());
-        objectMapper.writeValue(response.getWriter(), errorResponse);
+        filterChain.doFilter(request, response);
     }
 }

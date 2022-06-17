@@ -31,7 +31,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-            throws IOException, ServletException {
+            throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
         GoogleUser user = GoogleUser.builder()
@@ -44,7 +44,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 RefreshToken.builder()
                         .uuid(String.valueOf(user.getUuid()))
                         .refreshToken(jwtTokenProvider.createRefreshToken(String.valueOf(user.getUuid())))
-                        .expiration(jwtProperties.getExp().getRefresh())
+                        .expiration(jwtProperties.getRefresh())
                         .build());
 
         response.addHeader("Authorization", jwtTokenProvider.createAccessToken(String.valueOf(user.getUuid())));

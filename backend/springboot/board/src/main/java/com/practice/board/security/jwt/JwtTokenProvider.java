@@ -1,5 +1,6 @@
 package com.practice.board.security.jwt;
 
+import com.practice.board.exception.ExpiredTokenException;
 import com.practice.board.exception.InvalidTokenException;
 import com.practice.board.security.auth.CustomUserDetailsService;
 import io.jsonwebtoken.*;
@@ -38,48 +39,57 @@ public class JwtTokenProvider implements InitializingBean {
                 .setSubject(uuid)
                 .claim("type", "access")
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + jwtProperties.getExp().getToken()))
+                .setExpiration(new Date(now.getTime() + jwtProperties.getAccess() * 1000))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public String createRefreshToken(String uuid){
+    public String createRefreshToken(String uuid) {
         Date now = new Date();
         return Jwts.builder()
                 .setSubject(uuid)
                 .claim("type", "refresh")
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + jwtProperties.getExp().getRefresh()))
+                .setExpiration(new Date(now.getTime() + jwtProperties.getRefresh() * 1000))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts
-                .parser()
-                .setSigningKey(key)
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = getClaims(token);
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getId(String token){
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+    public String getId(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    public boolean isRefreshToken(String token) {
+        return getClaims(token).get("type").equals("refresh");
+    }
+
+    private Claims getClaims(String token) {
+        try {
+            return Jwts
+                    .parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw ExpiredTokenException.EXCEPTION;
+        } catch (Exception e) {
+            throw InvalidTokenException.EXCEPTION;
+        }
     }
 
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(jwtProperties.getHeader());
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.getPrefix())
+                && bearerToken.length() > jwtProperties.getPrefix().length() + 1) {
             return bearerToken.substring(7);
         }
         return null;
     }
 
-    public boolean isRefreshToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(token)
-                .getBody().get("type").equals("refresh");
-    }
 }
