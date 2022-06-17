@@ -1,6 +1,7 @@
 package com.practice.board.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.board.security.jwt.JwtFilter;
 import com.practice.board.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void configure(HttpSecurity http) {
-        JwtFilter customFilter = new JwtFilter(jwtTokenProvider);
+        JwtFilter customFilter = new JwtFilter(jwtTokenProvider, objectMapper);
         http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

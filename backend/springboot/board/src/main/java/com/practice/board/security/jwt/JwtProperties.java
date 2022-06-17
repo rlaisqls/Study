@@ -1,17 +1,15 @@
-package com.practice.board.setting;
+package com.practice.board.security.jwt;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 @Setter
 @Getter
 @Configuration
 @ConfigurationProperties(prefix = "jwt")
-public class SecurityProperty {
+public class JwtProperties {
 
     private String header;
     private String secret;

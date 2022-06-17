@@ -1,11 +1,26 @@
 package com.practice.board.error;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.practice.board.error.exception.ErrorCode;
+import lombok.*;
 
+import java.time.LocalDateTime;
+
+@Builder
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorResponse {
-    private final int status;
-    private final String message;
+    private String message;
+    private Integer status;
+    private LocalDateTime timestamp;
+    private String description;
+
+    public static ErrorResponse of(ErrorCode errorCode, String description) {
+        return ErrorResponse.builder()
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatusCode())
+                .timestamp(LocalDateTime.now())
+                .description(description)
+                .build();
+    }
 }

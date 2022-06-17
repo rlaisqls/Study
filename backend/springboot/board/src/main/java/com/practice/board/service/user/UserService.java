@@ -54,10 +54,10 @@ public class UserService {
     //비밀번호 변경
     public void passwordChange(PasswordChangeRequest request) {
         GeneralUser user = (GeneralUser) nowUser();
-        if (user.getPassword() == null) throw new WrongApproachException();
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword()))
+        if (user.getPassword() == null) throw new HandleAccessDeniedException();
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
             throw PasswordMismatchException.EXCEPTION;
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
 
@@ -65,6 +65,6 @@ public class UserService {
     public User nowUser() {
         return SecurityUtil.getCurrentUsername()
                 .flatMap(userRepository::findByUsername)
-                .orElseThrow(InvalidTokenException::new);
+                .orElseThrow(()->InvalidTokenException.EXCEPTION);
     }
 }

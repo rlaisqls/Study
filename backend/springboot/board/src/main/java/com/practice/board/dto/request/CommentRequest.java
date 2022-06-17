@@ -12,6 +12,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class CommentRequest {
-    @NotNull
+    @NotNull(message = "댓글을 입력하세요.")
     private String comment;
 }

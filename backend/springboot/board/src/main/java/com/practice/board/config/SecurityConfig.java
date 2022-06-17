@@ -1,8 +1,9 @@
 package com.practice.board.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.board.security.jwt.JwtTokenProvider;
-import com.practice.board.security.OAuth2SuccessHandler;
+import com.practice.board.security.auth.OAuth2SuccessHandler;
 import com.practice.board.service.user.OAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuthService oAuthService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -51,15 +53,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
-                .apply(new JwtSecurityConfig(jwtTokenProvider))
+                .apply(new JwtSecurityConfig(jwtTokenProvider, objectMapper))
 
                 .and()
                 .oauth2Login()
                 .successHandler(oAuth2SuccessHandler)
                 .userInfoEndpoint()
-                .userService(oAuthService)
-
-                ;
+                .userService(oAuthService);
 
     }
 

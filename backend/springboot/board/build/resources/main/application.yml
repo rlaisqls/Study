@@ -17,7 +17,6 @@ spring:
   redis:
     port: ${REDIS-PORT}
     host: ${REDIS-HOST}
-
   security:
     oauth2:
       client:
@@ -31,10 +30,8 @@ jwt:
   header: ${HEADER}
   secret: ${JWT-SECRET}
   exp:
-    token: ${TOKEN}
-    refresh: ${REFRESH}
-
-
+    token: 1 #${TOKEN}
+    refresh: 1 #${REFRESH}
 
 logging:
   level:

@@ -1,6 +1,6 @@
 package com.practice.board;
 
-import com.practice.board.setting.SecurityProperty;
+import com.practice.board.security.jwt.JwtProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -14,11 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 class BoardApplicationTests {
 
 	@Autowired
-	private SecurityProperty securityProperty;
+	private JwtProperties jwtProperties;
 
 	@Test
 	public void contextLoad() throws Exception{
-		System.out.println(securityProperty);
+		System.out.println(jwtProperties);
 	}
 
 }

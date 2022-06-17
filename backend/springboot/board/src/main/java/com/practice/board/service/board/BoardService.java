@@ -7,15 +7,16 @@ import com.practice.board.entity.Board.Board;
 import com.practice.board.entity.Board.BoardRepository;
 import com.practice.board.entity.user.User;
 import com.practice.board.entity.user.UserRepository;
+import com.practice.board.exception.HandleAccessDeniedException;
 import com.practice.board.exception.InvalidTokenException;
-import com.practice.board.exception.WrongApproachException;
 import com.practice.board.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,41 +56,39 @@ public class BoardService {
     public void boardWriterCheck(Long boardId) {
         Optional<Board> board = boardRepository.findById(boardId);
         board.filter(b -> b.getUser().getUuid().equals(currentUser().getUuid()))
-                .orElseThrow(WrongApproachException::new);
+                .orElseThrow(()->HandleAccessDeniedException.EXCEPTION);
     }
 
     //게시글 ID로 조회
     public BoardResponse findBoard(Long id) {
-        return boardRepository.findById(id).map(BoardResponse::from)
-                .orElseThrow(WrongApproachException::new);
+        return boardRepository.findById(id).map(BoardResponse::new)
+                .orElseThrow(()->HandleAccessDeniedException.EXCEPTION);
     }
 
     //전체 게시글 조회
-    public List<BoardResponse> findBoardAll() {
-        return boardRepository.findAll().stream()
-                .map(BoardResponse::from)
-                .collect(Collectors.toList());
+    public Page<BoardResponse> findBoardAll(Pageable pageable) {
+        return boardRepository.findAll(pageable)
+                .map(BoardResponse::new);
     }
 
     //내 게시글 조회
-    public List<BoardResponse> findMyBoard() {
+    public Page<BoardResponse> findMyBoard(Pageable pageable) {
         return SecurityUtil.getCurrentUsername()
-                .map(boardRepository::findByUser_Username)
-                .map(BoardResponse::from)
-                .orElseThrow(InvalidTokenException::new);
+                .map(user->boardRepository.findByUser_Username(user, pageable))
+                .map(boards -> boards.map(BoardResponse::new))
+                .orElseThrow(()->InvalidTokenException.EXCEPTION);
     }
 
     //게시글 제목 검색
-    public List<BoardResponse> searchBoard(String title) {
-        return boardRepository.findByTitleContaining(title).stream()
-                .map(BoardResponse::from)
-                .collect(Collectors.toList());
+    public Page<BoardResponse> searchBoard(String title, Pageable pageable) {
+        return boardRepository.findByTitleContaining(title, pageable)
+                .map(BoardResponse::new);
     }
 
     //유저정보 토큰에서 받기
     public User currentUser() {
         return SecurityUtil.getCurrentUsername()
                 .flatMap(userRepository::findByUsername)
-                .orElseThrow(InvalidTokenException::new);
+                .orElseThrow(()->InvalidTokenException.EXCEPTION);
     }
 }
