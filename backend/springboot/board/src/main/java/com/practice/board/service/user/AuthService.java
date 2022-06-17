@@ -19,32 +19,36 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Value("${jwt.exp.refresh}")
-    private Long refreshTokenValidTime;
-
     private final LoginService loginService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    @Value("${jwt.refresh}")
+    private Long refreshTokenValidTime;
 
     @Transactional
     public TokensResponse login(LoginRequest request) {
+
         User user = userRepository.findByUsername(request.getUsername())
-                .filter(a -> passwordEncoder.matches(request.getPassword(),a.getPassword())) //패스워드 입력과 데이터 비교
-                .orElseThrow(()->InvalidInformationException.EXCEPTION);
+                .filter(a -> passwordEncoder.matches(request.getPassword(), a.getPassword())) //패스워드 입력과 데이터 비교
+                .orElseThrow(() -> InvalidInformationException.EXCEPTION);
+
         return loginService.login(user);
     }
 
     @Transactional
     public TokensResponse reissue(String refreshToken) {
-        if(!jwtTokenProvider.isRefreshToken(refreshToken)) throw IncorrectTokenException.EXCEPTION;
+
+        if (!jwtTokenProvider.isRefreshToken(refreshToken))
+            throw IncorrectTokenException.EXCEPTION;
+
         String uuid = jwtTokenProvider.getId(refreshToken);
 
         refreshTokenRepository.findById(uuid)
                 .filter(token -> token.getRefreshToken().equals(refreshToken)) //저장한 토큰과 동일한지 확인
                 .map(token -> token.updateExpiration(refreshTokenValidTime)) //유효시간 갱신
-                .orElseThrow(()->IncorrectTokenException.EXCEPTION);
+                .orElseThrow(() -> IncorrectTokenException.EXCEPTION);
 
         return TokensResponse.builder()
                 .accessToken(jwtTokenProvider.createAccessToken(uuid))

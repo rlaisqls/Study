@@ -4,28 +4,27 @@
       "name": "jwt",
       "type": "com.practice.board.security.jwt.JwtProperties",
       "sourceType": "com.practice.board.security.jwt.JwtProperties"
-    },
-    {
-      "name": "jwt.exp",
-      "type": "com.practice.board.security.jwt.JwtProperties$Exp",
-      "sourceType": "com.practice.board.security.jwt.JwtProperties",
-      "sourceMethod": "getExp()"
     }
   ],
   "properties": [
     {
-      "name": "jwt.exp.refresh",
+      "name": "jwt.access",
       "type": "java.lang.Long",
-      "sourceType": "com.practice.board.security.jwt.JwtProperties$Exp"
-    },
-    {
-      "name": "jwt.exp.token",
-      "type": "java.lang.Long",
-      "sourceType": "com.practice.board.security.jwt.JwtProperties$Exp"
+      "sourceType": "com.practice.board.security.jwt.JwtProperties"
     },
     {
       "name": "jwt.header",
       "type": "java.lang.String",
+      "sourceType": "com.practice.board.security.jwt.JwtProperties"
+    },
+    {
+      "name": "jwt.prefix",
+      "type": "java.lang.String",
+      "sourceType": "com.practice.board.security.jwt.JwtProperties"
+    },
+    {
+      "name": "jwt.refresh",
+      "type": "java.lang.Long",
       "sourceType": "com.practice.board.security.jwt.JwtProperties"
     },
     {

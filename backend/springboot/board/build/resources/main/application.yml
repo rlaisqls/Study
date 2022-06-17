@@ -28,10 +28,10 @@ spring:
 
 jwt:
   header: ${HEADER}
+  prefix : ${PREFIX}
   secret: ${JWT-SECRET}
-  exp:
-    token: 1 #${TOKEN}
-    refresh: 1 #${REFRESH}
+  access: ${TOKEN-EXP}
+  refresh: ${REFRESH-EXP}
 
 logging:
   level:

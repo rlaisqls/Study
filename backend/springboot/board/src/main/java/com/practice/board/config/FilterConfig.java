@@ -2,6 +2,7 @@ package com.practice.board.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practice.board.error.GlobalExceptionFilter;
 import com.practice.board.security.jwt.JwtFilter;
 import com.practice.board.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -11,15 +12,18 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
-public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class FilterConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final JwtTokenProvider jwtTokenProvider;
+
     private final ObjectMapper objectMapper;
 
     @Override
     public void configure(HttpSecurity http) {
-        JwtFilter customFilter = new JwtFilter(jwtTokenProvider, objectMapper);
-        http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
+        JwtFilter jwtTokenFilter = new JwtFilter(jwtTokenProvider);
+        GlobalExceptionFilter globalExceptionFilter = new GlobalExceptionFilter(objectMapper);
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(globalExceptionFilter, JwtFilter.class);
     }
 
 }
