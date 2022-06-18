@@ -29,7 +29,7 @@ public class UserService {
     //가입
     public void register(RegisterRequest request) {
 
-        if(userRepository.findByUsername(request.getUsername()).isPresent())
+        if (userRepository.findByUsername(request.getUsername()).isPresent())
             throw UserAlreadyExistException.EXCEPTION;
 
         userRepository.save(GeneralUser
@@ -68,8 +68,9 @@ public class UserService {
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
             throw PasswordMismatchException.EXCEPTION;
 
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
+        GeneralUser newUser = new GeneralUser(user, passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(newUser);
+
     }
 
     //유저정보 토큰에서 받기

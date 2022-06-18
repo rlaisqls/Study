@@ -27,7 +27,7 @@ public class BoardService {
     private final UserRepository userRepository;
 
     //게시글 작성
-    public BoardIdResponse boardWrite(BoardRequest request) {
+    public BoardIdResponse writeBoard(BoardRequest request) {
         return new BoardIdResponse(boardRepository.save(Board.builder()
                 .user(currentUser())
                 .title(request.getTitle())
@@ -37,8 +37,8 @@ public class BoardService {
     }
 
     //게시글 수정
-    public void boardModify(Long boardId, BoardRequest request) {
-        boardWriterCheck(boardId);
+    public void modifyBoard(Long boardId, BoardRequest request) {
+        writerCheck(boardId);
         boardRepository.findById(boardId).ifPresent(board -> {
             board.setTitle(request.getTitle());
             board.setContent(request.getContent());
@@ -47,13 +47,13 @@ public class BoardService {
     }
 
     //게시글 삭제
-    public void boardDelete(Long boardId) {
-        boardWriterCheck(boardId);
+    public void deleteBoard(Long boardId) {
+        writerCheck(boardId);
         boardRepository.deleteById(boardId);
     }
 
     //본인 게시글인지 확인
-    public void boardWriterCheck(Long boardId) {
+    public void writerCheck(Long boardId) {
         Optional<Board> board = boardRepository.findById(boardId);
         board.filter(b -> b.getUser().getUuid().equals(currentUser().getUuid()))
                 .orElseThrow(()->HandleAccessDeniedException.EXCEPTION);
