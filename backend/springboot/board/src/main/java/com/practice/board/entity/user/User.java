@@ -24,7 +24,7 @@ import java.util.List;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class User implements UserDetails {
+public class User implements UserDetails {
     @Id
     @Column(columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "uuid2")

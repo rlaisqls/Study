@@ -20,18 +20,18 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/board") //글 작성
-    public BoardIdResponse boardWrite(@Valid @RequestBody BoardRequest request) {
-        return boardService.boardWrite(request);
+    public BoardIdResponse writeBoard(@Valid @RequestBody BoardRequest request) {
+        return boardService.writeBoard(request);
     }
 
     @PatchMapping ("/board/{boardId}") //글 수정
-    public void boardModify(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
-        boardService.boardModify(boardId, request);
+    public void modifyBoard(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
+        boardService.modifyBoard(boardId, request);
     }
 
     @DeleteMapping("/board/{boardId}") //글 삭제
-    public void boardDelete(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
-        boardService.boardDelete(boardId);
+    public void deleteBoard(@PathVariable Long boardId, @Valid @RequestBody BoardRequest request) {
+        boardService.deleteBoard(boardId);
     }
 
     @GetMapping("/board/{boardId}") //글 조회
