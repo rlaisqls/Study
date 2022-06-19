@@ -11,8 +11,8 @@
     <bean id="memberRepository" class="com.study.oopspring.member.MemoryMemberRepository"/>
 
     <bean id="orderService" class="com.study.oopspring.order.OrderServiceImpl">
-        <constructor-arg name="memberRepository" ref="memberRepository"/>
         <constructor-arg name="discountPolicy" ref="discountPolicy"/>
+        <constructor-arg name="memberRepository" ref="memberRepository"/>
     </bean>
 
     <bean id="discountPolicy" class="com.study.oopspring.discount.RateDiscountPolicy"/>
