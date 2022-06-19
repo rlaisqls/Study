@@ -1,4 +1,4 @@
-package com.study.oopspring.C_springSingleton;
+package com.study.oopspring.C_SpringSingleton;
 
 import com.study.oopspring.AppConfig;
 import com.study.oopspring.member.MemberService;

@@ -1,10 +1,13 @@
 package com.study.oopspring.discount;
 
+import com.study.oopspring.annotation.MainDiscountPolicy;
 import com.study.oopspring.member.Grade;
 import com.study.oopspring.member.Member;
+import org.springframework.stereotype.Component;
 
+@Component
+@MainDiscountPolicy
 public class FixDiscountPolicy implements DiscountPolicy {
-
 
     private int discountFixAmount = 1000;
 

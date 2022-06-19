@@ -1,4 +1,4 @@
-package com.study.oopspring.C_springSingleton;
+package com.study.oopspring.C_SpringSingleton;
 
 public class StatefulService {
 
