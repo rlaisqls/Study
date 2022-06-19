@@ -1,4 +1,4 @@
-package com.study.oopspring.beanDefinition;
+package com.study.oopspring.B_ConfigBeanFind.beanDefinition;
 
 import com.study.oopspring.AppConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,7 @@ public class BeanDefinitionTest {
         for (String beanDefinitionName : beanDefinitionNames) {
             BeanDefinition beanDefinition = ac.getBeanDefinition(beanDefinitionName);
             if(beanDefinition.getRole() == BeanDefinition.ROLE_APPLICATION){
-                System.out.println("beanDefinitionName = " + beanDefinitionName + "beanDefinition = " + beanDefinition);
+                System.out.println("beanDefinitionName = " + beanDefinitionName + ", beanDefinition = " + beanDefinition);
             }
         }
     }

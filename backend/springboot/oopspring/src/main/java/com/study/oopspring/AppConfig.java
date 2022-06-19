@@ -17,22 +17,26 @@ public class AppConfig {
     @Bean
     public MemberRepository memberRepository() {
         //repository에 @repository를 달면 알아서 인식해서 빈으로 등록시켜줌
+        System.out.println("AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
 
     @Bean
     public DiscountPolicy discountPolicy() {
+        System.out.println("AppConfig.discountPolicy");
         return new FixDiscountPolicy();
     }
     // ------------------------------------------
 
     @Bean
     public MemberService memberService(){
+        System.out.println("AppConfig.memberService");
         return new MemberServiceImpl(memberRepository());
     }
 
     @Bean
     public OrderService orderService(){
+        System.out.println("AppConfig.orderService");
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 

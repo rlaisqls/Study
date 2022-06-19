@@ -1,4 +1,4 @@
-package com.study.oopspring.singleton;
+package com.study.oopspring.C_springSingleton;
 
 public class SingletonService {
     //이 메서드를 호출하면 항상 같은 인스턴스를 반환한다.

@@ -1,4 +1,4 @@
-package com.study.oopspring.singleton;
+package com.study.oopspring.C_springSingleton;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;

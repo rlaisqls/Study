@@ -1,9 +1,11 @@
-package com.study.oopspring.order;
+package com.study.oopspring.A_funtion;
 
 import com.study.oopspring.AppConfig;
 import com.study.oopspring.member.Grade;
 import com.study.oopspring.member.Member;
 import com.study.oopspring.member.MemberService;
+import com.study.oopspring.order.Order;
+import com.study.oopspring.order.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

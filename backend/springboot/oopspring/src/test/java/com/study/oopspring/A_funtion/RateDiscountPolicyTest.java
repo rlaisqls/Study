@@ -1,5 +1,6 @@
-package com.study.oopspring.discount;
+package com.study.oopspring.A_funtion;
 
+import com.study.oopspring.discount.RateDiscountPolicy;
 import com.study.oopspring.member.Grade;
 import com.study.oopspring.member.Member;
 import org.junit.jupiter.api.DisplayName;

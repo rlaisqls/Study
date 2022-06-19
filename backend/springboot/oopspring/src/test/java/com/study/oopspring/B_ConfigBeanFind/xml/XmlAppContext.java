@@ -1,4 +1,4 @@
-package com.study.oopspring.xml;
+package com.study.oopspring.B_ConfigBeanFind.xml;
 
 import com.study.oopspring.member.MemberService;
 import org.junit.jupiter.api.Test;

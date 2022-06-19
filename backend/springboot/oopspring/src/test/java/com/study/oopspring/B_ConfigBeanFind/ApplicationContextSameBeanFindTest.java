@@ -1,4 +1,4 @@
-package com.study.oopspring.beanFind;
+package com.study.oopspring.B_ConfigBeanFind;
 
 import com.study.oopspring.member.MemberRepository;
 import com.study.oopspring.member.MemoryMemberRepository;

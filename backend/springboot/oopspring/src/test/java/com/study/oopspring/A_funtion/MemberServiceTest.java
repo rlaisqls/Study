@@ -1,7 +1,10 @@
-package com.study.oopspring.member;
+package com.study.oopspring.A_funtion;
 
 
 import com.study.oopspring.AppConfig;
+import com.study.oopspring.member.Grade;
+import com.study.oopspring.member.Member;
+import com.study.oopspring.member.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
