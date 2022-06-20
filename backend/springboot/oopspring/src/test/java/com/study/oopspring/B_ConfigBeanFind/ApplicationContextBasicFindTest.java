@@ -1,6 +1,6 @@
 package com.study.oopspring.B_ConfigBeanFind;
 
-import com.study.oopspring.AppConfig;
+import com.study.oopspring.config.AppConfig;
 import com.study.oopspring.member.MemberService;
 import com.study.oopspring.member.MemberServiceImpl;
 import org.junit.jupiter.api.DisplayName;

@@ -1,6 +1,6 @@
 package com.study.oopspring.A_funtion;
 
-import com.study.oopspring.AppConfig;
+import com.study.oopspring.config.AppConfig;
 import com.study.oopspring.member.Grade;
 import com.study.oopspring.member.Member;
 import com.study.oopspring.member.MemberService;

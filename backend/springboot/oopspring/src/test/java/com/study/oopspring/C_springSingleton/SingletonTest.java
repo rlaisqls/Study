@@ -1,6 +1,6 @@
 package com.study.oopspring.C_SpringSingleton;
 
-import com.study.oopspring.AppConfig;
+import com.study.oopspring.config.AppConfig;
 import com.study.oopspring.member.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -23,7 +23,6 @@ import java.util.Date;
 public class JwtTokenProvider implements InitializingBean {
 
     private final JwtProperties jwtProperties;
-
     private final CustomUserDetailsService customUserDetailsService;
     private Key key;
 

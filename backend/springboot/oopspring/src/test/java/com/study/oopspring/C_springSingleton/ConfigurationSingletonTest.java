@@ -1,6 +1,6 @@
 package com.study.oopspring.C_SpringSingleton;
 
-import com.study.oopspring.AppConfig;
+import com.study.oopspring.config.AppConfig;
 import com.study.oopspring.member.MemberRepository;
 import com.study.oopspring.member.MemberServiceImpl;
 import com.study.oopspring.order.OrderServiceImpl;
@@ -28,7 +28,7 @@ public class ConfigurationSingletonTest {
         ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
         AppConfig bean = ac.getBean(AppConfig.class);
         System.out.println("bean.getClass() = " + bean.getClass());
-        /*class com.study.oopspring.AppConfig$$EnhancerBySpringCGLIB$$c5d3ba9
+        /*class com.study.oopspring.config.AppConfig$$EnhancerBySpringCGLIB$$c5d3ba9
         스프링이 CGLIB라는 바이트 코드 조작 라이브러리를 사용해서 AppConfig를 상속받은
         임의의 다른 클래스를 만들어서 빈으로 등록했기 때문에 위처럼 뜬다.*/
     }

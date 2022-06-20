@@ -1,4 +1,4 @@
-package com.study.oopspring;
+package com.study.oopspring.config;
 
 import com.study.oopspring.discount.DiscountPolicy;
 import com.study.oopspring.discount.FixDiscountPolicy;

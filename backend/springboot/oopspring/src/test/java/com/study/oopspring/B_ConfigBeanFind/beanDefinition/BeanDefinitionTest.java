@@ -1,6 +1,6 @@
 package com.study.oopspring.B_ConfigBeanFind.beanDefinition;
 
-import com.study.oopspring.AppConfig;
+import com.study.oopspring.config.AppConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.config.BeanDefinition;

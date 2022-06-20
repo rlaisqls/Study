@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class CommentService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
 
     //댓글 작성
     public void CommentWrite(Long boardId, CommentRequest request) {

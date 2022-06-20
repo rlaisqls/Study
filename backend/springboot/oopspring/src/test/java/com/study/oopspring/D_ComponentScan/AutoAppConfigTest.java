@@ -1,6 +1,6 @@
 package com.study.oopspring.D_ComponentScan;
 
-import com.study.oopspring.AutoAppConfig;
+import com.study.oopspring.config.AutoAppConfig;
 import com.study.oopspring.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

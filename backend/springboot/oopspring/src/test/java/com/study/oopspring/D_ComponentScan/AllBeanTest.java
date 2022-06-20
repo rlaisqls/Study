@@ -1,6 +1,6 @@
 package com.study.oopspring.D_ComponentScan;
 
-import com.study.oopspring.AutoAppConfig;
+import com.study.oopspring.config.AutoAppConfig;
 import com.study.oopspring.discount.DiscountPolicy;
 import com.study.oopspring.member.Grade;
 import com.study.oopspring.member.Member;
