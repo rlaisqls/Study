@@ -1,6 +1,10 @@
 package com.practice.shoppingmall.entity.item;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -12,7 +16,9 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item {
     @Id
     @Column(name = "item_id", columnDefinition = "BINARY(16)")

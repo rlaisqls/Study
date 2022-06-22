@@ -30,9 +30,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
-@Builder
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
@@ -60,5 +59,9 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    public void putOrderItem(OrderItem orderItem){
+        this.orderItemList.add(orderItem);
+    }
 
 }

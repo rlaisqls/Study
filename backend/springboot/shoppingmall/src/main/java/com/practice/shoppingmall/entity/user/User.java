@@ -12,6 +12,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -34,9 +36,14 @@ public class User {
 
     private String username;
 
+    private String email;
+
     private String password;
 
     private String address;
+
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")

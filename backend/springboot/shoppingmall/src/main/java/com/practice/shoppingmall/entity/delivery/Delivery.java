@@ -1,7 +1,11 @@
 package com.practice.shoppingmall.entity.delivery;
 
 import com.practice.shoppingmall.entity.order.Order;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,9 +19,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.util.UUID;
 
-@Getter
-@Setter
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery {
     @Id
     @Column(name = "delivery_id", columnDefinition = "BINARY(16)")

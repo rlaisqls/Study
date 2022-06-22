@@ -6,11 +6,19 @@ spring:
     password: ${PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: create-drop
       use-new-id-generator-mappings: false
     show-sql: false
     properties:
       format_sql: true
       generate-ddl: true
+  redis:
+    port: ${REDIS-PORT}
+    host: ${REDIS-HOST}
+
+jwt:
+  header: ${HEADER}
+  prefix : ${PREFIX}
+  secret: ${JWT-SECRET}
+  access: ${TOKEN-EXP}
+  refresh: ${REFRESH-EXP}
