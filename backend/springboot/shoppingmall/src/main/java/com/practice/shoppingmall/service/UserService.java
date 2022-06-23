@@ -56,14 +56,9 @@ public class UserService {
     }
 
     public void passwordChange(PasswordChangeRequest request) {
-        userRepository.findByUsername(userFacade.nowUsername())
-                .filter(u -> passwordEncoder.matches(request.getOldPassword(),u.getPassword()))
-                .ifPresentOrElse(
-                        user -> {
-                            user.modifyPassword(request.getNewPassword());
-                            userRepository.save(user);
-                        }
-                        ,()-> {throw UserNotFoundException.EXCEPTION;}
-                );
+        User user = userFacade.nowUser();
+
+        if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
+            throw
     }
 }
