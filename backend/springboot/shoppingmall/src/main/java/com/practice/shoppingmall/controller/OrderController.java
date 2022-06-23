@@ -1,6 +1,6 @@
 package com.practice.shoppingmall.controller;
 
-import com.practice.shoppingmall.dto.request.OrderItemRequest;
+import com.practice.shoppingmall.dto.request.item.OrderItemRequest;
 import com.practice.shoppingmall.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;

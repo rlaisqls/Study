@@ -48,4 +48,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> ordersList = new ArrayList<>();
+
+    public void modifyPassword(String newPassword) {
+        this.password = password;
+    }
 }

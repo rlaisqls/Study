@@ -8,9 +8,11 @@ import com.practice.shoppingmall.dto.response.UserInformationResponse;
 import com.practice.shoppingmall.entity.user.Authority;
 import com.practice.shoppingmall.entity.user.User;
 import com.practice.shoppingmall.entity.user.UserRepository;
-import com.practice.shoppingmall.exception.UserAlreadyExistException;
-import com.practice.shoppingmall.exception.UserNotFoundException;
-import com.practice.shoppingmall.security.jwt.JwtTokenProvider;
+import com.practice.shoppingmall.exception.item.ItemNotExistException;
+import com.practice.shoppingmall.exception.user.UserAlreadyExistException;
+import com.practice.shoppingmall.exception.user.UserNotFoundException;
+import com.practice.shoppingmall.global.facade.UserFacade;
+import com.practice.shoppingmall.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserFacade userFacade;
 
     public TokenResponse register(RegisterRequest request) {
         userRepository.findByUsernameOrEmail(request.getUsername(),request.getEmail())
@@ -49,14 +52,18 @@ public class UserService {
     }
 
     public UserInformationResponse getUserInfo() {
-        return null;
+        return UserInformationResponse.from(userFacade.nowUser());
     }
 
     public void passwordChange(PasswordChangeRequest request) {
-
-    }
-
-    public List<UserInformationResponse> getAllUserInfo() {
-        return null;
+        userRepository.findByUsername(userFacade.nowUsername())
+                .filter(u -> passwordEncoder.matches(request.getOldPassword(),u.getPassword()))
+                .ifPresentOrElse(
+                        user -> {
+                            user.modifyPassword(request.getNewPassword());
+                            userRepository.save(user);
+                        }
+                        ,()-> {throw UserNotFoundException.EXCEPTION;}
+                );
     }
 }
