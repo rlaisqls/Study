@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service;
+package com.practice.shoppingmall.service.user;
 
 import com.practice.shoppingmall.dto.request.LoginRequest;
 import com.practice.shoppingmall.dto.request.PasswordChangeRequest;
@@ -8,27 +8,27 @@ import com.practice.shoppingmall.dto.response.UserInformationResponse;
 import com.practice.shoppingmall.entity.user.Authority;
 import com.practice.shoppingmall.entity.user.User;
 import com.practice.shoppingmall.entity.user.UserRepository;
-import com.practice.shoppingmall.exception.item.ItemNotExistException;
+import com.practice.shoppingmall.exception.user.BadUserInformationException;
 import com.practice.shoppingmall.exception.user.UserAlreadyExistException;
 import com.practice.shoppingmall.exception.user.UserNotFoundException;
-import com.practice.shoppingmall.global.facade.UserFacade;
-import com.practice.shoppingmall.global.security.jwt.JwtTokenProvider;
+import com.practice.shoppingmall.facade.UserFacade;
+import com.practice.shoppingmall.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService{
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserFacade userFacade;
 
+    @Override
     public TokenResponse register(RegisterRequest request) {
+
         userRepository.findByUsernameOrEmail(request.getUsername(),request.getEmail())
                 .ifPresent(user -> {throw UserAlreadyExistException.EXCEPTION;}); //null 아니면 실행
 
@@ -43,7 +43,9 @@ public class UserService {
         return jwtTokenProvider.createTokens(user.getId().toString());
     }
 
+    @Override
     public TokenResponse login(LoginRequest request) {
+
         User user = userRepository.findByUsername(request.getUsername())
                 .filter(u -> passwordEncoder.matches(request.getPassword(),u.getPassword()))
                 .orElseThrow(()-> UserNotFoundException.EXCEPTION);
@@ -51,14 +53,26 @@ public class UserService {
         return jwtTokenProvider.createTokens(user.getId().toString());
     }
 
+    @Override
     public UserInformationResponse getUserInfo() {
-        return UserInformationResponse.from(userFacade.nowUser());
+
+        User user = userFacade.nowUser();
+        return UserInformationResponse
+                .builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .address(user.getAddress())
+                .build();
     }
 
-    public void passwordChange(PasswordChangeRequest request) {
+    @Override
+    public void changePassword(PasswordChangeRequest request) {
+
         User user = userFacade.nowUser();
 
         if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
-            throw
+            throw BadUserInformationException.EXCEPTION;
+
+        user.changePassword(request.getNewPassword());
     }
 }

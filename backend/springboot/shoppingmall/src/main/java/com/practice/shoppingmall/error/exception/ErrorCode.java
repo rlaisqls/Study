@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.global.error.exception;
+package com.practice.shoppingmall.error.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

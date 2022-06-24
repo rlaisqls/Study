@@ -1,6 +1,6 @@
-package com.practice.shoppingmall.global.error;
+package com.practice.shoppingmall.error;
 
-import com.practice.shoppingmall.global.error.exception.ErrorCode;
+import com.practice.shoppingmall.error.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

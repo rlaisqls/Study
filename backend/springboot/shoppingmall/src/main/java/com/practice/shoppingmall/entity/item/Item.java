@@ -33,7 +33,6 @@ public class Item {
 
     private int stock;
 
-    //데이터를 가지고 있는 쪽에 비즈니스 메서드가 있는게 객체지향적으로 더 나음
     public void addStock(int quantity){
         int restStock = this.stock + quantity;
         if(restStock < 0) throw OutOfStockException.EXCEPTION;

@@ -2,7 +2,8 @@ package com.practice.shoppingmall.controller;
 
 import com.practice.shoppingmall.dto.request.PasswordChangeRequest;
 import com.practice.shoppingmall.dto.response.UserInformationResponse;
-import com.practice.shoppingmall.service.UserService;
+import com.practice.shoppingmall.service.user.UserService;
+import com.practice.shoppingmall.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,12 +24,7 @@ public class UserController {
     }
 
     @PatchMapping("/user") //user 정보 수정
-    public void passwordChange(@Valid @RequestBody PasswordChangeRequest request) {
-        userService.passwordChange(request);
-    }
-
-    @GetMapping("/admin") //admin 전체 유저 정보조회
-    public List<UserInformationResponse> getAllUserInfo() {
-        return userService.getAllUserInfo();
+    public void changePassword(@Valid @RequestBody PasswordChangeRequest request) {
+        userService.changePassword(request);
     }
 }

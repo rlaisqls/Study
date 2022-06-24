@@ -1,7 +1,7 @@
-package com.practice.shoppingmall.global.config;
+package com.practice.shoppingmall.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.practice.shoppingmall.global.security.jwt.JwtTokenProvider;
+import com.practice.shoppingmall.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

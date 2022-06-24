@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.global.security.jwt;
+package com.practice.shoppingmall.security.jwt;
 
 
 import com.practice.shoppingmall.dto.response.TokenResponse;
@@ -6,7 +6,7 @@ import com.practice.shoppingmall.entity.refreshtoken.RefreshToken;
 import com.practice.shoppingmall.entity.refreshtoken.RefreshTokenRepository;
 import com.practice.shoppingmall.exception.ExpiredTokenException;
 import com.practice.shoppingmall.exception.InvalidTokenException;
-import com.practice.shoppingmall.global.security.auth.CustomUserDetailsService;
+import com.practice.shoppingmall.security.auth.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

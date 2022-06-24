@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.global.security.auth;
+package com.practice.shoppingmall.security.auth;
 
 
 import com.practice.shoppingmall.entity.user.UserRepository;
@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String uuid) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findById(UUID.fromString(uuid))
+        return userRepository.findById(UUID.fromString(uuid))
                 .orElseThrow(()->UserNotFoundException.EXCEPTION);
     }
 

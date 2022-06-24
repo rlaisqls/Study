@@ -1,9 +1,9 @@
-package com.practice.shoppingmall.global.facade;
+package com.practice.shoppingmall.facade;
 
 import com.practice.shoppingmall.entity.user.User;
 import com.practice.shoppingmall.entity.user.UserRepository;
 import com.practice.shoppingmall.exception.InvalidTokenException;
-import com.practice.shoppingmall.global.util.SecurityUtil;
+import com.practice.shoppingmall.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

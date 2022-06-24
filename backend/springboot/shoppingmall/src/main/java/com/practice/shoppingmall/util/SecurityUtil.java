@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.global.util;
+package com.practice.shoppingmall.util;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

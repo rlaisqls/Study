@@ -8,9 +8,9 @@ import java.util.UUID;
 
 @Getter
 public class AddItemStockRequest {
-    @NotNull
-    private UUID itemUuid;
+    @NotNull(message = "상품 ID를 입력해주세요")
+    private String itemUuid;
 
-    @NotNull
+    @NotNull(message = "추가할 재고량을 입력해주세요")
     private int addItemStock;
 }

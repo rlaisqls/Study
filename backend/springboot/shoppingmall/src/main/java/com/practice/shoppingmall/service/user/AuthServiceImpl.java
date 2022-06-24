@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service;
+package com.practice.shoppingmall.service.user;
 
 import com.practice.shoppingmall.dto.request.LoginRequest;
 import com.practice.shoppingmall.dto.request.RegisterRequest;
@@ -9,7 +9,7 @@ import com.practice.shoppingmall.entity.user.UserRepository;
 import com.practice.shoppingmall.exception.IncorrectTokenException;
 import com.practice.shoppingmall.exception.user.UserAlreadyExistException;
 import com.practice.shoppingmall.exception.user.UserNotFoundException;
-import com.practice.shoppingmall.global.security.jwt.JwtTokenProvider;
+import com.practice.shoppingmall.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Override
     @Transactional
     public TokenResponse register(RegisterRequest request) {
 
@@ -39,6 +40,7 @@ public class AuthService {
         return jwtTokenProvider.createTokens(user.getId().toString());
     }
 
+    @Override
     @Transactional
     public TokenResponse login(LoginRequest request) {
 
@@ -49,6 +51,7 @@ public class AuthService {
         return jwtTokenProvider.createTokens(user.getId().toString());
     }
 
+    @Override
     @Transactional
     public TokenResponse reissue(String refreshToken) {
 

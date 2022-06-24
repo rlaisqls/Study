@@ -1,12 +1,12 @@
 package com.practice.shoppingmall.exception.item;
 
 
-import com.practice.shoppingmall.global.error.exception.BusinessException;
-import com.practice.shoppingmall.global.error.exception.ErrorCode;
+import com.practice.shoppingmall.error.exception.BusinessException;
+import com.practice.shoppingmall.error.exception.ErrorCode;
 
 public class ItemNotFoundException extends BusinessException {
     public static final BusinessException EXCEPTION = new ItemNotFoundException();
-    public ItemNotFoundException(){
+    private ItemNotFoundException(){
         super(ErrorCode.ITEM_NOT_FOUND);
     }
 }

@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.global.security.jwt;
+package com.practice.shoppingmall.security.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
