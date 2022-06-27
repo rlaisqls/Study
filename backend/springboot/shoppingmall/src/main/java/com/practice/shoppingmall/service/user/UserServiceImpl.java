@@ -4,7 +4,7 @@ import com.practice.shoppingmall.dto.request.LoginRequest;
 import com.practice.shoppingmall.dto.request.PasswordChangeRequest;
 import com.practice.shoppingmall.dto.request.RegisterRequest;
 import com.practice.shoppingmall.dto.response.TokenResponse;
-import com.practice.shoppingmall.dto.response.UserInformationResponse;
+import com.practice.shoppingmall.dto.response.FindUserResponse;
 import com.practice.shoppingmall.entity.user.Authority;
 import com.practice.shoppingmall.entity.user.User;
 import com.practice.shoppingmall.entity.user.UserRepository;
@@ -40,14 +40,14 @@ public class UserServiceImpl implements UserService{
                 .authority(Authority.ROLE_USER)
                 .build());
 
-        return jwtTokenProvider.createTokens(user.getId().toString());
+        return jwtTokenProvider.createTokens(user.getUuid().toString());
     }
 
     @Override
     public TokenResponse login(LoginRequest request) {
 
         User user = verifyUser(request);
-        return jwtTokenProvider.createTokens(user.getId().toString());
+        return jwtTokenProvider.createTokens(user.getUuid().toString());
     }
 
     private User verifyUser(LoginRequest request) {
@@ -57,10 +57,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserInformationResponse getUserInfo() {
+    public FindUserResponse getUserInfo() {
 
         User user = userFacade.nowUser();
-        return UserInformationResponse
+        return FindUserResponse
                 .builder()
                 .username(user.getUsername())
                 .email(user.getEmail())

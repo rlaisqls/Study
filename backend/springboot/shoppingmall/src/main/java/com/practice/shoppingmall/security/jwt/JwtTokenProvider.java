@@ -47,7 +47,7 @@ public class JwtTokenProvider implements InitializingBean {
         return new TokenResponse(createAccessToken(uuid), createRefreshToken(uuid));
     }
 
-    private String createAccessToken(String uuid) {
+    public String createAccessToken(String uuid) {
 
         String accessToken = Jwts.builder()
                 .setSubject(uuid)

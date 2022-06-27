@@ -41,8 +41,8 @@ public class OrderItem {
 
     private int count; //주문 수량
 
-
-    public OrderItem(Item item, int count) {
+    public OrderItem(Order order, Item item, int count) {
+        this.order = order;
         this.item = item;
         this.count = count;
     }

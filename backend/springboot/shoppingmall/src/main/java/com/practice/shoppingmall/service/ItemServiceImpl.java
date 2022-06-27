@@ -4,8 +4,8 @@ import com.practice.shoppingmall.dto.request.item.AddItemStockRequest;
 import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;
 import com.practice.shoppingmall.dto.request.item.ModifyItemInfoRequest;
-import com.practice.shoppingmall.dto.response.item.ItemUuidResponse;
-import com.practice.shoppingmall.dto.response.item.findItemResponse;
+import com.practice.shoppingmall.dto.response.item.CreateItemResponse;
+import com.practice.shoppingmall.dto.response.item.FindItemResponse;
 import com.practice.shoppingmall.entity.item.Item;
 import com.practice.shoppingmall.entity.item.ItemRepository;
 import com.practice.shoppingmall.exception.item.ItemNotFoundException;
@@ -24,9 +24,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemUuidResponse createItem(CreateItemRequest request) {
+    public CreateItemResponse createItem(CreateItemRequest request) {
 
-        return new ItemUuidResponse(itemRepository.save(
+        return new CreateItemResponse(itemRepository.save(
                         Item.builder()
                                 .name(request.getName())
                                 .price(request.getPrice())
@@ -37,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void modifyItem(ModifyItemInfoRequest request) {
+    public void patchItem(ModifyItemInfoRequest request) {
 
         itemRepository.findById(UUID.fromString(request.getItemUuid()))
                 .ifPresentOrElse(
@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public findItemResponse findItem(String itemUuid) {
+    public FindItemResponse findItem(String itemUuid) {
 
         Item item = itemRepository.findById(UUID.fromString(itemUuid))
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
@@ -87,7 +87,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<findItemResponse> findItemList() {
+    public List<FindItemResponse> findItemList() {
 
         List<Item> itemList = itemRepository.findAll();
 
@@ -97,13 +97,14 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
-    private findItemResponse getFindItemResponses(Item item) {
+    private FindItemResponse getFindItemResponses(Item item) {
 
-        return findItemResponse
+        return FindItemResponse
                 .builder()
                 .uuid(item.getId().toString())
                 .name(item.getName())
                 .price(item.getPrice())
+                .stock(item.getStock())
                 .isSoldOut(item.getStock() == 0)
                 .build();
     }

@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public TokenResponse register(RegisterRequest request) {
 
-        userRepository.findByUsernameOrEmail(request.getUsername(),request.getEmail())
+        userRepository.findByUsername(request.getUsername())
                 .ifPresent(user -> {throw UserAlreadyExistException.EXCEPTION;}); //null 아니면 실행
 
         User user = userRepository.save(User.builder()
@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService{
                 .authority(Authority.ROLE_USER)
                 .build());
 
-        return jwtTokenProvider.createTokens(user.getId().toString());
+        return jwtTokenProvider.createTokens(user.getUuid().toString());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService{
                 .filter(u -> passwordEncoder.matches(request.getPassword(),u.getPassword()))
                 .orElseThrow(()-> UserNotFoundException.EXCEPTION);
 
-        return jwtTokenProvider.createTokens(user.getId().toString());
+        return jwtTokenProvider.createTokens(user.getUuid().toString());
     }
 
     @Override

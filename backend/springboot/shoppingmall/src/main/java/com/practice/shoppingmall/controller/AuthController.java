@@ -2,6 +2,7 @@ package com.practice.shoppingmall.controller;
 
 import com.practice.shoppingmall.dto.request.LoginRequest;
 import com.practice.shoppingmall.dto.request.RegisterRequest;
+import com.practice.shoppingmall.dto.response.ResponseBody;
 import com.practice.shoppingmall.dto.response.TokenResponse;
 import com.practice.shoppingmall.service.user.AuthService;
 import com.practice.shoppingmall.service.user.AuthServiceImpl;
@@ -22,18 +23,19 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register") //user 가입
-    public TokenResponse signup(@Valid @RequestBody RegisterRequest request) {
-        return authService.register(request);
+    public ResponseBody register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseBody.of(authService.register(request), HttpStatus.CREATED.value());
     }
 
     @PostMapping("/login")
-    public TokenResponse login(@Valid @RequestBody LoginRequest request){
-        return authService.login(request);
+    public ResponseBody login(@Valid @RequestBody LoginRequest request){
+        return ResponseBody.of(authService.login(request), HttpStatus.OK.value());
     }
 
     @PutMapping("/reissue")
-    public TokenResponse reissue(@RequestHeader("X-Refresh-Token") String refreshToken) {
-        return authService.reissue(refreshToken);
+    public ResponseBody reissue(@RequestHeader("X-Refresh-Token") String refreshToken) {
+        return ResponseBody.of(authService.reissue(refreshToken), HttpStatus.OK.value());
     }
 }

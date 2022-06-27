@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Column(name = "user_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private UUID id;
+    private UUID uuid;
 
     private String username;
 

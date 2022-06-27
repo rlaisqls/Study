@@ -4,22 +4,21 @@ import com.practice.shoppingmall.dto.request.item.AddItemStockRequest;
 import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;
 import com.practice.shoppingmall.dto.request.item.ModifyItemInfoRequest;
-import com.practice.shoppingmall.dto.response.item.ItemUuidResponse;
-import com.practice.shoppingmall.dto.response.item.findItemResponse;
-import org.springframework.transaction.annotation.Transactional;
+import com.practice.shoppingmall.dto.response.item.CreateItemResponse;
+import com.practice.shoppingmall.dto.response.item.FindItemResponse;
 
 import java.util.List;
 
 public interface ItemService {
-    ItemUuidResponse createItem(CreateItemRequest request);
+    CreateItemResponse createItem(CreateItemRequest request);
 
-    void modifyItem(ModifyItemInfoRequest request);
+    void patchItem(ModifyItemInfoRequest request);
 
     void addItemStock(AddItemStockRequest request);
 
     void deleteItemStock(DeleteItemRequest request);
 
-    findItemResponse findItem(String itemUuid);
+    FindItemResponse findItem(String itemUuid);
 
-    List<findItemResponse> findItemList();
+    List<FindItemResponse> findItemList();
 }

@@ -23,8 +23,8 @@ public class OrderController {
         orderService.order(requests);
     }
 
-    @DeleteMapping("/order/{orderUuid}")
+    @DeleteMapping("/order/{orderUuid}") //사실 delete가 아님 (상태만 바꿈)
     public void cancelOrder(@PathVariable String orderUuid){
-
+        //orderService.cancleOrder(orderUuid);
     }
 }

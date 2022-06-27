@@ -1,25 +1,21 @@
 package com.practice.shoppingmall.controller;
 
-import com.practice.shoppingmall.dto.request.LoginRequest;
-import com.practice.shoppingmall.dto.request.RegisterRequest;
 import com.practice.shoppingmall.dto.request.item.AddItemStockRequest;
 import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;
 import com.practice.shoppingmall.dto.request.item.ModifyItemInfoRequest;
-import com.practice.shoppingmall.dto.response.TokenResponse;
-import com.practice.shoppingmall.dto.response.item.ItemUuidResponse;
-import com.practice.shoppingmall.dto.response.item.findItemResponse;
+import com.practice.shoppingmall.dto.response.ResponseBody;
+import com.practice.shoppingmall.dto.response.item.FindItemResponse;
 import com.practice.shoppingmall.service.ItemService;
-import com.practice.shoppingmall.service.user.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -30,14 +26,15 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/item")
-    public ItemUuidResponse createItem(@Valid @RequestBody CreateItemRequest request){
-        return itemService.createItem(request);
+    public ResponseBody createItem(@Valid @RequestBody CreateItemRequest request){
+        return ResponseBody.of(itemService.createItem(request), HttpStatus.CREATED.value());
     }
 
     @PatchMapping("/item")
-    public void modifyItem(@Valid @RequestBody ModifyItemInfoRequest request){
-        itemService.modifyItem(request);
+    public void patchItem(@Valid @RequestBody ModifyItemInfoRequest request){
+        itemService.patchItem(request);
     }
 
     @PostMapping("/item/add")
@@ -51,12 +48,12 @@ public class ItemController {
     }
 
     @GetMapping("/item")
-    public List<findItemResponse> findItemList(){
+    public List<FindItemResponse> findItemList(){
         return itemService.findItemList();
     }
 
     @GetMapping("/item/{itemUuid}")
-    public findItemResponse findItem(@PathVariable String itemUuid){
+    public FindItemResponse findItem(@PathVariable String itemUuid){
         return itemService.findItem(itemUuid);
     }
 }
