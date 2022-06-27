@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class findItemResponse {
+    String uuid;
     String name;
     int price;
     Boolean isSoldOut;

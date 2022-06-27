@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,8 +70,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void deleteItemStock(DeleteItemRequest request) {
+
         Item item = itemRepository.findById(UUID.fromString(request.getItemUuid()))
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
+
         itemRepository.delete(item);
     }
 
@@ -79,13 +83,29 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(UUID.fromString(itemUuid))
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
-        return findItemResponse
-                .builder()
-                .name(item.getName())
-                .price(item.getPrice())
-                .isSoldOut(item.getStock()==0)
-                .build();
+        return getFindItemResponses(item);
     }
 
+    @Override
+    public List<findItemResponse> findItemList() {
+
+        List<Item> itemList = itemRepository.findAll();
+
+        return itemList
+                .stream()
+                .map(this::getFindItemResponses)
+                .collect(Collectors.toList());
+    }
+
+    private findItemResponse getFindItemResponses(Item item) {
+
+        return findItemResponse
+                .builder()
+                .uuid(item.getId().toString())
+                .name(item.getName())
+                .price(item.getPrice())
+                .isSoldOut(item.getStock() == 0)
+                .build();
+    }
 
 }

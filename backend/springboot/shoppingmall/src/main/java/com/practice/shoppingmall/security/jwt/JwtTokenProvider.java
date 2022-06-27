@@ -43,26 +43,30 @@ public class JwtTokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createAccessToken(String uuid) {
-        Date now = new Date();
+    public TokenResponse createTokens(String uuid) {
+        return new TokenResponse(createAccessToken(uuid), createRefreshToken(uuid));
+    }
+
+    private String createAccessToken(String uuid) {
+
         String accessToken = Jwts.builder()
                 .setSubject(uuid)
                 .claim("type", "access")
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + jwtProperties.getAccess() * 1000))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccess() * 1000))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
         return accessToken;
     }
 
-    public String createRefreshToken(String uuid) {
-        Date now = new Date();
+    private String createRefreshToken(String uuid) {
+
         String refreshToken = Jwts.builder()
                 .setSubject(uuid)
                 .claim("type", "refresh")
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + jwtProperties.getRefresh() * 1000))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefresh() * 1000))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
@@ -74,13 +78,9 @@ public class JwtTokenProvider implements InitializingBean {
         return refreshToken;
     }
 
-    public TokenResponse createTokens(String uuid) {
-        return new TokenResponse(createAccessToken(uuid), createRefreshToken(uuid));
-    }
-
     public Authentication getAuthentication(String token) {
-        Claims claims = getClaims(token);
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(claims.getSubject());
+
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(getId(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
@@ -110,7 +110,7 @@ public class JwtTokenProvider implements InitializingBean {
         String bearerToken = request.getHeader(jwtProperties.getHeader());
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.getPrefix())
                 && bearerToken.length() > jwtProperties.getPrefix().length() + 1) {
-            return bearerToken.substring(7);
+            return bearerToken.substring(jwtProperties.getPrefix().length() + 1);
         }
         return null;
     }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,8 +50,13 @@ public class ItemController {
         itemService.deleteItemStock(request);
     }
 
+    @GetMapping("/item")
+    public List<findItemResponse> findItemList(){
+        return itemService.findItemList();
+    }
+
     @GetMapping("/item/{itemUuid}")
-    public findItemResponse findItemStock(@PathVariable String itemUuid){
+    public findItemResponse findItem(@PathVariable String itemUuid){
         return itemService.findItem(itemUuid);
     }
 }

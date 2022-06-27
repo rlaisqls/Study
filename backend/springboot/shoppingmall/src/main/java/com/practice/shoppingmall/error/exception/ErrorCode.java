@@ -32,7 +32,9 @@ public enum ErrorCode {
     //서버문제
     INTERNAL_SERVER_ERROR(500,"Server Error")
 
-    , OUT_OF_STOCK(404, "Out Of Stock");
+    //주문
+    , OUT_OF_STOCK(404, "Out Of Stock"),
+    ORDER_NOT_FOUND(404, "Order Not Found");
 
     private final Integer status;
     private final String message;

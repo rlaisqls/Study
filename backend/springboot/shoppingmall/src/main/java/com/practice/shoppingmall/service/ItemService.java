@@ -8,6 +8,8 @@ import com.practice.shoppingmall.dto.response.item.ItemUuidResponse;
 import com.practice.shoppingmall.dto.response.item.findItemResponse;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface ItemService {
     ItemUuidResponse createItem(CreateItemRequest request);
 
@@ -18,4 +20,6 @@ public interface ItemService {
     void deleteItemStock(DeleteItemRequest request);
 
     findItemResponse findItem(String itemUuid);
+
+    List<findItemResponse> findItemList();
 }

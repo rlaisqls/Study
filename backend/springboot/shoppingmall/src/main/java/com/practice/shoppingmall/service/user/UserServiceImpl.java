@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public TokenResponse register(RegisterRequest request) {
 
-        userRepository.findByUsernameOrEmail(request.getUsername(),request.getEmail())
+        userRepository.findByUsername(request.getUsername())
                 .ifPresent(user -> {throw UserAlreadyExistException.EXCEPTION;}); //null 아니면 실행
 
         User user = userRepository.save(User.builder()
@@ -46,11 +46,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public TokenResponse login(LoginRequest request) {
 
-        User user = userRepository.findByUsername(request.getUsername())
+        User user = verifyUser(request);
+        return jwtTokenProvider.createTokens(user.getId().toString());
+    }
+
+    private User verifyUser(LoginRequest request) {
+        return userRepository.findByUsername(request.getUsername())
                 .filter(u -> passwordEncoder.matches(request.getPassword(),u.getPassword()))
                 .orElseThrow(()-> UserNotFoundException.EXCEPTION);
-
-        return jwtTokenProvider.createTokens(user.getId().toString());
     }
 
     @Override
