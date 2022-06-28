@@ -1,11 +1,10 @@
-package com.practice.shoppingmall.controller;
+package com.practice.shoppingmall.controller.user;
 
-import com.practice.shoppingmall.dto.request.LoginRequest;
-import com.practice.shoppingmall.dto.request.RegisterRequest;
+import com.practice.shoppingmall.dto.request.user.LoginUserRequest;
+import com.practice.shoppingmall.dto.request.user.SignUpUserRequest;
 import com.practice.shoppingmall.dto.response.ResponseBody;
-import com.practice.shoppingmall.dto.response.TokenResponse;
-import com.practice.shoppingmall.service.user.AuthService;
-import com.practice.shoppingmall.service.user.AuthServiceImpl;
+import com.practice.shoppingmall.service.user.UserAuthService;
+import com.practice.shoppingmall.service.user.UserSignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,18 +18,20 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-public class AuthController {
+public class UserAuthController {
 
-    private final AuthService authService;
+    private final UserSignUpService userSignUpService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/register") //user 가입
-    public ResponseBody register(@Valid @RequestBody RegisterRequest request) {
+    @PostMapping("/register")
+    public ResponseBody register(@Valid @RequestBody SignUpUserRequest request) {
         return ResponseBody.of(authService.register(request), HttpStatus.CREATED.value());
     }
 
+    private final UserAuthService authService;
+
     @PostMapping("/login")
-    public ResponseBody login(@Valid @RequestBody LoginRequest request){
+    public ResponseBody login(@Valid @RequestBody LoginUserRequest request){
         return ResponseBody.of(authService.login(request), HttpStatus.OK.value());
     }
 

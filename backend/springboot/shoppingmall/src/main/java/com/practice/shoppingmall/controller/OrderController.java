@@ -1,10 +1,12 @@
 package com.practice.shoppingmall.controller;
 
 import com.practice.shoppingmall.dto.request.item.OrderItemRequest;
+import com.practice.shoppingmall.dto.response.ResponseBody;
 import com.practice.shoppingmall.service.OrderService;
-import com.practice.shoppingmall.service.OrderServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +25,18 @@ public class OrderController {
         orderService.order(requests);
     }
 
-    @DeleteMapping("/order/{orderUuid}") //사실 delete가 아님 (상태만 바꿈)
-    public void cancelOrder(@PathVariable String orderUuid){
-        //orderService.cancleOrder(orderUuid);
+    @PatchMapping("/order/{uuid}")
+    public void cancelOrder(@PathVariable String uuid){
+        orderService.cancelOrder(uuid);
+    }
+
+    @GetMapping("/order/{uuid}")
+    public ResponseBody findOrder(@PathVariable String uuid){
+        return ResponseBody.of(orderService.findOrder(uuid), HttpStatus.OK.value());
+    }
+
+    @GetMapping("/order")
+    public ResponseBody findMyOrder(int page, int size){
+        return ResponseBody.of(orderService.findMyOrder(page, size), HttpStatus.OK.value());
     }
 }

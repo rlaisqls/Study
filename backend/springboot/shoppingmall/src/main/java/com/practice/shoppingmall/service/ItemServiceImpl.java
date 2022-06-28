@@ -1,21 +1,23 @@
 package com.practice.shoppingmall.service;
 
-import com.practice.shoppingmall.dto.request.item.AddItemStockRequest;
 import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;
 import com.practice.shoppingmall.dto.request.item.ModifyItemInfoRequest;
 import com.practice.shoppingmall.dto.response.item.CreateItemResponse;
+import com.practice.shoppingmall.dto.response.item.FindItemListResponse;
 import com.practice.shoppingmall.dto.response.item.FindItemResponse;
 import com.practice.shoppingmall.entity.item.Item;
 import com.practice.shoppingmall.entity.item.ItemRepository;
 import com.practice.shoppingmall.exception.item.ItemNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,50 +28,41 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public CreateItemResponse createItem(CreateItemRequest request) {
 
-        return new CreateItemResponse(itemRepository.save(
-                        Item.builder()
-                                .name(request.getName())
-                                .price(request.getPrice())
-                                .stock(request.getStock())
-                                .build())
-                .getId());
+        Item item = itemRepository.save(Item.builder()
+                .name(request.getName())
+                .price(request.getPrice())
+                .stock(request.getStock())
+                .build()
+        );
+
+        return new CreateItemResponse(item.getId());
     }
 
     @Override
     @Transactional
-    public void patchItem(ModifyItemInfoRequest request) {
+    public void modifyItem(ModifyItemInfoRequest request) {
 
-        itemRepository.findById(UUID.fromString(request.getItemUuid()))
-                .ifPresentOrElse(
-                        item -> {
-                            item.modifyInfo(request.getName(), request.getPrice());
-                            itemRepository.save(item);
-                        },
-                        () -> {
-                            throw ItemNotFoundException.EXCEPTION;
-                        }
-                );
+        Item item = itemRepository.findById(UUID.fromString(request.getItemUuid()))
+                .orElseThrow(()->ItemNotFoundException.EXCEPTION);
+
+        item.modifyInfo(request.getName(), request.getPrice());
+        itemRepository.save(item);
     }
 
     @Override
     @Transactional
-    public void addItemStock(AddItemStockRequest request) {
+    public void addItemStock(String uuid, Integer addStock) {
 
-        itemRepository.findById(UUID.fromString(request.getItemUuid()))
-                .ifPresentOrElse(
-                        item -> {
-                            item.addStock(request.getAddItemStock());
-                            itemRepository.save(item);
-                        },
-                        () -> {
-                            throw ItemNotFoundException.EXCEPTION;
-                        }
-                );
+        Item item = itemRepository.findById(UUID.fromString(uuid))
+                .orElseThrow(()->ItemNotFoundException.EXCEPTION);
+
+        item.addStock(addStock);
+        itemRepository.save(item);
     }
 
     @Override
     @Transactional
-    public void deleteItemStock(DeleteItemRequest request) {
+    public void deleteItem(DeleteItemRequest request) {
 
         Item item = itemRepository.findById(UUID.fromString(request.getItemUuid()))
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
@@ -78,23 +71,27 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public FindItemResponse findItem(String itemUuid) {
+    public FindItemResponse findItem(String uuid) {
 
-        Item item = itemRepository.findById(UUID.fromString(itemUuid))
+        Item item = itemRepository.findById(UUID.fromString(uuid))
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
         return getFindItemResponses(item);
     }
 
     @Override
-    public List<FindItemResponse> findItemList() {
+    public FindItemListResponse findItemList(int page, int size) {
+        Pageable request = PageRequest.of(page, size);
+        Page<Item> itemPage = itemRepository.findAll(request);
 
-        List<Item> itemList = itemRepository.findAll();
+        List<FindItemResponse> itemResponseList = itemPage
+                .map(FindItemResponse::of).toList();
 
-        return itemList
-                .stream()
-                .map(this::getFindItemResponses)
-                .collect(Collectors.toList());
+        return FindItemListResponse
+                .builder()
+                .itemResponseList(itemResponseList)
+                .totalPage(itemPage.getTotalPages())
+                .totalSize(itemPage.getTotalElements()).build();
     }
 
     private FindItemResponse getFindItemResponses(Item item) {

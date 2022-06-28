@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.exception;
+package com.practice.shoppingmall.exception.order;
 
 import com.practice.shoppingmall.error.exception.BusinessException;
 import com.practice.shoppingmall.error.exception.ErrorCode;

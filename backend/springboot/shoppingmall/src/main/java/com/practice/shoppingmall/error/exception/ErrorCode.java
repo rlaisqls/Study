@@ -17,23 +17,24 @@ public enum ErrorCode {
     INCORRECT_TOKEN(400, "Incorrect Token"),
     INVALID_TOKEN(401, "Invalid Token"),
 
-    //권한없음
-    HANDLE_ACCESS_DENIED(403, "Handle Access Denied"),
-
     //유저
+    MAIL_SEND_FAIL(404, "Mail Send Fail"),
+    BAD_AUTHENTICATION_CODE(400, "Bad Authentication Code"),
+
     USER_NOT_FOUND(404,"User Nor Found"),
     USER_ALREADY_EXISTS(409, "User Already Exists"),
     INVALID_INFORMATION(401, "Invalid Information"),
     PASSWORD_MISMATCH(404, "Password Mismatch"),
+    FORBIDDEN_USER(403, "Forbidden User"),
 
     //상품
     ITEM_NOT_FOUND(404, "Item Not Found"),
+    OUT_OF_STOCK(404, "Out Of Stock"),
 
     //서버문제
-    INTERNAL_SERVER_ERROR(500,"Server Error")
+    INTERNAL_SERVER_ERROR(500,"Server Error"),
 
     //주문
-    , OUT_OF_STOCK(404, "Out Of Stock"),
     ORDER_NOT_FOUND(404, "Order Not Found");
 
     private final Integer status;

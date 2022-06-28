@@ -2,8 +2,8 @@ package com.practice.shoppingmall.security.jwt;
 
 
 import com.practice.shoppingmall.dto.response.TokenResponse;
-import com.practice.shoppingmall.entity.refreshtoken.RefreshToken;
-import com.practice.shoppingmall.entity.refreshtoken.RefreshTokenRepository;
+import com.practice.shoppingmall.entity.redis.refreshtoken.RefreshToken;
+import com.practice.shoppingmall.entity.redis.refreshtoken.RefreshTokenRepository;
 import com.practice.shoppingmall.exception.ExpiredTokenException;
 import com.practice.shoppingmall.exception.InvalidTokenException;
 import com.practice.shoppingmall.security.auth.CustomUserDetailsService;

@@ -61,4 +61,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    public void cancel() {
+        this.orderStatus = OrderStatus.CANCEL;
+    }
 }

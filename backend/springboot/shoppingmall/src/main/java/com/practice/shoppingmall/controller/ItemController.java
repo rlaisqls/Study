@@ -8,6 +8,7 @@ import com.practice.shoppingmall.dto.response.ResponseBody;
 import com.practice.shoppingmall.dto.response.item.FindItemResponse;
 import com.practice.shoppingmall.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,26 +36,29 @@ public class ItemController {
 
     @PatchMapping("/item")
     public void patchItem(@Valid @RequestBody ModifyItemInfoRequest request){
-        itemService.patchItem(request);
-    }
-
-    @PostMapping("/item/add")
-    public void addItemStock(@Valid @RequestBody AddItemStockRequest request){
-        itemService.addItemStock(request);
+        itemService.modifyItem(request);
     }
 
     @DeleteMapping("/item")
-    public void deleteItemStock(@Valid @RequestBody DeleteItemRequest request){
-        itemService.deleteItemStock(request);
+    public void deleteItem(@Valid @RequestBody DeleteItemRequest request){
+        itemService.deleteItem(request);
+    }
+
+    @PostMapping("/item/{itemUuid}/{addStock}")
+    public void addItemStock(@PathVariable String itemUuid, @PathVariable Integer addStock){
+        itemService.addItemStock(itemUuid, addStock);
     }
 
     @GetMapping("/item")
-    public List<FindItemResponse> findItemList(){
-        return itemService.findItemList();
+    public ResponseBody findItemList(
+            @RequestParam("page") int page,
+            @Range(min = 1, max = 50) @RequestParam("size") int size
+    ){
+        return ResponseBody.of(itemService.findItemList(page, size), HttpStatus.OK.value());
     }
 
     @GetMapping("/item/{itemUuid}")
-    public FindItemResponse findItem(@PathVariable String itemUuid){
-        return itemService.findItem(itemUuid);
+    public ResponseBody findItem(@PathVariable String itemUuid){
+        return ResponseBody.of(itemService.findItem(itemUuid), HttpStatus.OK.value());
     }
 }

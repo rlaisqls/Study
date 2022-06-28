@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.entity.refreshtoken;
+package com.practice.shoppingmall.entity.redis.refreshtoken;
 
 import lombok.Builder;
 import lombok.Getter;

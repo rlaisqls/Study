@@ -5,6 +5,7 @@ import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;
 import com.practice.shoppingmall.dto.request.item.ModifyItemInfoRequest;
 import com.practice.shoppingmall.dto.response.item.CreateItemResponse;
+import com.practice.shoppingmall.dto.response.item.FindItemListResponse;
 import com.practice.shoppingmall.dto.response.item.FindItemResponse;
 
 import java.util.List;
@@ -12,13 +13,13 @@ import java.util.List;
 public interface ItemService {
     CreateItemResponse createItem(CreateItemRequest request);
 
-    void patchItem(ModifyItemInfoRequest request);
+    void modifyItem(ModifyItemInfoRequest request);
 
-    void addItemStock(AddItemStockRequest request);
+    void addItemStock(String uuid, Integer addStock);
 
-    void deleteItemStock(DeleteItemRequest request);
+    void deleteItem(DeleteItemRequest request);
 
-    FindItemResponse findItem(String itemUuid);
+    FindItemResponse findItem(String uuid);
 
-    List<FindItemResponse> findItemList();
+    FindItemListResponse findItemList(int page, int size);
 }
