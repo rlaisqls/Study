@@ -15,16 +15,16 @@ public class FindOrderResponse implements Response {
     private String username;
     private String orderStatus;
     private String orderDate;
-    private List<OrderItemResponse> orderItemList;
+    private List<OrderItemResponse> orderItems;
 
     public static FindOrderResponse of(Order order) {
-        List<OrderItemResponse> orderItemList = order.getOrderItemList()
+        List<OrderItemResponse> orderItemList = order.getOrderItems()
                 .stream().map(OrderItemResponse::of).collect(Collectors.toList());
 
         return FindOrderResponse
                 .builder()
-                .orderItemList(orderItemList)
-                .orderStatus(order.getOrderStatus().toString())
+                .orderItems(orderItemList)
+                .orderStatus(order.getStatus().toString())
                 .orderDate(order.getOrderDate().toString())
                 .build();
     }

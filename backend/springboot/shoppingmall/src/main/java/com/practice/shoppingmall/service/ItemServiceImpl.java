@@ -4,7 +4,7 @@ import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;
 import com.practice.shoppingmall.dto.request.item.ModifyItemInfoRequest;
 import com.practice.shoppingmall.dto.response.item.CreateItemResponse;
-import com.practice.shoppingmall.dto.response.item.FindItemListResponse;
+import com.practice.shoppingmall.dto.response.item.FindItemGroupResponse;
 import com.practice.shoppingmall.dto.response.item.FindItemResponse;
 import com.practice.shoppingmall.entity.item.Item;
 import com.practice.shoppingmall.entity.item.ItemRepository;
@@ -80,14 +80,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public FindItemListResponse findItemList(int page, int size) {
+    public FindItemGroupResponse findItemList(int page, int size) {
         Pageable request = PageRequest.of(page, size);
         Page<Item> itemPage = itemRepository.findAll(request);
 
         List<FindItemResponse> itemResponseList = itemPage
                 .map(FindItemResponse::of).toList();
 
-        return FindItemListResponse
+        return FindItemGroupResponse
                 .builder()
                 .itemResponseList(itemResponseList)
                 .totalPage(itemPage.getTotalPages())

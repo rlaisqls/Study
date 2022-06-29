@@ -1,6 +1,7 @@
 package com.practice.shoppingmall.entity.order;
 
 import com.practice.shoppingmall.entity.delivery.Delivery;
+import com.practice.shoppingmall.entity.delivery.DeliveryStatus;
 import com.practice.shoppingmall.entity.user.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,7 +51,7 @@ public class Order {
     하지만 그런 방식을 쓰면 예상치 못한 쿼리가 나가거나 오류가 생기기 쉬우므로 중간에 orderItem 테이블을 만들어서 직접 일대다, 다대일 관계로 풀어서 사용한다.*/
     @Setter
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //cascade.All이기 때문에 orders를 persist해주면 같이 저장된다.
-    private List<OrderItem> orderItemList;
+    private List<OrderItem> orderItems;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
@@ -59,9 +60,21 @@ public class Order {
     private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus status;
+
+    public void addOrderItem(OrderItem orderItem){
+        orderItems.add(orderItem);
+    }
+
 
     public void cancel() {
-        this.orderStatus = OrderStatus.CANCEL;
+        if(delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+        }
+
+        this.status = OrderStatus.CANCEL;
+        for (OrderItem orderItem :this.orderItems) {
+            orderItem.cancel();
+        }
     }
 }

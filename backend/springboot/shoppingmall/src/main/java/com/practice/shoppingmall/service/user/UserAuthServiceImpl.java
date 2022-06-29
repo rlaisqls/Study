@@ -4,7 +4,7 @@ import com.practice.shoppingmall.dto.request.user.LoginUserRequest;
 import com.practice.shoppingmall.dto.response.TokenResponse;
 import com.practice.shoppingmall.entity.user.User;
 import com.practice.shoppingmall.entity.user.UserRepository;
-import com.practice.shoppingmall.exception.RefreshTokenNotFoundException;
+import com.practice.shoppingmall.exception.InvalidTokenException;
 import com.practice.shoppingmall.exception.user.UserNotFoundException;
 import com.practice.shoppingmall.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Transactional
     public TokenResponse reissue(String refreshToken) {
 
-        if(!jwtTokenProvider.isRefreshToken(refreshToken)) throw RefreshTokenNotFoundException.EXCEPTION;
+        if(!jwtTokenProvider.isRefreshToken(refreshToken)) throw InvalidTokenException.EXCEPTION;
 
         String uuid = jwtTokenProvider.getId(refreshToken);
 

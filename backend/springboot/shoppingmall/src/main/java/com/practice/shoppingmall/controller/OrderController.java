@@ -1,6 +1,7 @@
 package com.practice.shoppingmall.controller;
 
-import com.practice.shoppingmall.dto.request.item.OrderItemRequest;
+import com.practice.shoppingmall.dto.request.order.OrderItemRequest;
+import com.practice.shoppingmall.dto.request.order.OrderRequest;
 import com.practice.shoppingmall.dto.response.ResponseBody;
 import com.practice.shoppingmall.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/order")
-    public void order(@Valid @RequestBody List<OrderItemRequest> requests){
+    public void order(@Valid @RequestBody OrderRequest requests){
         orderService.order(requests);
     }
 

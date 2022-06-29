@@ -1,8 +1,8 @@
 package com.practice.shoppingmall.service;
 
-import com.practice.shoppingmall.dto.request.item.OrderItemRequest;
+import com.practice.shoppingmall.dto.request.order.OrderRequest;
 import com.practice.shoppingmall.dto.response.order.CreateOrderResponse;
-import com.practice.shoppingmall.dto.response.order.FindOrderListResponse;
+import com.practice.shoppingmall.dto.response.order.FindOrderGroupResponse;
 import com.practice.shoppingmall.dto.response.order.FindOrderResponse;
 import com.practice.shoppingmall.dto.response.item.OrderItemResponse;
 import com.practice.shoppingmall.entity.delivery.Delivery;
@@ -39,33 +39,33 @@ public class OrderServiceImpl implements OrderService{
 
     private final ItemRepository itemRepository;
 
-
     private final OrderRepository orderRepository;
 
     @Override
     @Transactional
-    public CreateOrderResponse order(List<OrderItemRequest> itemsRequest) {
+    public CreateOrderResponse order(OrderRequest request) {
 
         User user = userFacade.nowUser();
 
         Order order = Order.builder()
                 .user(user)
                 .delivery(deliveryStart(user))
-                .orderItemList(new ArrayList<>())
+                .status(OrderStatus.ORDER)
+                .orderItems(new ArrayList<>())
                 .orderDate(LocalDateTime.now())
-                .orderStatus(OrderStatus.ORDER)
                 .build();
 
-        order.setOrderItemList(itemsRequest
-                .stream()
-                .map(itemRequest -> {
-                    Item item = itemRepository.findById(UUID.fromString(itemRequest.getUuid()))
+        request.getOrderItems()
+                .forEach(orderItem -> {
+                    Item item = itemRepository.findById(UUID.fromString(orderItem.getUuid()))
                             .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
-                    return new OrderItem(order, item, itemRequest.getCount());
-                })
-                .collect(Collectors.toList()));
+                    item.removeStock(orderItem.getCount());
+                    order.addOrderItem(new OrderItem(order, item, orderItem.getCount()));
+                });
 
-        return new CreateOrderResponse(orderRepository.save(order).getUuid().toString());
+        orderRepository.save(order);
+
+        return new CreateOrderResponse(order.getUuid().toString());
     }
 
     private Delivery deliveryStart(User user) {
@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService{
         return Delivery
                 .builder()
                 .address(user.getAddress())
-                .deliveryStatus(DeliveryStatus.READY)
+                .status(DeliveryStatus.READY)
                 .build();
     }
 
@@ -88,21 +88,21 @@ public class OrderServiceImpl implements OrderService{
 
         if(!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;
 
-        List<OrderItemResponse> orderItemResponses = order.getOrderItemList()
+        List<OrderItemResponse> orderItemResponses = order.getOrderItems()
                 .stream()
                 .map(OrderItemResponse::of)
                 .collect(Collectors.toList());
 
         return FindOrderResponse.builder()
-                .orderStatus(order.getOrderStatus().toString())
+                .orderStatus(order.getStatus().toString())
                 .username(order.getUser().getUsername())
-                .orderItemList(orderItemResponses)
+                .orderItems(orderItemResponses)
                 .build();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public FindOrderListResponse findMyOrder(int page, int size){
+    public FindOrderGroupResponse findMyOrder(int page, int size){
 
         User user = userFacade.nowUser();
 
@@ -112,7 +112,7 @@ public class OrderServiceImpl implements OrderService{
         List<FindOrderResponse> orderResponseList = orderPage
                 .map(FindOrderResponse::of).toList();
 
-        return FindOrderListResponse.builder()
+        return FindOrderGroupResponse.builder()
                 .orderResponseList(orderResponseList)
                 .totalPage(orderPage.getTotalPages())
                 .totalSize(orderPage.getTotalElements())

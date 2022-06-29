@@ -1,5 +1,6 @@
 package com.practice.shoppingmall.controller.user;
 
+import com.practice.shoppingmall.dto.request.EmailAuthenticationRequest;
 import com.practice.shoppingmall.dto.request.user.LoginUserRequest;
 import com.practice.shoppingmall.dto.request.user.SignUpUserRequest;
 import com.practice.shoppingmall.dto.response.ResponseBody;
@@ -22,10 +23,15 @@ public class UserAuthController {
 
     private final UserSignUpService userSignUpService;
 
+    @PostMapping("/mail")
+    public ResponseBody mail(@Valid @RequestBody EmailAuthenticationRequest request) {
+        return ResponseBody.of(userSignUpService.sendAuthenticationEmail(request), HttpStatus.OK.value());
+    }
+
+    @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/register")
     public ResponseBody register(@Valid @RequestBody SignUpUserRequest request) {
-        return ResponseBody.of(authService.register(request), HttpStatus.CREATED.value());
+        return ResponseBody.of(userSignUpService.doSignUpUser(request), HttpStatus.CREATED.value());
     }
 
     private final UserAuthService authService;

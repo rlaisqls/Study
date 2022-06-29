@@ -1,5 +1,6 @@
 package com.practice.shoppingmall.entity.item;
 
+import com.practice.shoppingmall.exception.item.NotEnoughStockException;
 import com.practice.shoppingmall.exception.item.OutOfStockException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,14 @@ public class Item {
     public void addStock(int quantity){
         int restStock = this.stock + quantity;
         if(restStock < 0) throw OutOfStockException.EXCEPTION;
+        this.stock = restStock;
+    }
+
+    public void removeStock(int quantity) {
+        int restStock = this.stock - quantity;
+        if(restStock < 0) {
+            throw NotEnoughStockException.EXCEPTION;
+        }
         this.stock = restStock;
     }
 

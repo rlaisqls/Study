@@ -39,11 +39,21 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    private int orderPrice;
+
     private int count; //주문 수량
 
     public OrderItem(Order order, Item item, int count) {
         this.order = order;
         this.item = item;
         this.count = count;
+    }
+
+    public void cancel() {
+        getItem().addStock(count);
+    }
+
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
     }
 }

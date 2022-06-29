@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service.user.mail;
+package com.practice.shoppingmall.service.mail;
 
 import com.practice.shoppingmall.dto.request.SendMailRequest;
 import com.practice.shoppingmall.exception.MailSendFailException;
@@ -20,10 +20,9 @@ public class MailServiceImpl implements MailService {
     private String fromAddress;
 
     @Override
-    public String sendEmail(SendMailRequest request) {
+    public void sendEmail(SendMailRequest request) {
         try {
             sendMailLogic(request);
-            return "ok";
         } catch (Exception e) {
             throw MailSendFailException.EXCEPTION;
         }
@@ -38,9 +37,8 @@ public class MailServiceImpl implements MailService {
         messageHelper.setFrom(fromAddress);
         messageHelper.setSubject(request.getTitle());
 
-        final boolean isHTML = true;
-        messageHelper.setText("다음 링크를 클릭하여 인증을 완료하세요.\n" +
-                "<a href=\"http://localhost:8080/email/approval/%s\">인증하기</a>", isHTML);
+
+        messageHelper.setText(request.getAuthenticationCode()+"를 입력하세요");
 
         mailSender.send(message);
     }

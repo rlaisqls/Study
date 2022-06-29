@@ -12,7 +12,7 @@ import com.practice.shoppingmall.entity.user.User;
 import com.practice.shoppingmall.entity.user.UserRepository;
 import com.practice.shoppingmall.exception.BadAuthenticationCodeException;
 import com.practice.shoppingmall.exception.user.UserAlreadyExistException;
-import com.practice.shoppingmall.service.user.mail.MailService;
+import com.practice.shoppingmall.service.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,8 +33,8 @@ public class UserSignUpServiceImpl implements UserSignUpService{
     @Override
     public SignUpUserResponse doSignUpUser(SignUpUserRequest request) {
 
-        userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail())
-                .orElseThrow(() -> UserAlreadyExistException.EXCEPTION);
+        if(userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail()).isPresent())
+            throw UserAlreadyExistException.EXCEPTION;
 
         authenticationCodeRepository.findById(request.getEmail())
                 .filter(a -> request.getAuthenticationCode().equals(a.getCode()))
@@ -57,8 +57,8 @@ public class UserSignUpServiceImpl implements UserSignUpService{
         String authenticationCode = createAuthenticationCode();
         String emailAddress = request.getEmail();
 
-        userRepository.findByEmail(emailAddress)
-                .orElseThrow(() -> UserAlreadyExistException.EXCEPTION); //null이 아니면 실행
+        if(userRepository.findByEmail(emailAddress).isPresent())
+                throw UserAlreadyExistException.EXCEPTION; //null이 아니면 실행
 
         authenticationCodeRepository.save(new AuthenticationCode(emailAddress, authenticationCode));
 

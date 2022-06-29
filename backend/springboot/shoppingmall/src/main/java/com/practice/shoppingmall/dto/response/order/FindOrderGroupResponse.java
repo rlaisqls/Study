@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.dto.response.item;
+package com.practice.shoppingmall.dto.response.order;
 
 import com.practice.shoppingmall.dto.response.Response;
 import lombok.Builder;
@@ -8,8 +8,8 @@ import java.util.List;
 
 @Getter
 @Builder
-public class FindItemListResponse implements Response {
-    List<FindItemResponse> itemResponseList;
+public class FindOrderGroupResponse implements Response {
+    List<FindOrderResponse> orderResponseList;
 
     private final Integer totalPage;
 
