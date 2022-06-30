@@ -49,15 +49,13 @@ public class JwtTokenProvider implements InitializingBean {
 
     public String createAccessToken(String uuid) {
 
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(uuid)
                 .claim("type", "access")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccess() * 1000))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
-
-        return accessToken;
     }
 
     private String createRefreshToken(String uuid) {

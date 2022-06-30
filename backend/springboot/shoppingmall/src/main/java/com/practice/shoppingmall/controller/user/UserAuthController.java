@@ -4,8 +4,8 @@ import com.practice.shoppingmall.dto.request.EmailAuthenticationRequest;
 import com.practice.shoppingmall.dto.request.user.LoginUserRequest;
 import com.practice.shoppingmall.dto.request.user.SignUpUserRequest;
 import com.practice.shoppingmall.dto.response.ResponseBody;
-import com.practice.shoppingmall.service.user.UserAuthService;
-import com.practice.shoppingmall.service.user.UserSignUpService;
+import com.practice.shoppingmall.service.user.auth.UserAuthService;
+import com.practice.shoppingmall.service.user.auth.UserSignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +30,7 @@ public class UserAuthController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseBody register(@Valid @RequestBody SignUpUserRequest request) {
+    public ResponseBody signUp(@Valid @RequestBody SignUpUserRequest request) {
         return ResponseBody.of(userSignUpService.doSignUpUser(request), HttpStatus.CREATED.value());
     }
 

@@ -1,10 +1,10 @@
-package com.practice.shoppingmall.service;
+package com.practice.shoppingmall.service.order;
 
+import com.practice.shoppingmall.dto.request.order.OrderItemRequest;
 import com.practice.shoppingmall.dto.request.order.OrderRequest;
 import com.practice.shoppingmall.dto.response.order.CreateOrderResponse;
 import com.practice.shoppingmall.dto.response.order.FindOrderGroupResponse;
 import com.practice.shoppingmall.dto.response.order.FindOrderResponse;
-import com.practice.shoppingmall.dto.response.item.OrderItemResponse;
 import com.practice.shoppingmall.entity.delivery.Delivery;
 import com.practice.shoppingmall.entity.delivery.DeliveryStatus;
 import com.practice.shoppingmall.entity.item.Item;
@@ -26,14 +26,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     private final UserFacade userFacade;
 
@@ -51,17 +50,15 @@ public class OrderServiceImpl implements OrderService{
                 .user(user)
                 .delivery(deliveryStart(user))
                 .status(OrderStatus.ORDER)
-                .orderItems(new ArrayList<>())
                 .orderDate(LocalDateTime.now())
                 .build();
 
-        request.getOrderItems()
-                .forEach(orderItem -> {
-                    Item item = itemRepository.findById(UUID.fromString(orderItem.getUuid()))
-                            .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
-                    item.removeStock(orderItem.getCount());
-                    order.addOrderItem(new OrderItem(order, item, orderItem.getCount()));
-                });
+        List<OrderItem> orderItems = request.getOrderItems()
+                .stream()
+                .map(orderItem -> getOrderItemOfOrder(orderItem, order))
+                .collect(Collectors.toList());
+
+        order.setOrderItems(orderItems);
 
         orderRepository.save(order);
 
@@ -77,58 +74,52 @@ public class OrderServiceImpl implements OrderService{
                 .build();
     }
 
+    private OrderItem getOrderItemOfOrder(OrderItemRequest orderItem, Order order) {
+
+        Item item = itemRepository.findById(UUID.fromString(orderItem.getUuid()))
+                .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
+
+        item.removeStock(orderItem.getCount());
+
+        return new OrderItem(order, item, orderItem.getCount());
+    }
+
     @Override
     @Transactional(readOnly = true)
-    public FindOrderResponse findOrder(String uuid){
+    public FindOrderResponse findOrder(String uuid) {
 
         User user = userFacade.nowUser();
 
         Order order = orderRepository.findById(UUID.fromString(uuid))
                 .orElseThrow(() -> OrderNotFoundException.EXCEPTION);
 
-        if(!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;
+        if (!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;
 
-        List<OrderItemResponse> orderItemResponses = order.getOrderItems()
-                .stream()
-                .map(OrderItemResponse::of)
-                .collect(Collectors.toList());
-
-        return FindOrderResponse.builder()
-                .orderStatus(order.getStatus().toString())
-                .username(order.getUser().getUsername())
-                .orderItems(orderItemResponses)
-                .build();
+        return FindOrderResponse.of(order);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public FindOrderGroupResponse findMyOrder(int page, int size){
+    public FindOrderGroupResponse findMyOrder(int page, int size) {
 
         User user = userFacade.nowUser();
 
         Pageable request = PageRequest.of(page, size);
         Page<Order> orderPage = orderRepository.findByUser(user, request);
 
-        List<FindOrderResponse> orderResponseList = orderPage
-                .map(FindOrderResponse::of).toList();
-
-        return FindOrderGroupResponse.builder()
-                .orderResponseList(orderResponseList)
-                .totalPage(orderPage.getTotalPages())
-                .totalSize(orderPage.getTotalElements())
-                .build();
+        return FindOrderGroupResponse.of(orderPage);
     }
 
     @Override
     @Transactional
-    public void cancelOrder(String uuid){
+    public void cancelOrder(String uuid) {
 
         User user = userFacade.nowUser();
 
         Order order = orderRepository.findById(UUID.fromString(uuid))
                 .orElseThrow(() -> OrderNotFoundException.EXCEPTION);
 
-        if(!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;
+        if (!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;
 
         order.cancel();
         orderRepository.save(order);

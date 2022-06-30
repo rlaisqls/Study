@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service;
+package com.practice.shoppingmall.service.order;
 
 import com.practice.shoppingmall.dto.request.order.OrderItemRequest;
 import com.practice.shoppingmall.dto.request.order.OrderRequest;

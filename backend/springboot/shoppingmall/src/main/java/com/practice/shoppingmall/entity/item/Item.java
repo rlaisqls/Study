@@ -35,9 +35,7 @@ public class Item {
     private int stock;
 
     public void addStock(int quantity){
-        int restStock = this.stock + quantity;
-        if(restStock < 0) throw OutOfStockException.EXCEPTION;
-        this.stock = restStock;
+        this.stock += quantity;
     }
 
     public void removeStock(int quantity) {

@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service.user;
+package com.practice.shoppingmall.service.user.auth;
 
 import com.practice.shoppingmall.dto.request.user.LoginUserRequest;
 import com.practice.shoppingmall.dto.response.TokenResponse;

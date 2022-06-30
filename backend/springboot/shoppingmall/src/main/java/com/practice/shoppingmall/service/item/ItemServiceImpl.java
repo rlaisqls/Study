@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service;
+package com.practice.shoppingmall.service.item;
 
 import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -76,34 +75,16 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(UUID.fromString(uuid))
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
-        return getFindItemResponses(item);
+        return FindItemResponse.of(item);
     }
 
     @Override
     public FindItemGroupResponse findItemList(int page, int size) {
+
         Pageable request = PageRequest.of(page, size);
         Page<Item> itemPage = itemRepository.findAll(request);
 
-        List<FindItemResponse> itemResponseList = itemPage
-                .map(FindItemResponse::of).toList();
-
-        return FindItemGroupResponse
-                .builder()
-                .itemResponseList(itemResponseList)
-                .totalPage(itemPage.getTotalPages())
-                .totalSize(itemPage.getTotalElements()).build();
-    }
-
-    private FindItemResponse getFindItemResponses(Item item) {
-
-        return FindItemResponse
-                .builder()
-                .uuid(item.getId().toString())
-                .name(item.getName())
-                .price(item.getPrice())
-                .stock(item.getStock())
-                .isSoldOut(item.getStock() == 0)
-                .build();
+        return FindItemGroupResponse.of(itemPage);
     }
 
 }

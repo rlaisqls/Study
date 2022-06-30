@@ -1,9 +1,8 @@
 package com.practice.shoppingmall.controller;
 
-import com.practice.shoppingmall.dto.request.order.OrderItemRequest;
 import com.practice.shoppingmall.dto.request.order.OrderRequest;
 import com.practice.shoppingmall.dto.response.ResponseBody;
-import com.practice.shoppingmall.service.OrderService;
+import com.practice.shoppingmall.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

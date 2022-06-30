@@ -1,14 +1,11 @@
 package com.practice.shoppingmall.controller;
 
-import com.practice.shoppingmall.dto.request.item.AddItemStockRequest;
 import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;
 import com.practice.shoppingmall.dto.request.item.ModifyItemInfoRequest;
 import com.practice.shoppingmall.dto.response.ResponseBody;
-import com.practice.shoppingmall.dto.response.item.FindItemResponse;
-import com.practice.shoppingmall.service.ItemService;
+import com.practice.shoppingmall.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,10 +46,7 @@ public class ItemController {
     }
 
     @GetMapping("/item")
-    public ResponseBody findItemList(
-            @RequestParam("page") int page,
-            @Range(min = 1, max = 50) @RequestParam("size") int size
-    ){
+    public ResponseBody findItemList(@RequestParam("page") int page, @RequestParam("size") int size){
         return ResponseBody.of(itemService.findItemList(page, size), HttpStatus.OK.value());
     }
 

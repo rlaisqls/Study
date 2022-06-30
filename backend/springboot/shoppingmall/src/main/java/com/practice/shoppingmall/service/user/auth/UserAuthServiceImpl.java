@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service.user;
+package com.practice.shoppingmall.service.user.auth;
 
 import com.practice.shoppingmall.dto.request.user.LoginUserRequest;
 import com.practice.shoppingmall.dto.response.TokenResponse;
@@ -28,7 +28,6 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     private User verifyUser(LoginUserRequest request) {
-
         return userRepository.findByUsername(request.getUsername())
                 .filter(u -> passwordEncoder.matches(request.getPassword(),u.getPassword()))
                 .orElseThrow(()-> UserNotFoundException.EXCEPTION);

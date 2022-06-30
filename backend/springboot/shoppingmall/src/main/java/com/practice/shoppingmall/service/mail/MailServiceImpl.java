@@ -36,8 +36,6 @@ public class MailServiceImpl implements MailService {
         messageHelper.setTo(request.getAddress());
         messageHelper.setFrom(fromAddress);
         messageHelper.setSubject(request.getTitle());
-
-
         messageHelper.setText(request.getAuthenticationCode()+"를 입력하세요");
 
         mailSender.send(message);

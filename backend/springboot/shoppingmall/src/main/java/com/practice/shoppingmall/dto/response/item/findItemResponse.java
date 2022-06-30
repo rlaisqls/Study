@@ -18,15 +18,14 @@ public class FindItemResponse implements Response {
     private Integer stock;
 
     private Boolean isSoldOut;
-
-    public static FindItemResponse of(Item item) {
+    public static FindItemResponse of (Item item) {
         return FindItemResponse
                 .builder()
                 .uuid(item.getId().toString())
                 .name(item.getName())
                 .price(item.getPrice())
                 .stock(item.getStock())
-                .isSoldOut(item.getStock()==0)
+                .isSoldOut(item.getStock() == 0)
                 .build();
     }
 }

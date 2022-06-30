@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service.user;
+package com.practice.shoppingmall.service.user.auth;
 
 import com.practice.shoppingmall.dto.request.EmailAuthenticationRequest;
 import com.practice.shoppingmall.dto.request.SendMailRequest;
@@ -33,7 +33,7 @@ public class UserSignUpServiceImpl implements UserSignUpService{
     @Override
     public SignUpUserResponse doSignUpUser(SignUpUserRequest request) {
 
-        if(userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail()).isPresent())
+        if(userRepository.findByUsername(request.getUsername()).isPresent())
             throw UserAlreadyExistException.EXCEPTION;
 
         authenticationCodeRepository.findById(request.getEmail())
@@ -48,23 +48,25 @@ public class UserSignUpServiceImpl implements UserSignUpService{
                 .authority(Authority.ROLE_USER)
                 .build());
 
-        return SignUpUserResponse.of(user);
+        return new SignUpUserResponse(user.getUuid());
     }
 
     @Override
     public StringResponse sendAuthenticationEmail(EmailAuthenticationRequest request) {
 
-        String authenticationCode = createAuthenticationCode();
+        String code = createAuthenticationCode();
         String emailAddress = request.getEmail();
 
         if(userRepository.findByEmail(emailAddress).isPresent())
                 throw UserAlreadyExistException.EXCEPTION; //null이 아니면 실행
 
-        authenticationCodeRepository.save(new AuthenticationCode(emailAddress, authenticationCode));
+        AuthenticationCode authenticationCode = new AuthenticationCode(emailAddress, code);
+
+        authenticationCodeRepository.save(authenticationCode);
 
         mailService.sendEmail(SendMailRequest.builder()
                 .address(emailAddress)
-                .authenticationCode(authenticationCode)
+                .authenticationCode(code)
                 .title("이메일 인증")
                 .build()
         );

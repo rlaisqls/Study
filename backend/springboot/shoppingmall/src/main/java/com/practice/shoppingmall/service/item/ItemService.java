@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service;
+package com.practice.shoppingmall.service.item;
 
 import com.practice.shoppingmall.dto.request.item.CreateItemRequest;
 import com.practice.shoppingmall.dto.request.item.DeleteItemRequest;

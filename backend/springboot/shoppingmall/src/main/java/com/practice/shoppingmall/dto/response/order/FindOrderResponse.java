@@ -16,8 +16,10 @@ public class FindOrderResponse implements Response {
     private String orderStatus;
     private String orderDate;
     private List<OrderItemResponse> orderItems;
+    private int totalPrice;
 
     public static FindOrderResponse of(Order order) {
+
         List<OrderItemResponse> orderItemList = order.getOrderItems()
                 .stream().map(OrderItemResponse::of).collect(Collectors.toList());
 
@@ -26,6 +28,7 @@ public class FindOrderResponse implements Response {
                 .orderItems(orderItemList)
                 .orderStatus(order.getStatus().toString())
                 .orderDate(order.getOrderDate().toString())
+                .totalPrice(order.getTotalPrice())
                 .build();
     }
 }

@@ -41,11 +41,12 @@ public class OrderItem {
 
     private int orderPrice;
 
-    private int count; //주문 수량
+    private int count;
 
     public OrderItem(Order order, Item item, int count) {
         this.order = order;
         this.item = item;
+        this.orderPrice = item.getPrice();
         this.count = count;
     }
 

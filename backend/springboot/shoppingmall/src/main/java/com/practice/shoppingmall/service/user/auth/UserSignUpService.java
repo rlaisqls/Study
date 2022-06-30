@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.service.user;
+package com.practice.shoppingmall.service.user.auth;
 
 import com.practice.shoppingmall.dto.request.CheckIdDuplicationRequest;
 import com.practice.shoppingmall.dto.request.EmailAuthenticationRequest;
