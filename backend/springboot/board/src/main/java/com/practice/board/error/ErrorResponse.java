@@ -23,4 +23,13 @@ public class ErrorResponse {
                 .description(description)
                 .build();
     }
+
+    public static ErrorResponse of(int errorCode, String description) {
+        return ErrorResponse.builder()
+                .message(description)
+                .status(errorCode)
+                .timestamp(LocalDateTime.now())
+                .description(description)
+                .build();
+    }
 }
