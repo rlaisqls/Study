@@ -42,14 +42,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public CreateOrderResponse order(OrderRequest request) {
+    public CreateOrderResponse doOrder(OrderRequest request) {
 
         User user = userFacade.nowUser();
 
         Order order = Order.builder()
                 .user(user)
                 .delivery(deliveryStart(user))
-                .status(OrderStatus.ORDER)
+                .orderStatus(OrderStatus.ORDER)
                 .orderDate(LocalDateTime.now())
                 .build();
 
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(order);
 
-        return new CreateOrderResponse(order.getUuid().toString());
+        return new CreateOrderResponse(order.getId().toString());
     }
 
     private Delivery deliveryStart(User user) {
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
         return Delivery
                 .builder()
                 .address(user.getAddress())
-                .status(DeliveryStatus.READY)
+                .deliveryStatus(DeliveryStatus.READY)
                 .build();
     }
 
@@ -81,16 +81,21 @@ public class OrderServiceImpl implements OrderService {
 
         item.removeStock(orderItem.getCount());
 
-        return new OrderItem(order, item, orderItem.getCount());
+        return OrderItem.builder()
+                .order(order)
+                .item(item)
+                .count(orderItem.getCount())
+                .orderPrice(item.getPrice()*orderItem.getCount())
+                .build();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public FindOrderResponse findOrder(String uuid) {
+    public FindOrderResponse findOneOrder(UUID id) {
 
         User user = userFacade.nowUser();
 
-        Order order = orderRepository.findById(UUID.fromString(uuid))
+        Order order = orderRepository.findById(id)
                 .orElseThrow(() -> OrderNotFoundException.EXCEPTION);
 
         if (!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;
@@ -112,11 +117,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void cancelOrder(String uuid) {
+    public void cancelOrder(String id) {
 
         User user = userFacade.nowUser();
 
-        Order order = orderRepository.findById(UUID.fromString(uuid))
+        Order order = orderRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> OrderNotFoundException.EXCEPTION);
 
         if (!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;

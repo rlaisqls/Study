@@ -15,6 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderRequest {
-    @NotNull
+    @NotBlank
     List<OrderItemRequest> orderItems;
 }

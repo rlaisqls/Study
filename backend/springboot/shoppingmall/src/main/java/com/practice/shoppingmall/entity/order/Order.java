@@ -40,17 +40,14 @@ public class Order {
     @Column(name = "order_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private UUID uuid;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    /*한 주문이 여러개의 아이템을 가질 수 있고, 한 아이템이 여러개의 주문에 호출될 수 있으므로
-    다대다 매핑을 해줘야하는데 RDB는 다대다 관계를 표현할 수 없기 때문에 자동으로 중간 테이블을 만들어 구현한다.
-    하지만 그런 방식을 쓰면 예상치 못한 쿼리가 나가거나 오류가 생기기 쉬우므로 중간에 orderItem 테이블을 만들어서 직접 일대다, 다대일 관계로 풀어서 사용한다.*/
     @Setter
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //cascade.All이기 때문에 orders를 persist해주면 같이 저장된다.
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -60,14 +57,15 @@ public class Order {
     private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus orderStatus;
 
     public void cancel() {
-        if(delivery.getStatus() == DeliveryStatus.COMP) {
+
+        if(delivery.getDeliveryStatus() == DeliveryStatus.COMP) {
             throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
         }
 
-        this.status = OrderStatus.CANCEL;
+        this.orderStatus = OrderStatus.CANCEL;
         for (OrderItem orderItem :this.orderItems) {
             orderItem.cancel();
         }

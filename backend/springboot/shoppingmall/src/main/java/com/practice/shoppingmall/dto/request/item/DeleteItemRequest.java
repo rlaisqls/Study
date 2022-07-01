@@ -16,5 +16,5 @@ import java.util.UUID;
 public class DeleteItemRequest {
 
     @NotBlank(message = "상품 ID를 입력해주세요")
-    private String itemUuid;
+    private UUID itemUuid;
 }

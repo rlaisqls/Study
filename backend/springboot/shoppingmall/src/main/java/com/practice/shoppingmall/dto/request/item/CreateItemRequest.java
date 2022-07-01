@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Builder
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateItemRequest {
-    @NotNull(message = "이름을 입력해주세요")
+    @NotBlank(message = "이름을 입력해주세요")
     private String name;
 
     @NotNull(message = "가격을 입력해주세요")

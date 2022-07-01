@@ -43,13 +43,6 @@ public class OrderItem {
 
     private int count;
 
-    public OrderItem(Order order, Item item, int count) {
-        this.order = order;
-        this.item = item;
-        this.orderPrice = item.getPrice();
-        this.count = count;
-    }
-
     public void cancel() {
         getItem().addStock(count);
     }

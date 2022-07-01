@@ -48,7 +48,7 @@ public class UserSignUpServiceImpl implements UserSignUpService{
                 .authority(Authority.ROLE_USER)
                 .build());
 
-        return new SignUpUserResponse(user.getUuid());
+        return new SignUpUserResponse(user.getId());
     }
 
     @Override

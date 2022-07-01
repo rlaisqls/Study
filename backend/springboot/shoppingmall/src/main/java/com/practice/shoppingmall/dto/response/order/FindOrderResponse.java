@@ -26,7 +26,7 @@ public class FindOrderResponse implements Response {
         return FindOrderResponse
                 .builder()
                 .orderItems(orderItemList)
-                .orderStatus(order.getStatus().toString())
+                .orderStatus(order.getOrderStatus().toString())
                 .orderDate(order.getOrderDate().toString())
                 .totalPrice(order.getTotalPrice())
                 .build();

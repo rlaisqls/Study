@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,18 +21,18 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/order")
-    public void order(@Valid @RequestBody OrderRequest requests){
-        orderService.order(requests);
+    public void doOrder(@Valid @RequestBody OrderRequest requests){
+        orderService.doOrder(requests);
     }
 
-    @PatchMapping("/order/{uuid}")
-    public void cancelOrder(@PathVariable String uuid){
-        orderService.cancelOrder(uuid);
+    @PatchMapping("/order/{orderId}")
+    public void cancelOrder(@PathVariable String orderId){
+        orderService.cancelOrder(orderId);
     }
 
-    @GetMapping("/order/{uuid}")
-    public ResponseBody findOrder(@PathVariable String uuid){
-        return ResponseBody.of(orderService.findOrder(uuid), HttpStatus.OK.value());
+    @GetMapping("/order/{orderId}")
+    public ResponseBody findOneOrder(@PathVariable UUID orderId){
+        return ResponseBody.of(orderService.findOneOrder(orderId), HttpStatus.OK.value());
     }
 
     @GetMapping("/order")

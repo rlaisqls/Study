@@ -34,14 +34,14 @@ public class ItemServiceImpl implements ItemService {
                 .build()
         );
 
-        return new CreateItemResponse(item.getId());
+        return new CreateItemResponse(item.getId().toString());
     }
 
     @Override
     @Transactional
     public void modifyItem(ModifyItemInfoRequest request) {
 
-        Item item = itemRepository.findById(UUID.fromString(request.getItemUuid()))
+        Item item = itemRepository.findById(request.getItemUuid())
                 .orElseThrow(()->ItemNotFoundException.EXCEPTION);
 
         item.modifyInfo(request.getName(), request.getPrice());
@@ -50,9 +50,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void addItemStock(String uuid, Integer addStock) {
+    public void addItemStock(UUID id, Integer addStock) {
 
-        Item item = itemRepository.findById(UUID.fromString(uuid))
+        Item item = itemRepository.findById(id)
                 .orElseThrow(()->ItemNotFoundException.EXCEPTION);
 
         item.addStock(addStock);
@@ -63,16 +63,16 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public void deleteItem(DeleteItemRequest request) {
 
-        Item item = itemRepository.findById(UUID.fromString(request.getItemUuid()))
+        Item item = itemRepository.findById(request.getItemUuid())
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
         itemRepository.delete(item);
     }
 
     @Override
-    public FindItemResponse findItem(String uuid) {
+    public FindItemResponse findItem(UUID id) {
 
-        Item item = itemRepository.findById(UUID.fromString(uuid))
+        Item item = itemRepository.findById(id)
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
         return FindItemResponse.of(item);

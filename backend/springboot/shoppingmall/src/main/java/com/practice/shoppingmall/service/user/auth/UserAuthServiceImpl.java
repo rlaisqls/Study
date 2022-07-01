@@ -24,7 +24,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public TokenResponse login(LoginUserRequest request) {
 
         User user = verifyUser(request);
-        return jwtTokenProvider.createTokens(user.getUuid().toString());
+        return jwtTokenProvider.createTokens(user.getId().toString());
     }
 
     private User verifyUser(LoginUserRequest request) {

@@ -46,26 +46,4 @@ public class UserServiceTest {
     static void setUp(){
         user = User.builder().build();
     }
-
-    @Test
-    void 유저비밀번호_수정_성공() {
-        //given
-        String oldPassword = user.getPassword();
-        String newPassword = "NewPassword";
-
-        given(securityContextService.getPrincipal()).willReturn(new AuthenticationDetails(user));
-        given(passwordEncoder.matches(oldPassword, user.getPassword())).willReturn(true);
-        given(passwordEncoder.encode(newPassword)).willReturn(newPassword);
-
-        //when
-        ChangePasswordRequest request = ChangePasswordRequest.builder()
-                .oldPassword(oldPassword)
-                .newPassword(newPassword)
-                .build();
-        userService.modifyPassword(request);
-
-        //then
-        assertThat(user.getPassword()).isEqualTo(newPassword);
-        verify(userRepository, times(1)).save(any());
-    }
 }

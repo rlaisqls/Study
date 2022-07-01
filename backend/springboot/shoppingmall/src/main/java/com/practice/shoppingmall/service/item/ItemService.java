@@ -7,16 +7,18 @@ import com.practice.shoppingmall.dto.response.item.CreateItemResponse;
 import com.practice.shoppingmall.dto.response.item.FindItemGroupResponse;
 import com.practice.shoppingmall.dto.response.item.FindItemResponse;
 
+import java.util.UUID;
+
 public interface ItemService {
     CreateItemResponse createItem(CreateItemRequest request);
 
     void modifyItem(ModifyItemInfoRequest request);
 
-    void addItemStock(String uuid, Integer addStock);
+    void addItemStock(UUID id, Integer addStock);
 
     void deleteItem(DeleteItemRequest request);
 
-    FindItemResponse findItem(String uuid);
+    FindItemResponse findItem(UUID id);
 
     FindItemGroupResponse findItemList(int page, int size);
 }

@@ -1,6 +1,8 @@
 package com.practice.shoppingmall.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.practice.shoppingmall.entity.coupon.Coupon;
+import com.practice.shoppingmall.entity.coupon.UserCoupon;
 import com.practice.shoppingmall.entity.order.Order;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -37,7 +40,7 @@ public class User implements UserDetails {
     @Column(name = "user_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private UUID uuid;
+    private UUID id;
 
     private String username;
 
@@ -52,9 +55,23 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private List<Order> ordersList = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private final List<UserCoupon> coupons = new ArrayList<>();
 
     public void changePassword(String newPassword) { this.password = password; }
+
+
+    public void addCoupon(Coupon coupon) {
+        UserCoupon userCoupon = UserCoupon
+                .builder()
+                .user(this)
+                .coupon(coupon)
+                .build();
+
+        coupons.add(userCoupon);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

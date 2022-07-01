@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -15,9 +16,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddItemStockRequest {
-    @NotNull(message = "상품 ID를 입력해주세요")
-    private String itemUuid;
+    @NotBlank(message = "상품 ID를 입력해주세요")
+    private UUID itemUuid;
 
-    @NotNull(message = "추가할 재고량을 입력해주세요")
+    @NotBlank(message = "추가할 재고량을 입력해주세요")
     private int addItemStock;
 }

@@ -1,4 +1,4 @@
-package com.practice.shoppingmall.dto.response.item;
+package com.practice.shoppingmall.dto.response.coupon;
 
 import com.practice.shoppingmall.dto.response.Response;
 import lombok.AllArgsConstructor;
@@ -6,8 +6,9 @@ import lombok.Getter;
 
 import java.util.UUID;
 
+
 @Getter
 @AllArgsConstructor
-public class CreateItemResponse implements Response {
+public class CreateCouponResponse implements Response {
     String uuid;
 }

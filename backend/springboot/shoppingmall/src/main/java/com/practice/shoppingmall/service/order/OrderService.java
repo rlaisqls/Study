@@ -7,14 +7,15 @@ import com.practice.shoppingmall.dto.response.order.FindOrderGroupResponse;
 import com.practice.shoppingmall.dto.response.order.FindOrderResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface OrderService {
 
-    CreateOrderResponse order(OrderRequest request);
+    CreateOrderResponse doOrder(OrderRequest request);
 
-    void cancelOrder(String uuid);
+    void cancelOrder(String id);
 
-    FindOrderResponse findOrder(String uuid);
+    FindOrderResponse findOneOrder(UUID id);
 
     FindOrderGroupResponse findMyOrder(int page, int size);
 }

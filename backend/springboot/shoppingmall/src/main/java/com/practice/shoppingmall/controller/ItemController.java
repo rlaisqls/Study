@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,18 +41,18 @@ public class ItemController {
         itemService.deleteItem(request);
     }
 
-    @PostMapping("/item/{itemUuid}/{addStock}")
-    public void addItemStock(@PathVariable String itemUuid, @PathVariable Integer addStock){
-        itemService.addItemStock(itemUuid, addStock);
+    @PostMapping("/item/{itemId}/{addStock}")
+    public void addItemStock(@PathVariable UUID itemId, @PathVariable Integer addStock){
+        itemService.addItemStock(itemId, addStock);
     }
 
     @GetMapping("/item")
-    public ResponseBody findItemList(@RequestParam("page") int page, @RequestParam("size") int size){
+    public ResponseBody findItemList(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
         return ResponseBody.of(itemService.findItemList(page, size), HttpStatus.OK.value());
     }
 
-    @GetMapping("/item/{itemUuid}")
-    public ResponseBody findItem(@PathVariable String itemUuid){
-        return ResponseBody.of(itemService.findItem(itemUuid), HttpStatus.OK.value());
+    @GetMapping("/item/{itemId}")
+    public ResponseBody findItem(@PathVariable UUID itemId){
+        return ResponseBody.of(itemService.findItem(itemId), HttpStatus.OK.value());
     }
 }

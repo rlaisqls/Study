@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -18,5 +19,5 @@ import javax.validation.constraints.Size;
 public class CheckIdDuplicationRequest {
 
     @NotEmpty
-    private String id;
+    private UUID id;
 }
