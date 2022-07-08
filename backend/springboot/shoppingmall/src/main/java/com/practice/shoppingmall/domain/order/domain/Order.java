@@ -1,8 +1,8 @@
 package com.practice.shoppingmall.domain.order.domain;
 
 import com.practice.shoppingmall.domain.delivery.domain.Delivery;
-import com.practice.shoppingmall.domain.delivery.domain.types.DeliveryStatus;
-import com.practice.shoppingmall.domain.order.domain.types.OrderStatus;
+import com.practice.shoppingmall.domain.delivery.domain.DeliveryStatus;
+import com.practice.shoppingmall.domain.order.exception.AlreadyDeliveredException;
 import com.practice.shoppingmall.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,7 +37,7 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_id")
+    @Column(name = "order_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,7 +60,7 @@ public class Order {
     public void cancel() {
 
         if(delivery.getDeliveryStatus() == DeliveryStatus.COMP) {
-            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+            throw AlreadyDeliveredException.EXCEPTION;
         }
 
         this.orderStatus = OrderStatus.CANCEL;

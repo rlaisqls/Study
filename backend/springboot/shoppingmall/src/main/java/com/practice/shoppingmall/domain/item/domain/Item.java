@@ -1,19 +1,17 @@
 package com.practice.shoppingmall.domain.item.domain;
 
-import com.practice.shoppingmall.global.exception.item.NotEnoughStockException;
+import com.practice.shoppingmall.domain.item.exception.NotEnoughStockException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -23,7 +21,7 @@ import java.util.UUID;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_id")
+    @Column(name = "item_id")
     private Long id;
 
     private String name;

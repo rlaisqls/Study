@@ -1,6 +1,5 @@
 package com.practice.shoppingmall.domain.delivery.domain;
 
-import com.practice.shoppingmall.domain.delivery.domain.types.DeliveryStatus;
 import com.practice.shoppingmall.domain.order.domain.Order;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,7 @@ import javax.persistence.OneToOne;
 public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_id")
+    @Column(name = "delivery_id")
     private Long id;
 
     @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
