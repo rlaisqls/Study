@@ -5,12 +5,12 @@ import com.practice.shoppingmall.domain.user.presentation.dto.request.SignUpUser
 import com.practice.shoppingmall.domain.user.presentation.dto.response.SignUpUserResponse;
 import com.practice.shoppingmall.domain.user.domain.AuthenticationCode;
 import com.practice.shoppingmall.domain.user.domain.repository.AuthenticationCodeRepository;
-import com.practice.shoppingmall.domain.user.domain.types.Authority;
+import com.practice.shoppingmall.domain.user.domain.Authority;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.EmailAuthenticationRequest;
 import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
-import com.practice.shoppingmall.global.exception.BadAuthenticationCodeException;
-import com.practice.shoppingmall.global.exception.user.UserAlreadyExistException;
+import com.practice.shoppingmall.domain.user.exception.BadAuthenticationCodeException;
+import com.practice.shoppingmall.domain.user.exception.UserAlreadyExistException;
 import com.practice.shoppingmall.domain.user.service.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,7 +51,7 @@ public class UserSignUpServiceImpl implements UserSignUpService{
     }
 
     @Override
-    public StringResponse sendAuthenticationEmail(EmailAuthenticationRequest request) {
+    public void sendAuthenticationEmail(EmailAuthenticationRequest request) {
 
         String code = createAuthenticationCode();
         String emailAddress = request.getEmail();
@@ -69,8 +69,6 @@ public class UserSignUpServiceImpl implements UserSignUpService{
                 .title("이메일 인증")
                 .build()
         );
-
-        return new StringResponse("메일을 전송했습니다");
     }
 
     private String createAuthenticationCode() {

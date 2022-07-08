@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateItemRequest {
     @NotBlank(message = "이름을 입력해주세요")
-    private String name;
+    private String itemName;
 
     @NotNull(message = "가격을 입력해주세요")
     private int price;

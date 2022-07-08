@@ -2,6 +2,8 @@ package com.practice.shoppingmall.domain.user.presentation;
 
 import com.practice.shoppingmall.domain.user.presentation.dto.request.LoginUserRequest;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.SignUpUserRequest;
+import com.practice.shoppingmall.domain.user.presentation.dto.response.SignUpUserResponse;
+import com.practice.shoppingmall.domain.user.presentation.dto.response.TokenResponse;
 import com.practice.shoppingmall.domain.user.service.auth.UserAuthService;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.EmailAuthenticationRequest;
 import com.practice.shoppingmall.domain.user.service.auth.UserSignUpService;
@@ -23,25 +25,25 @@ public class UserAuthController {
     private final UserSignUpService userSignUpService;
 
     @PostMapping("/mail")
-    public ResponseBody mail(@Valid @RequestBody EmailAuthenticationRequest request) {
-        return ResponseBody.of(userSignUpService.sendAuthenticationEmail(request), HttpStatus.OK.value());
+    public void mail(@Valid @RequestBody EmailAuthenticationRequest request) {
+        userSignUpService.sendAuthenticationEmail(request);
     }
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseBody signUp(@Valid @RequestBody SignUpUserRequest request) {
-        return ResponseBody.of(userSignUpService.doSignUpUser(request), HttpStatus.CREATED.value());
+    public SignUpUserResponse signUp(@Valid @RequestBody SignUpUserRequest request) {
+        return userSignUpService.doSignUpUser(request);
     }
 
     private final UserAuthService authService;
 
     @PostMapping("/login")
-    public ResponseBody login(@Valid @RequestBody LoginUserRequest request){
-        return ResponseBody.of(authService.login(request), HttpStatus.OK.value());
+    public TokenResponse login(@Valid @RequestBody LoginUserRequest request){
+        return authService.login(request);
     }
 
     @PutMapping("/reissue")
-    public ResponseBody reissue(@RequestHeader("X-Refresh-Token") String refreshToken) {
-        return ResponseBody.of(authService.reissue(refreshToken), HttpStatus.OK.value());
+    public TokenResponse reissue(@RequestHeader("X-Refresh-Token") String refreshToken) {
+        return authService.reissue(refreshToken);
     }
 }

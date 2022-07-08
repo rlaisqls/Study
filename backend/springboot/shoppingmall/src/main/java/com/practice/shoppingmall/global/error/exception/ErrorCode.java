@@ -16,6 +16,11 @@ public enum ErrorCode {
 
     //주문
     ORDER_NOT_FOUND(404, "Order Not Found"),
+    ALREADY_DELIVERED(409, "Already Delivered"),
+
+    COUPON_NOT_FOUND(404, "Coupon Not Found"),
+    INVALID_COUPON(400, "Invalid Coupon"),
+    DISCOUNT_OUT_OF_RANGE(400, "Discount Out Of Range"),
 
     //유저
     BAD_USER_INFORMATION(404, "Bad User Information"),
@@ -31,12 +36,11 @@ public enum ErrorCode {
     EXPIRED_TOKEN(401 , "Expired Token"),
     INVALID_TOKEN(401, "Invalid Token"),
 
-
     BAD_AUTHENTICATION_CODE(400, "Bad Authentication Code"),
     MAIL_SEND_FAIL(404, "Mail Send Fail"),
 
     INTERNAL_SERVER_ERROR(500,"Server Error");
 
-    private final Integer status;
+    private final Integer statusCode;
     private final String message;
 }

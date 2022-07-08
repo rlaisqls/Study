@@ -1,11 +1,11 @@
 package com.practice.shoppingmall.domain.coupon.presentation.dto.request;
 
+import com.practice.shoppingmall.domain.coupon.domain.CouponDiscountType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 
@@ -19,15 +19,10 @@ public class CreateCouponRequest {
     private String name;
 
     @NotBlank
-    private String discountType;
+    private CouponDiscountType discountType;
 
-    //
-    @Nullable
+    @NotBlank
     private Integer discountAmount;
-
-    @Nullable
-    private Integer discountRate;
-    //
 
     @NotBlank
     private Integer expirationTime;

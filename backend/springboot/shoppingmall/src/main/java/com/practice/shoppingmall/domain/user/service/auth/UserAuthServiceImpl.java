@@ -4,8 +4,8 @@ import com.practice.shoppingmall.domain.user.presentation.dto.request.LoginUserR
 import com.practice.shoppingmall.domain.user.presentation.dto.response.TokenResponse;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
-import com.practice.shoppingmall.global.exception.InvalidTokenException;
-import com.practice.shoppingmall.global.exception.user.UserNotFoundException;
+import com.practice.shoppingmall.domain.user.exception.InvalidTokenException;
+import com.practice.shoppingmall.domain.user.exception.UserNotFoundException;
 import com.practice.shoppingmall.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,15 +29,15 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     private User verifyUser(LoginUserRequest request) {
         return userRepository.findByUsername(request.getUsername())
-                .filter(u -> passwordEncoder.matches(request.getPassword(),u.getPassword()))
-                .orElseThrow(()-> UserNotFoundException.EXCEPTION);
+                .filter(u -> passwordEncoder.matches(request.getPassword(), u.getPassword()))
+                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
     }
 
     @Override
     @Transactional
     public TokenResponse reissue(String refreshToken) {
 
-        if(!jwtTokenProvider.isRefreshToken(refreshToken)) throw InvalidTokenException.EXCEPTION;
+        if (!jwtTokenProvider.isRefreshToken(refreshToken)) throw InvalidTokenException.EXCEPTION;
 
         String uuid = jwtTokenProvider.getId(refreshToken);
 

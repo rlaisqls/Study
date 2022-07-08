@@ -1,7 +1,7 @@
 package com.practice.shoppingmall.domain.user.service.mail;
 
 import com.practice.shoppingmall.domain.user.presentation.dto.request.SendMailRequest;
-import com.practice.shoppingmall.global.exception.MailSendFailException;
+import com.practice.shoppingmall.domain.user.exception.MailSendFailException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;

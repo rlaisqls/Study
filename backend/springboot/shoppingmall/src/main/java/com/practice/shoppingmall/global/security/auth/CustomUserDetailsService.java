@@ -2,7 +2,7 @@ package com.practice.shoppingmall.global.security.auth;
 
 
 import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
-import com.practice.shoppingmall.global.exception.user.UserNotFoundException;
+import com.practice.shoppingmall.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findById(UUID.fromString(username))
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> UserNotFoundException.EXCEPTION);
     }
 

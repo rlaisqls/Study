@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 @Builder
 @Getter
@@ -17,8 +15,11 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItemRequest {
     @NotBlank(message = "상품 정보를 입력해주세요")
-    private String uuid;
+    private Long itemId;
 
     @NotBlank(message = "구매 수량을 입력해주세요")
     private int count;
+
+    @Nullable
+    Long couponId;
 }

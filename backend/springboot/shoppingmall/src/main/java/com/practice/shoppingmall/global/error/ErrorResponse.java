@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
 public class ErrorResponse {
 
     private String message;
-    private Integer status;
+    private Integer statusCode;
     private LocalDateTime timestamp;
     private String description;
 
     public static ErrorResponse of(ErrorCode errorCode, String description) {
         return ErrorResponse.builder()
                 .message(errorCode.getMessage())
-                .status(errorCode.getStatus())
+                .statusCode(errorCode.getStatusCode())
                 .timestamp(LocalDateTime.now())
                 .description(description)
                 .build();

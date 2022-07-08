@@ -10,6 +10,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class SignUpUserResponse {
 
-    private final UUID uuid;
+    private final Long id;
 
 }

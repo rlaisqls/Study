@@ -1,11 +1,11 @@
 package com.practice.shoppingmall.domain.coupon.presentation.dto.response;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class CreateCouponResponse {
-    String uuid;
+    Long id;
 }

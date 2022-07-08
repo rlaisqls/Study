@@ -4,8 +4,8 @@ package com.practice.shoppingmall.global.security.jwt;
 import com.practice.shoppingmall.domain.user.presentation.dto.response.TokenResponse;
 import com.practice.shoppingmall.domain.refreshtoken.domain.RefreshToken;
 import com.practice.shoppingmall.domain.refreshtoken.domain.repository.RefreshTokenRepository;
-import com.practice.shoppingmall.global.exception.ExpiredTokenException;
-import com.practice.shoppingmall.global.exception.InvalidTokenException;
+import com.practice.shoppingmall.domain.user.exception.ExpiredTokenException;
+import com.practice.shoppingmall.domain.user.exception.InvalidTokenException;
 import com.practice.shoppingmall.global.security.auth.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -43,14 +43,14 @@ public class JwtTokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenResponse createTokens(String uuid) {
-        return new TokenResponse(createAccessToken(uuid), createRefreshToken(uuid));
+    public TokenResponse createTokens(String username) {
+        return new TokenResponse(createAccessToken(username), createRefreshToken(username));
     }
 
-    public String createAccessToken(String uuid) {
+    public String createAccessToken(String username) {
 
         return Jwts.builder()
-                .setSubject(uuid)
+                .setSubject(username)
                 .claim("type", "access")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccess() * 1000))
@@ -58,10 +58,10 @@ public class JwtTokenProvider implements InitializingBean {
                 .compact();
     }
 
-    private String createRefreshToken(String uuid) {
+    private String createRefreshToken(String username) {
 
         String refreshToken = Jwts.builder()
-                .setSubject(uuid)
+                .setSubject(username)
                 .claim("type", "refresh")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefresh() * 1000))
@@ -69,7 +69,7 @@ public class JwtTokenProvider implements InitializingBean {
                 .compact();
 
         refreshTokenRepository.save(RefreshToken.builder()
-                .uuid(uuid)
+                .username(username)
                 .refreshToken(refreshToken)
                 .expiration(jwtProperties.getRefresh() * 1000).build());
 

@@ -7,5 +7,5 @@ import java.util.UUID;
 public interface UserCouponService {
     FindCouponGroupResponse findMyCoupon();
 
-    void addMyCoupon(UUID couponId);
+    void addMyCoupon(Long couponId);
 }

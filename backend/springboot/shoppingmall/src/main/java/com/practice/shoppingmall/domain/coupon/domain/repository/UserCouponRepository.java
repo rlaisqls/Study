@@ -1,7 +1,11 @@
 package com.practice.shoppingmall.domain.coupon.domain.repository;
 
 import com.practice.shoppingmall.domain.coupon.domain.UserCoupon;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.practice.shoppingmall.domain.user.domain.User;
+import org.springframework.data.repository.CrudRepository;
 
-public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
+import java.util.List;
+
+public interface UserCouponRepository extends CrudRepository<UserCoupon, Long> {
+    List<UserCoupon> findByUserAndCoupon_Id(User user, Long couponId);
 }

@@ -4,7 +4,7 @@ import com.practice.shoppingmall.domain.user.presentation.dto.request.PasswordCh
 import com.practice.shoppingmall.domain.user.presentation.dto.response.FindUserResponse;
 import com.practice.shoppingmall.domain.user.facade.UserFacade;
 import com.practice.shoppingmall.domain.user.domain.User;
-import com.practice.shoppingmall.global.exception.user.BadUserInformationException;
+import com.practice.shoppingmall.domain.user.exception.BadUserInformationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService{
     public FindUserResponse getUserInfo() {
 
         User user = userFacade.nowUser();
+
         return FindUserResponse
                 .builder()
                 .username(user.getUsername())

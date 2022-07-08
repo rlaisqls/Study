@@ -8,9 +8,9 @@ import lombok.Getter;
 @Builder
 public class FindItemResponse {
 
-    private String uuid;
+    private Long itemId;
 
-    private String name;
+    private String itemName;
 
     private Integer price;
 
@@ -18,10 +18,11 @@ public class FindItemResponse {
 
     private Boolean isSoldOut;
     public static FindItemResponse of (Item item) {
+
         return FindItemResponse
                 .builder()
-                .uuid(item.getId().toString())
-                .name(item.getName())
+                .itemId(item.getId())
+                .itemName(item.getName())
                 .price(item.getPrice())
                 .stock(item.getStock())
                 .isSoldOut(item.getStock() == 0)

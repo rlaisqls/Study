@@ -8,5 +8,5 @@ import com.practice.shoppingmall.domain.user.presentation.dto.response.SignUpUse
 public interface UserSignUpService {
     SignUpUserResponse doSignUpUser(SignUpUserRequest request);
 
-    StringResponse sendAuthenticationEmail(EmailAuthenticationRequest request);
+    void sendAuthenticationEmail(EmailAuthenticationRequest request);
 }

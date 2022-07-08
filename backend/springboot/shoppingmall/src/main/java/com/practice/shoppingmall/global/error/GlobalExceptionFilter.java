@@ -25,7 +25,7 @@ public class GlobalExceptionFilter extends OncePerRequestFilter {
         } catch (BusinessException e) {
 
             ErrorCode errorCode = e.getErrorCode();
-            response.setStatus(errorCode.getStatus());
+            response.setStatus(errorCode.getStatusCode());
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 

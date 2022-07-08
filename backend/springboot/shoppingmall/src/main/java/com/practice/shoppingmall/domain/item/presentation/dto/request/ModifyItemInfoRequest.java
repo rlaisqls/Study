@@ -16,10 +16,10 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ModifyItemInfoRequest {
     @NotBlank(message = "상품 ID를 입력해주세요")
-    private UUID itemUuid;
+    private Long itemId;
 
     @NotBlank(message = "수정할 이름을 입력해주세요")
-    private String name;
+    private String itemName;
 
     @NotBlank
     private int price;

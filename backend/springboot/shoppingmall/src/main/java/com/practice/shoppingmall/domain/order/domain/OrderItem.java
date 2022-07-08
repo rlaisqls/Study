@@ -1,6 +1,7 @@
 package com.practice.shoppingmall.domain.order.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.practice.shoppingmall.domain.coupon.domain.Coupon;
 import com.practice.shoppingmall.domain.item.domain.Item;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -39,15 +40,22 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
+
     private int orderPrice;
 
     private int count;
+
+    private int totalPrice;
 
     public void cancel() {
         getItem().addStock(count);
     }
 
-    public int getTotalPrice() {
-        return getOrderPrice() * getCount();
+    public void applyCoupon(Coupon coupon) {
+        this.coupon = coupon;
+        this.totalPrice = coupon.doDiscount(totalPrice);
     }
 }

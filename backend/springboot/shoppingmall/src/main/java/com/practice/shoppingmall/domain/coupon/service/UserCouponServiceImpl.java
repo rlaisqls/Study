@@ -7,7 +7,7 @@ import com.practice.shoppingmall.domain.coupon.domain.repository.CouponRepositor
 import com.practice.shoppingmall.domain.coupon.domain.UserCoupon;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
-import com.practice.shoppingmall.global.exception.order.OrderNotFoundException;
+import com.practice.shoppingmall.domain.order.exception.OrderNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ public class UserCouponServiceImpl implements UserCouponService{
     }
 
     @Override
-    public void addMyCoupon(UUID couponId) {
+    public void addMyCoupon(Long couponId) {
 
         User user = userFacade.nowUser();
 
