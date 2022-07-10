@@ -17,8 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user")
-    public FindUserResponse getUserInfo() {
-        return userService.getUserInfo();
+    public FindUserResponse getMyInfo() {
+        return userService.getMyInfo();
     }
 
     @PatchMapping("/user")

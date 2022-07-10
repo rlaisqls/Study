@@ -1,5 +1,6 @@
 package com.practice.shoppingmall.domain.user.service;
 
+import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.PasswordChangeRequest;
 import com.practice.shoppingmall.domain.user.presentation.dto.response.FindUserResponse;
 import com.practice.shoppingmall.domain.user.facade.UserFacade;
@@ -15,9 +16,10 @@ public class UserServiceImpl implements UserService{
 
     private final PasswordEncoder passwordEncoder;
     private final UserFacade userFacade;
+    private final UserRepository userRepository;
 
     @Override
-    public FindUserResponse getUserInfo() {
+    public FindUserResponse getMyInfo() {
 
         User user = userFacade.nowUser();
 
@@ -37,6 +39,8 @@ public class UserServiceImpl implements UserService{
         if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
             throw BadUserInformationException.EXCEPTION;
 
-        user.changePassword(request.getNewPassword());
+        user.changePassword(passwordEncoder.encode(request.getNewPassword()));
+
+        userRepository.save(user);
     }
 }

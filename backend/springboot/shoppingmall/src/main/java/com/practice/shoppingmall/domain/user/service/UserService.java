@@ -5,7 +5,7 @@ import com.practice.shoppingmall.domain.user.presentation.dto.response.FindUserR
 
 public interface UserService {
 
-    FindUserResponse getUserInfo();
+    FindUserResponse getMyInfo();
 
     void changePassword(PasswordChangeRequest request);
 }

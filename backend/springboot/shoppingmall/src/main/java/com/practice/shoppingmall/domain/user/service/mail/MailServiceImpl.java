@@ -20,9 +20,10 @@ public class MailServiceImpl implements MailService {
     private String fromAddress;
 
     @Override
-    public void sendEmail(SendMailRequest request) {
+    public String sendEmail(SendMailRequest request) {
         try {
             sendMailLogic(request);
+            return "ok";
         } catch (Exception e) {
             throw MailSendFailException.EXCEPTION;
         }
@@ -37,7 +38,7 @@ public class MailServiceImpl implements MailService {
         messageHelper.setFrom(fromAddress);
         messageHelper.setSubject(request.getTitle());
         messageHelper.setText(request.getAuthenticationCode()+"를 입력하세요");
-        System.out.println(request.getAuthenticationCode());
+
         mailSender.send(message);
     }
 }
