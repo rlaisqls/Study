@@ -1,5 +1,6 @@
 package com.practice.shoppingmall.domain.order.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.practice.shoppingmall.domain.delivery.domain.Delivery;
 import com.practice.shoppingmall.domain.delivery.domain.DeliveryStatus;
 import com.practice.shoppingmall.domain.order.exception.AlreadyDeliveredException;
@@ -26,6 +27,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -45,9 +47,11 @@ public class Order {
     private User user;
 
     @Setter
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
+    @JsonIgnore
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
@@ -56,6 +60,27 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrders(this);
+    }
+
+    public static Order createOrder(User user, Delivery delivery, List<OrderItem> orderItems) {
+        Order order = Order.builder()
+                .user(user)
+                .delivery(delivery)
+                .orderItems(new ArrayList<>())
+                .orderStatus(OrderStatus.ORDER)
+                .orderDate(LocalDateTime.now())
+                .build();
+
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+
+        return order;
+    }
 
     public void cancel() {
 
@@ -71,6 +96,7 @@ public class Order {
 
     public int getTotalPrice() {
         int totalPrice = 0;
+
         for(OrderItem orderItem : orderItems) {
             totalPrice += orderItem.getTotalPrice();
         }

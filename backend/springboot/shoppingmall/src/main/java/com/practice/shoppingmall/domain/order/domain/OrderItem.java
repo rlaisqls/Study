@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,10 +36,11 @@ public class OrderItem {
     private Item item;
 
     //양방향 매핑
+    @Setter
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Order orders;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
@@ -56,6 +58,6 @@ public class OrderItem {
 
     public void applyCoupon(Coupon coupon) {
         this.coupon = coupon;
-        this.totalPrice = coupon.doDiscount(totalPrice);
+        this.totalPrice = coupon.doDiscount(this.totalPrice);
     }
 }
