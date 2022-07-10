@@ -5,8 +5,7 @@ import com.practice.shoppingmall.domain.item.domain.repository.ItemRepository;
 import com.practice.shoppingmall.domain.item.exception.ItemNotFoundException;
 import com.practice.shoppingmall.domain.item.presentation.dto.request.AddItemStockRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.request.CreateItemRequest;
-import com.practice.shoppingmall.domain.item.presentation.dto.request.DeleteItemRequest;
-import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItemInfoRequest;
+import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItemRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.CreateItemResponse;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemGroupResponse;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemResponse;
@@ -38,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void modifyItem(ModifyItemInfoRequest request) {
+    public void modifyItem(ModifyItemRequest request) {
 
         Item item = itemRepository.findById(request.getItemId())
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
@@ -60,9 +59,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void deleteItem(DeleteItemRequest request) {
+    public void deleteItem(Long id) {
 
-        Item item = itemRepository.findById(request.getItemId())
+        Item item = itemRepository.findById(id)
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
         itemRepository.delete(item);

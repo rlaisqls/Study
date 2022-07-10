@@ -2,16 +2,15 @@ package com.practice.shoppingmall.domain.order.service;
 
 import com.practice.shoppingmall.domain.coupon.domain.UserCoupon;
 import com.practice.shoppingmall.domain.coupon.domain.repository.UserCouponRepository;
+import com.practice.shoppingmall.domain.coupon.exception.CouponNotFoundException;
+import com.practice.shoppingmall.domain.coupon.exception.InvalidCouponException;
 import com.practice.shoppingmall.domain.delivery.domain.Delivery;
-import com.practice.shoppingmall.domain.delivery.domain.DeliveryStatus;
 import com.practice.shoppingmall.domain.item.domain.Item;
 import com.practice.shoppingmall.domain.item.domain.repository.ItemRepository;
 import com.practice.shoppingmall.domain.item.exception.ItemNotFoundException;
 import com.practice.shoppingmall.domain.order.domain.Order;
 import com.practice.shoppingmall.domain.order.domain.OrderItem;
-import com.practice.shoppingmall.domain.order.domain.OrderStatus;
 import com.practice.shoppingmall.domain.order.domain.repository.OrderRepository;
-import com.practice.shoppingmall.domain.coupon.exception.CouponNotFoundException;
 import com.practice.shoppingmall.domain.order.exception.OrderNotFoundException;
 import com.practice.shoppingmall.domain.order.presentation.dto.request.OrderItemRequest;
 import com.practice.shoppingmall.domain.order.presentation.dto.request.OrderRequest;
@@ -50,35 +49,23 @@ public class OrderServiceImpl implements OrderService {
 
         User user = userFacade.nowUser();
 
-        Order order = Order.builder()
-                .user(user)
-                .delivery(deliveryStart(user))
-                .orderStatus(OrderStatus.ORDER)
-                .orderDate(LocalDateTime.now())
-                .build();
+        Delivery delivery = Delivery.start(user);
 
         List<OrderItem> orderItems = request.getOrderItems()
                 .stream()
-                .map(orderItem -> getOrderItemOfOrder(orderItem, order))
+                .map(this::createOrderItem)
                 .collect(Collectors.toList());
 
-        order.setOrderItems(orderItems);
+        Order order = orderRepository.save(Order.createOrder(user, delivery, orderItems));
 
-        orderRepository.save(order);
-
-        return new CreateOrderResponse(order.getId().toString());
-    }
-
-    private Delivery deliveryStart(User user) {
-
-        return Delivery
+        return CreateOrderResponse
                 .builder()
-                .address(user.getAddress())
-                .deliveryStatus(DeliveryStatus.READY)
+                .id(order.getId())
+                .totalPrice(order.getTotalPrice())
                 .build();
     }
 
-    private OrderItem getOrderItemOfOrder(OrderItemRequest request, Order order) {
+    private OrderItem createOrderItem(OrderItemRequest request) {
 
         Item item = itemRepository.findById(request.getItemId())
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
@@ -86,14 +73,13 @@ public class OrderServiceImpl implements OrderService {
         item.removeStock(request.getCount());
 
         OrderItem orderItem = OrderItem.builder()
-                .order(order)
                 .item(item)
                 .count(request.getCount())
                 .orderPrice(item.getPrice())
                 .totalPrice(item.getPrice() * request.getCount())
                 .build();
 
-        if (request.getItemId() != null) {
+        if (request.getCouponId() != null) {
             UserCoupon userCoupon = validateAndGetCoupon(request.getCouponId());
             orderItem.applyCoupon(userCoupon.getCoupon());
             deleteUserCoupon(userCoupon);
@@ -108,7 +94,14 @@ public class OrderServiceImpl implements OrderService {
         List<UserCoupon> userCoupons = userCouponRepository.findByUserAndCoupon_Id(user, couponId);
         if (userCoupons.isEmpty()) throw CouponNotFoundException.EXCEPTION;
 
-        return userCoupons.get(0);
+        UserCoupon userCoupon = userCoupons.get(0);
+
+        if(userCoupon.getExpirationDate().isAfter(LocalDateTime.now())){
+            deleteUserCoupon(userCoupon);
+            throw InvalidCouponException.EXCEPTION;
+        }
+
+        return userCoupon;
     }
 
     private void deleteUserCoupon(UserCoupon userCoupon) {

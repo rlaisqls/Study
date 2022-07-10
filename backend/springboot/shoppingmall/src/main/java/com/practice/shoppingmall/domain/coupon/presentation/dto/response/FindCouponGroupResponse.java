@@ -1,7 +1,7 @@
 package com.practice.shoppingmall.domain.coupon.presentation.dto.response;
 
-import com.practice.shoppingmall.domain.coupon.domain.Coupon;
 import com.practice.shoppingmall.domain.coupon.domain.CouponDiscountType;
+import com.practice.shoppingmall.domain.coupon.domain.UserCoupon;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 public class FindCouponGroupResponse {
     private List<FindCouponResponse> CouponResponseList;
 
-    public static FindCouponGroupResponse of(List<Coupon> coupons) {
+    public static FindCouponGroupResponse of(List<UserCoupon> userCoupons) {
 
-        List<FindCouponResponse> findCouponResponses = coupons
+        List<FindCouponResponse> findCouponResponses = userCoupons
                 .stream()
                 .map(FindCouponResponse::of)
                 .collect(Collectors.toList());
@@ -41,14 +41,14 @@ public class FindCouponGroupResponse {
 
         private LocalDateTime expirationDate;
 
-        public static FindCouponResponse of(Coupon coupon) {
+        public static FindCouponResponse of(UserCoupon userCoupon) {
 
             return FindCouponResponse
                     .builder()
-                    .name(coupon.getCouponName())
-                    .discountType(coupon.getDiscountType())
-                    .discountAmount(coupon.getDiscountAmount())
-                    .expirationDate(coupon.getExpirationDate())
+                    .name(userCoupon.getCoupon().getCouponName())
+                    .discountType(userCoupon.getCoupon().getDiscountType())
+                    .discountAmount(userCoupon.getCoupon().getDiscountAmount())
+                    .expirationDate(userCoupon.getExpirationDate())
                     .build();
         }
     }

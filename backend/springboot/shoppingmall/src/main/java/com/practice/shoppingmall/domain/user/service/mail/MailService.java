@@ -4,5 +4,5 @@ import com.practice.shoppingmall.domain.user.presentation.dto.request.SendMailRe
 
 
 public interface MailService {
-    void sendEmail(SendMailRequest request);
+    String sendEmail(SendMailRequest request);
 }

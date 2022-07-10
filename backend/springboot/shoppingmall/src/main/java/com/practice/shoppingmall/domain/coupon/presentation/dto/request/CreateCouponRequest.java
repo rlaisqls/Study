@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Builder
 @Getter
@@ -15,15 +15,15 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateCouponRequest {
 
-    @NotBlank
+    @NotNull
     private String name;
 
-    @NotBlank
+    @NotNull
     private CouponDiscountType discountType;
 
-    @NotBlank
+    @NotNull
     private Integer discountAmount;
 
-    @NotBlank
-    private Integer expirationTime;
+    @NotNull
+    private Long validityPeriod;
 }

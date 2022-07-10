@@ -1,10 +1,11 @@
 package com.practice.shoppingmall.domain.order.presentation.dto.response;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class CreateOrderResponse {
-    String orderId;
+    Long id;
+    int totalPrice;
 }
