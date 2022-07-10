@@ -11,7 +11,6 @@ import com.practice.shoppingmall.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,11 +28,7 @@ public class UserCouponServiceImpl implements UserCouponService{
 
         User user = userFacade.nowUser();
 
-<<<<<<< HEAD
-        List<UserCoupon> coupons = new ArrayList<>(user.getCoupons());
-=======
         List<UserCoupon> userCoupons =  user.getCoupons();
->>>>>>> main
 
         return FindCouponGroupResponse.of(userCoupons);
     }
