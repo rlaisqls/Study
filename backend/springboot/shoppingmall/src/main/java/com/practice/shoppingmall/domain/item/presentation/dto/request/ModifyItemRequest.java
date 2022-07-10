@@ -6,21 +6,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ModifyItemInfoRequest {
-    @NotBlank(message = "상품 ID를 입력해주세요")
+public class ModifyItemRequest {
+    @NotNull(message = "상품 ID를 입력해주세요")
     private Long itemId;
 
-    @NotBlank(message = "수정할 이름을 입력해주세요")
+    @NotNull(message = "수정할 이름을 입력해주세요")
     private String itemName;
 
-    @NotBlank
+    @NotNull
     private int price;
 }

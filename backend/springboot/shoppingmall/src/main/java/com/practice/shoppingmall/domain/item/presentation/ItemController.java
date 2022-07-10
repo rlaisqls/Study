@@ -2,8 +2,7 @@ package com.practice.shoppingmall.domain.item.presentation;
 
 import com.practice.shoppingmall.domain.item.presentation.dto.request.AddItemStockRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.request.CreateItemRequest;
-import com.practice.shoppingmall.domain.item.presentation.dto.request.DeleteItemRequest;
-import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItemInfoRequest;
+import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItemRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.CreateItemResponse;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemGroupResponse;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemResponse;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,16 +34,16 @@ public class ItemController {
     }
 
     @PatchMapping("/item")
-    public void patchItem(@Valid @RequestBody ModifyItemInfoRequest request){
+    public void patchItem(@Valid @RequestBody ModifyItemRequest request){
         itemService.modifyItem(request);
     }
 
-    @DeleteMapping("/item")
-    public void deleteItem(@Valid @RequestBody DeleteItemRequest request){
-        itemService.deleteItem(request);
+    @DeleteMapping("/item/{itemId}")
+    public void deleteItem(@PathVariable Long itemId){
+        itemService.deleteItem(itemId);
     }
 
-    @PostMapping("/item/{itemId}")
+    @PutMapping("/item/{itemId}")
     public void addItemStock(@PathVariable Long itemId, @Valid @RequestBody AddItemStockRequest request){
         itemService.addItemStock(itemId, request);
     }
