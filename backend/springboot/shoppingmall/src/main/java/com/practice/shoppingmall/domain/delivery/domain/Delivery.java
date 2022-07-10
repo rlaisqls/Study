@@ -1,6 +1,7 @@
 package com.practice.shoppingmall.domain.delivery.domain;
 
 import com.practice.shoppingmall.domain.order.domain.Order;
+import com.practice.shoppingmall.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,4 +36,12 @@ public class Delivery {
 
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
+
+    public static Delivery start(User user){
+        return Delivery
+                .builder()
+                .address(user.getAddress())
+                .deliveryStatus(DeliveryStatus.READY)
+                .build();
+    }
 }
