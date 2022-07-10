@@ -15,9 +15,7 @@ public class CouponServiceImpl implements CouponService{
     @Override
     public CreateCouponResponse createCoupon(CreateCouponRequest request) {
 
-        Coupon coupon = Coupon.of(request);
-
-        couponRepository.save(coupon);
+        Coupon coupon = couponRepository.save(Coupon.of(request));
 
         return CreateCouponResponse
                 .builder()
