@@ -3,6 +3,7 @@ package com.practice.shoppingmall.domain.coupon.domain;
 import com.practice.shoppingmall.domain.coupon.exception.DiscountOutOfRangeException;
 import com.practice.shoppingmall.domain.coupon.exception.InvalidCouponException;
 import com.practice.shoppingmall.domain.coupon.presentation.dto.request.CreateCouponRequest;
+import com.practice.shoppingmall.global.exception.InvalidParameterException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +38,12 @@ public class Coupon {
     private CouponDiscountType discountType;
 
     @Nullable
-    private int discountPrice;
+    private Integer discountPrice;
 
     @Nullable
-    private int discountRate;
+    private Integer discountRate;
 
-    private LocalDateTime expirationDate;
+    private Long validityPeriod;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private final List<UserCoupon> users = new ArrayList<>();
@@ -54,22 +54,44 @@ public class Coupon {
             throw DiscountOutOfRangeException.EXCEPTION;
         }
 
-        return Coupon
-                .builder()
-                .couponName(request.getName())
-                .discountType(request.getDiscountType())
-                .discountRate(request.getDiscountAmount())
-                .expirationDate(LocalDateTime.now().plusMinutes(request.getExpirationTime()))
-                .build();
+        Coupon coupon;
+
+        switch (request.getDiscountType()){
+            case RATE:
+                coupon = Coupon
+                        .builder()
+                        .couponName(request.getName())
+                        .discountType(request.getDiscountType())
+                        .discountRate(request.getDiscountAmount())
+                        .validityPeriod(request.getValidityPeriod())
+                        .build();
+                break;
+            case FIXED:
+                coupon = Coupon
+                        .builder()
+                        .couponName(request.getName())
+                        .discountType(request.getDiscountType())
+                        .discountPrice(request.getDiscountAmount())
+                        .validityPeriod(request.getValidityPeriod())
+                        .build();
+                break;
+            default:
+                throw InvalidParameterException.EXCEPTION;
+        }
+
+        return coupon;
     }
 
+
+
     public int doDiscount(int totalPrice) {
+        System.out.println(totalPrice);
 
         int discountedTotalPrice;
 
-        switch (this.getDiscountType()){
+        switch (this.discountType){
             case RATE:
-                discountedTotalPrice = totalPrice * this.discountRate / 100;
+                discountedTotalPrice = totalPrice - (totalPrice * this.discountRate / 100);
                 break;
             case FIXED:
                 if(totalPrice < this.discountPrice) discountedTotalPrice = 0;
@@ -88,10 +110,10 @@ public class Coupon {
 
         switch (this.getDiscountType()){
             case RATE:
-                discountAmount = String.valueOf(this.discountRate) + "%";
+                discountAmount = this.discountRate + "%";
                 break;
             case FIXED:
-                discountAmount = String.valueOf(this.discountPrice) + "원";
+                discountAmount = this.discountPrice + "원";
                 break;
             default:
                 throw InvalidCouponException.EXCEPTION;
