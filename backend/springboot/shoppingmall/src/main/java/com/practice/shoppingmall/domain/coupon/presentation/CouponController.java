@@ -30,8 +30,8 @@ public class CouponController {
     private final UserCouponService userCouponService;
 
     @GetMapping("/coupon")
-    public FindCouponGroupResponse findMyCoupon(){
-        return userCouponService.findMyCoupon();
+    public FindCouponGroupResponse findMyCoupons(){
+        return userCouponService.findMyCoupons();
     }
 
     @ResponseStatus(HttpStatus.CREATED)

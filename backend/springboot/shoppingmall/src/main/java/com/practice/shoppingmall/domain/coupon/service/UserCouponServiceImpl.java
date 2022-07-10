@@ -25,13 +25,17 @@ public class UserCouponServiceImpl implements UserCouponService{
     private final UserRepository userRepository;
 
     @Override
-    public FindCouponGroupResponse findMyCoupon() {
+    public FindCouponGroupResponse findMyCoupons() {
 
         User user = userFacade.nowUser();
 
+<<<<<<< HEAD
         List<UserCoupon> coupons = new ArrayList<>(user.getCoupons());
+=======
+        List<UserCoupon> userCoupons =  user.getCoupons();
+>>>>>>> main
 
-        return FindCouponGroupResponse.of(coupons);
+        return FindCouponGroupResponse.of(userCoupons);
     }
 
     @Override
