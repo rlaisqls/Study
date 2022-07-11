@@ -24,10 +24,12 @@ public class UserAuthServiceImpl implements UserAuthService {
     public TokenResponse login(LoginUserRequest request) {
 
         User user = verifyUser(request);
-        return jwtTokenProvider.createTokens(user.getId().toString());
+
+        return jwtTokenProvider.createTokens(user.getUsername());
     }
 
     private User verifyUser(LoginUserRequest request) {
+
         return userRepository.findByUsername(request.getUsername())
                 .filter(u -> passwordEncoder.matches(request.getPassword(), u.getPassword()))
                 .orElseThrow(() -> UserNotFoundException.EXCEPTION);
