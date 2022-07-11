@@ -41,5 +41,4 @@ public class UserCoupon {
     private Coupon coupon;
 
     private LocalDateTime expirationDate;
-
 }

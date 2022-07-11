@@ -17,9 +17,6 @@ public class CouponServiceImpl implements CouponService{
 
         Coupon coupon = couponRepository.save(Coupon.of(request));
 
-        return CreateCouponResponse
-                .builder()
-                .id(coupon.getId())
-                .build();
+        return new CreateCouponResponse(coupon.getId());
     }
 }

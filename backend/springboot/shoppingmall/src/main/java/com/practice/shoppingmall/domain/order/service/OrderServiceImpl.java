@@ -2,8 +2,8 @@ package com.practice.shoppingmall.domain.order.service;
 
 import com.practice.shoppingmall.domain.coupon.domain.UserCoupon;
 import com.practice.shoppingmall.domain.coupon.domain.repository.UserCouponRepository;
-import com.practice.shoppingmall.domain.coupon.exception.CouponNotFoundException;
 import com.practice.shoppingmall.domain.coupon.exception.InvalidCouponException;
+import com.practice.shoppingmall.domain.coupon.facade.CouponFacade;
 import com.practice.shoppingmall.domain.delivery.domain.Delivery;
 import com.practice.shoppingmall.domain.item.domain.Item;
 import com.practice.shoppingmall.domain.item.domain.repository.ItemRepository;
@@ -15,19 +15,15 @@ import com.practice.shoppingmall.domain.order.exception.OrderNotFoundException;
 import com.practice.shoppingmall.domain.order.presentation.dto.request.OrderItemRequest;
 import com.practice.shoppingmall.domain.order.presentation.dto.request.OrderRequest;
 import com.practice.shoppingmall.domain.order.presentation.dto.response.CreateOrderResponse;
-import com.practice.shoppingmall.domain.order.presentation.dto.response.FindOrderGroupResponse;
 import com.practice.shoppingmall.domain.order.presentation.dto.response.FindOrderInfoResponse;
+import com.practice.shoppingmall.domain.order.presentation.dto.response.FindOrderListResponse;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.exception.ForbiddenUserException;
 import com.practice.shoppingmall.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +36,8 @@ public class OrderServiceImpl implements OrderService {
     private final ItemRepository itemRepository;
 
     private final OrderRepository orderRepository;
+
+    private final CouponFacade couponFacade;
 
     private final UserCouponRepository userCouponRepository;
 
@@ -79,33 +77,27 @@ public class OrderServiceImpl implements OrderService {
                 .totalPrice(item.getPrice() * request.getCount())
                 .build();
 
-        if (request.getCouponId() != null) {
-            UserCoupon userCoupon = validateAndGetCoupon(request.getCouponId());
+        if (request.getUserCouponId() != null) {
+
+            UserCoupon userCoupon = validateAndGetCoupon(request.getUserCouponId());
             orderItem.applyCoupon(userCoupon.getCoupon());
-            deleteUserCoupon(userCoupon);
+            userCouponRepository.delete(userCoupon);
         }
 
         return orderItem;
     }
 
-    private UserCoupon validateAndGetCoupon(Long couponId) {
+    private UserCoupon validateAndGetCoupon(Long userCouponId) {
 
         User user = userFacade.nowUser();
-        List<UserCoupon> userCoupons = userCouponRepository.findByUserAndCoupon_Id(user, couponId);
-        if (userCoupons.isEmpty()) throw CouponNotFoundException.EXCEPTION;
 
-        UserCoupon userCoupon = userCoupons.get(0);
+        UserCoupon userCoupon = couponFacade.getUserCoupon(userCouponId, user);
 
-        if(userCoupon.getExpirationDate().isAfter(LocalDateTime.now())){
-            deleteUserCoupon(userCoupon);
+        if (!couponFacade.validateCoupon(userCoupon)) {
             throw InvalidCouponException.EXCEPTION;
         }
 
         return userCoupon;
-    }
-
-    private void deleteUserCoupon(UserCoupon userCoupon) {
-        userCouponRepository.delete(userCoupon);
     }
 
     @Override
@@ -116,20 +108,19 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> OrderNotFoundException.EXCEPTION);
 
-        if (!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;
+        if (order.getUser() != user) throw ForbiddenUserException.EXCEPTION;
 
         return FindOrderInfoResponse.of(order);
     }
 
     @Override
-    public FindOrderGroupResponse findMyOrder(int page, int size) {
+    public FindOrderListResponse findMyOrder() {
 
         User user = userFacade.nowUser();
 
-        Pageable request = PageRequest.of(page, size);
-        Page<Order> orderPage = orderRepository.findByUser(user, request);
+        List<Order> orderList = orderRepository.findByUser(user);
 
-        return FindOrderGroupResponse.of(orderPage);
+        return FindOrderListResponse.of(orderList);
     }
 
     @Override
@@ -141,9 +132,10 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> OrderNotFoundException.EXCEPTION);
 
-        if (!order.getUser().equals(user)) throw ForbiddenUserException.EXCEPTION;
+        if (order.getUser() != user) throw ForbiddenUserException.EXCEPTION;
 
         order.cancel();
+
         orderRepository.save(order);
     }
 

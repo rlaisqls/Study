@@ -25,6 +25,7 @@ public class UserAuthController {
     private final UserSignUpService userSignUpService;
 
     @PostMapping("/mail")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void mail(@Valid @RequestBody EmailAuthenticationRequest request) {
         userSignUpService.sendAuthenticationEmail(request);
     }

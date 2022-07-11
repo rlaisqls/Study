@@ -85,7 +85,6 @@ public class Coupon {
 
 
     public int doDiscount(int totalPrice) {
-        System.out.println(totalPrice);
 
         int discountedTotalPrice;
 

@@ -47,7 +47,9 @@ public class UserSignUpServiceImpl implements UserSignUpService{
                 .authority(Authority.ROLE_USER)
                 .build());
 
-        return new SignUpUserResponse(user.getId());
+        return SignUpUserResponse.builder()
+                .id(user.getId())
+                .build();
     }
 
     @Override
@@ -57,10 +59,9 @@ public class UserSignUpServiceImpl implements UserSignUpService{
         String emailAddress = request.getEmail();
 
         if(userRepository.findByEmail(emailAddress).isPresent())
-                throw UserAlreadyExistException.EXCEPTION; //null이 아니면 실행
+                throw UserAlreadyExistException.EXCEPTION;
 
         AuthenticationCode authenticationCode = new AuthenticationCode(emailAddress, code);
-
         authenticationCodeRepository.save(authenticationCode);
 
         mailService.sendEmail(SendMailRequest.builder()

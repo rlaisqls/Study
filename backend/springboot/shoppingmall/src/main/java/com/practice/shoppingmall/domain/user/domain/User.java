@@ -23,7 +23,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,19 +64,14 @@ public class User implements UserDetails {
 
     public void addCoupon(Coupon coupon) {
 
-        UserCoupon userCoupon = UserCoupon
-                .builder()
-                .user(this)
-                .coupon(coupon)
-                .expirationDate(LocalDateTime.now().plusMinutes(coupon.getValidityPeriod()))
-                .build();
 
-        coupons.add(userCoupon);
+        System.out.println("this.coupons.size() = " + this.coupons.size());
+
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(authority.name()));
+        return Collections.singleton(new SimpleGrantedAuthority(this.authority.name()));
     }
 
     @Override
@@ -99,4 +93,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

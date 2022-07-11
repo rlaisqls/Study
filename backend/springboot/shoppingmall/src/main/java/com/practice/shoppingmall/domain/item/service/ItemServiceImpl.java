@@ -7,14 +7,13 @@ import com.practice.shoppingmall.domain.item.presentation.dto.request.AddItemSto
 import com.practice.shoppingmall.domain.item.presentation.dto.request.CreateItemRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItemRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.CreateItemResponse;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemGroupResponse;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemResponse;
+import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemInfoResponse;
+import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemListResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +42,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
         item.modifyInfo(request.getItemName(), request.getPrice());
+
         itemRepository.save(item);
     }
 
@@ -54,6 +54,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
         item.addStock(request.getAddStock());
+
         itemRepository.save(item);
     }
 
@@ -68,21 +69,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public FindItemResponse findItemInfo(Long id) {
+    public FindItemInfoResponse findItemInfo(Long id) {
 
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
 
-        return FindItemResponse.of(item);
+        return FindItemInfoResponse.of(item);
     }
 
     @Override
-    public FindItemGroupResponse findItemGroup(int page, int size) {
+    public FindItemListResponse findItemList() {
 
-        Pageable request = PageRequest.of(page, size);
-        Page<Item> itemPage = itemRepository.findAll(request);
+        List<Item> itemPage = itemRepository.findBy();
 
-        return FindItemGroupResponse.of(itemPage);
+        return FindItemListResponse.of(itemPage);
     }
 
 }
