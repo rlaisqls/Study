@@ -34,7 +34,7 @@ public class CouponController {
         return userCouponService.findMyCoupons();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/coupon/{couponId}")
     public void addMyCoupon(@PathVariable Long couponId) {
         userCouponService.addMyCoupon(couponId);

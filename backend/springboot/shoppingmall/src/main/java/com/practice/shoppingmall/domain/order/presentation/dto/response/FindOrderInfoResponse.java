@@ -1,8 +1,8 @@
 package com.practice.shoppingmall.domain.order.presentation.dto.response;
 
 import com.practice.shoppingmall.domain.delivery.domain.Delivery;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.OrderItemResponse;
 import com.practice.shoppingmall.domain.order.domain.Order;
+import com.practice.shoppingmall.domain.order.domain.OrderItem;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -37,5 +37,20 @@ public class FindOrderInfoResponse {
                 .orderItems(orderItemList)
                 .totalPrice(order.getTotalPrice())
                 .build();
+    }
+
+    @Getter
+    @Builder
+    private static class OrderItemResponse {
+        private String itemName;
+        private Integer count;
+
+        public static OrderItemResponse of(OrderItem orderItem) {
+
+            return OrderItemResponse.builder()
+                    .itemName(orderItem.getItem().getName())
+                    .count(orderItem.getCount())
+                    .build();
+        }
     }
 }
