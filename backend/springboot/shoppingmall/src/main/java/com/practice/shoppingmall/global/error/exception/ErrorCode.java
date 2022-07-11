@@ -11,8 +11,8 @@ public enum ErrorCode {
 
     //상품
     ITEM_NOT_FOUND(404, "Item Not Found"),
-    NOT_ENOUGH_STOCK(404, "Not Enough Stock" ),
-    OUT_OF_STOCK(404, "Out Of Stock"),
+    NOT_ENOUGH_STOCK(409, "Not Enough Stock" ),
+    OUT_OF_STOCK(409, "Out Of Stock"),
 
     //주문
     ORDER_NOT_FOUND(404, "Order Not Found"),
