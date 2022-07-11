@@ -4,7 +4,6 @@ import com.practice.shoppingmall.constant.CouponConstant;
 import com.practice.shoppingmall.domain.coupon.domain.Coupon;
 import com.practice.shoppingmall.domain.coupon.domain.CouponDiscountType;
 import com.practice.shoppingmall.domain.coupon.domain.UserCoupon;
-import com.practice.shoppingmall.domain.user.domain.User;
 
 public class CouponBuilder {
 
@@ -12,7 +11,7 @@ public class CouponBuilder {
         return UserCoupon
                 .builder()
                 .id(CouponConstant.USER_COUPON_ID)
-                .user(User.builder().build())
+                .user(UserBuilder.build())
                 .coupon(coupon)
                 .expirationDate(CouponConstant.LOCAL_DATE_TIME_NOW.plusMinutes(CouponConstant.VALIDITY_PERIOD))
                 .build();

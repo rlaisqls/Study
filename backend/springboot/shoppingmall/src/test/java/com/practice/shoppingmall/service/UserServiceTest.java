@@ -28,7 +28,6 @@ import static org.mockito.Mockito.verify;
 public class UserServiceTest {
     @InjectMocks
     private UserServiceImpl userService;
-
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
