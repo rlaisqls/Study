@@ -14,12 +14,12 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItemRequest {
-    @NotNull(message = "상품 정보를 입력해주세요")
+    @NotNull(message = "구매할 상품을 입력해주세요")
     private Long itemId;
 
     @NotNull(message = "구매 수량을 입력해주세요")
     private int count;
 
     @Nullable
-    Long couponId;
+    Long userCouponId;
 }
