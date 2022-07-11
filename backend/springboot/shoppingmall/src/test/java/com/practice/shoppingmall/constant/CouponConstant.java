@@ -6,7 +6,7 @@ public class CouponConstant {
 
     public static final Long USER_COUPON_ID = 1L;
 
-    public static final LocalDateTime LOCAL_DATE_TIME_NOW = LocalDateTime.of(2022,1,1,1,5);
+    public static final LocalDateTime LOCAL_DATE_TIME_NOW = LocalDateTime.of(2022,1,1,0,0);
 
     public static final LocalDateTime COUPON_EXPIRED_DATE_TIME = LocalDateTime.of(2022,1,3,0,0);
 
@@ -16,5 +16,5 @@ public class CouponConstant {
 
     public static final String NAME = "방학기념 할인";
 
-    public static final Long VALIDITY_PERIOD = 86400L;
+    public static final Long VALIDITY_PERIOD = 1440L;
 }
