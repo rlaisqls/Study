@@ -4,8 +4,8 @@ import com.practice.shoppingmall.domain.item.presentation.dto.request.AddItemSto
 import com.practice.shoppingmall.domain.item.presentation.dto.request.CreateItemRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItemRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.CreateItemResponse;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemGroupResponse;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemResponse;
+import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemInfoResponse;
+import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemListResponse;
 import com.practice.shoppingmall.domain.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,12 +48,12 @@ public class ItemController {
     }
 
     @GetMapping("/item")
-    public FindItemGroupResponse findItemGroup(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
-        return itemService.findItemGroup(page, size);
+    public FindItemListResponse findItemGroup(){
+        return itemService.findItemList();
     }
 
     @GetMapping("/item/{itemId}")
-    public FindItemResponse findItemInfo(@PathVariable Long itemId){
+    public FindItemInfoResponse findItemInfo(@PathVariable Long itemId){
         return itemService.findItemInfo(itemId);
     }
 }

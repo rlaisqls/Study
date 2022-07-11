@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Getter
 @Builder
 public class FindCouponGroupResponse {
-    private List<FindCouponResponse> CouponResponseList;
+    private List<FindCouponResponse> CouponList;
 
     public static FindCouponGroupResponse of(List<UserCoupon> userCoupons) {
 
@@ -24,7 +24,7 @@ public class FindCouponGroupResponse {
 
         return FindCouponGroupResponse
                 .builder()
-                .CouponResponseList(findCouponResponses)
+                .CouponList(findCouponResponses)
                 .build();
     }
 
@@ -45,6 +45,7 @@ public class FindCouponGroupResponse {
 
             return FindCouponResponse
                     .builder()
+                    .id(userCoupon.getId())
                     .name(userCoupon.getCoupon().getCouponName())
                     .discountType(userCoupon.getCoupon().getDiscountType())
                     .discountAmount(userCoupon.getCoupon().getDiscountAmount())

@@ -4,8 +4,8 @@ import com.practice.shoppingmall.domain.item.presentation.dto.request.AddItemSto
 import com.practice.shoppingmall.domain.item.presentation.dto.request.CreateItemRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItemRequest;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.CreateItemResponse;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemGroupResponse;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemResponse;
+import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemListResponse;
+import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemInfoResponse;
 
 public interface ItemService {
     CreateItemResponse createItem(CreateItemRequest request);
@@ -16,7 +16,7 @@ public interface ItemService {
 
     void deleteItem(Long id);
 
-    FindItemResponse findItemInfo(Long id);
+    FindItemInfoResponse findItemInfo(Long id);
 
-    FindItemGroupResponse findItemGroup(int page, int size);
+    FindItemListResponse findItemList();
 }
