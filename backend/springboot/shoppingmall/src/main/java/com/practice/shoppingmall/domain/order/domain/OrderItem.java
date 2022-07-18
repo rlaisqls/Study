@@ -30,21 +30,15 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private Long id;
 
-    //단방향 매핑
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
-    //양방향 매핑
     @Setter
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order orders;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupon_id")
-    private Coupon coupon;
 
     private int orderPrice;
 
@@ -57,7 +51,6 @@ public class OrderItem {
     }
 
     public void applyCoupon(Coupon coupon) {
-        this.coupon = coupon;
         this.totalPrice = coupon.doDiscount(this.totalPrice);
     }
 }

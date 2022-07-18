@@ -21,6 +21,7 @@ public class ErrorResponse {
     private String description;
 
     public static ErrorResponse of(ErrorCode errorCode, String description) {
+
         return ErrorResponse.builder()
                 .message(errorCode.getMessage())
                 .statusCode(errorCode.getStatusCode())

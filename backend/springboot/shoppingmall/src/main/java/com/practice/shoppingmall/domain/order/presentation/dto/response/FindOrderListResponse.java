@@ -3,6 +3,7 @@ package com.practice.shoppingmall.domain.order.presentation.dto.response;
 import com.practice.shoppingmall.domain.order.domain.Order;
 import com.practice.shoppingmall.domain.order.domain.OrderStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -18,13 +19,14 @@ public class FindOrderListResponse {
 
         return new FindOrderListResponse(orders
                 .stream()
-                .map(FindOrderResponse::new)
+                .map(FindOrderResponse::of)
                 .collect(Collectors.toList()));
-
     }
 
-    @AllArgsConstructor
+    @Getter
+    @Builder
     private static class FindOrderResponse {
+
         private Long orderId;
 
         private OrderStatus orderStatus;
@@ -33,12 +35,15 @@ public class FindOrderListResponse {
 
         private LocalDateTime orderDate;
 
-        FindOrderResponse(Order order){
+        public static FindOrderResponse of(Order order){
 
-            this.orderId = order.getId();
-            this.representativeItemName = order.getOrderItems().get(0).getItem().getName();
-            this.orderStatus = order.getOrderStatus();
-            this.orderDate = order.getOrderDate();
+            return FindOrderResponse
+                    .builder()
+                    .orderId(order.getId())
+                    .representativeItemName(order.getOrderItems().get(0).getItem().getName())
+                    .orderStatus(order.getOrderStatus())
+                    .orderDate(order.getOrderDate())
+                    .build();
         }
     }
 }

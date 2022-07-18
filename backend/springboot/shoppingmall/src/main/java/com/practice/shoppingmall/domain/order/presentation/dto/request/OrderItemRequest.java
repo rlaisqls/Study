@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItemRequest {
+
     @NotNull(message = "구매할 상품을 입력해주세요")
     private Long itemId;
 

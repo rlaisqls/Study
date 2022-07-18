@@ -3,13 +3,11 @@ package com.practice.shoppingmall.domain.coupon.domain;
 import com.practice.shoppingmall.domain.coupon.exception.DiscountOutOfRangeException;
 import com.practice.shoppingmall.domain.coupon.exception.InvalidCouponException;
 import com.practice.shoppingmall.domain.coupon.presentation.dto.request.CreateCouponRequest;
-import com.practice.shoppingmall.global.exception.InvalidParameterException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,6 +26,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Coupon {
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private final List<UserCoupon> users = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coupon_id")
@@ -37,87 +38,46 @@ public class Coupon {
 
     private CouponDiscountType discountType;
 
-    @Nullable
-    private Integer discountPrice;
-
-    @Nullable
-    private Integer discountRate;
+    private Integer discountAmount;
 
     private Long validityPeriod;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private final List<UserCoupon> users = new ArrayList<>();
-
     public static Coupon of(CreateCouponRequest request) {
 
-        if(request.getDiscountType() == CouponDiscountType.RATE && request.getDiscountAmount() >= 100) {
+        if (request.getDiscountType() == CouponDiscountType.RATE && request.getDiscountAmount() >= 100) {
             throw DiscountOutOfRangeException.EXCEPTION;
         }
 
-        Coupon coupon;
-
-        switch (request.getDiscountType()){
-            case RATE:
-                coupon = Coupon
-                        .builder()
-                        .couponName(request.getName())
-                        .discountType(request.getDiscountType())
-                        .discountRate(request.getDiscountAmount())
-                        .validityPeriod(request.getValidityPeriod())
-                        .build();
-                break;
-            case FIXED:
-                coupon = Coupon
-                        .builder()
-                        .couponName(request.getName())
-                        .discountType(request.getDiscountType())
-                        .discountPrice(request.getDiscountAmount())
-                        .validityPeriod(request.getValidityPeriod())
-                        .build();
-                break;
-            default:
-                throw InvalidParameterException.EXCEPTION;
-        }
-
-        return coupon;
+        return Coupon.builder()
+                .couponName(request.getName())
+                .discountType(request.getDiscountType())
+                .discountAmount(request.getDiscountAmount())
+                .validityPeriod(request.getValidityPeriod())
+                .build();
     }
-
 
 
     public int doDiscount(int totalPrice) {
 
-        int discountedTotalPrice;
-
-        switch (this.discountType){
+        switch (this.discountType) {
             case RATE:
-                discountedTotalPrice = totalPrice - (totalPrice * this.discountRate / 100);
-                break;
+                return totalPrice - (totalPrice * this.discountAmount / 100);
             case FIXED:
-                if(totalPrice < this.discountPrice) discountedTotalPrice = 0;
-                else discountedTotalPrice = totalPrice - this.discountPrice;
-                break;
+                if (totalPrice < this.discountAmount) return 0;
+                else return totalPrice - this.discountAmount;
             default:
                 throw InvalidCouponException.EXCEPTION;
         }
-
-        return discountedTotalPrice;
     }
 
-    public String getDiscountAmount() {
-
-        String discountAmount;
-
-        switch (this.getDiscountType()){
+    public String getUnit() {
+        switch (this.discountType) {
             case RATE:
-                discountAmount = this.discountRate + "%";
-                break;
+                return "%";
             case FIXED:
-                discountAmount = this.discountPrice + "원";
-                break;
+                return "원";
             default:
                 throw InvalidCouponException.EXCEPTION;
         }
-
-        return discountAmount;
     }
 }

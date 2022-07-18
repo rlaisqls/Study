@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateItemRequest {
+
     @NotNull(message = "이름을 입력해주세요")
     private String itemName;
 

@@ -12,9 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SendMailRequest {
 
-    private String address;
-
-    private String authenticationCode;
-
-    private String title;
+    private String email;
 }

@@ -4,7 +4,10 @@ import com.practice.shoppingmall.domain.order.presentation.dto.request.OrderRequ
 import com.practice.shoppingmall.domain.order.presentation.dto.response.CreateOrderResponse;
 import com.practice.shoppingmall.domain.order.presentation.dto.response.FindOrderInfoResponse;
 import com.practice.shoppingmall.domain.order.presentation.dto.response.FindOrderListResponse;
-import com.practice.shoppingmall.domain.order.service.OrderService;
+import com.practice.shoppingmall.domain.order.service.CancelOrderService;
+import com.practice.shoppingmall.domain.order.service.DoOrderService;
+import com.practice.shoppingmall.domain.order.service.QueryOrderInfoService;
+import com.practice.shoppingmall.domain.order.service.QueryUserOrderListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,26 +23,33 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 public class OrderController {
-    private final OrderService orderService;
+
+    private final CancelOrderService cancelOrderService;
+
+    private final DoOrderService doOrderService;
+
+    private final QueryOrderInfoService queryOrderInfoService;
+
+    private final QueryUserOrderListService queryUserOrderListService;
 
     @PostMapping("/order")
     public CreateOrderResponse doOrder(@Valid @RequestBody OrderRequest requests){
-        return orderService.doOrder(requests);
+        return doOrderService.execute(requests);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/order/{orderId}")
     public void cancelOrder(@PathVariable Long orderId){
-        orderService.cancelOrder(orderId);
+        cancelOrderService.execute(orderId);
     }
 
     @GetMapping("/order/{orderId}")
-    public FindOrderInfoResponse findOneOrder(@PathVariable Long orderId){
-        return orderService.findOneOrder(orderId);
+    public FindOrderInfoResponse queryOrderInfo(@PathVariable Long orderId){
+        return queryOrderInfoService.execute(orderId);
     }
 
     @GetMapping("/order")
-    public FindOrderListResponse findMyOrder(){
-        return orderService.findMyOrder();
+    public FindOrderListResponse queryUserOrderList(){
+        return queryUserOrderListService.execute();
     }
 }

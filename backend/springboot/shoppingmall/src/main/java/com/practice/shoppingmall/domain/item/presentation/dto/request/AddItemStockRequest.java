@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddItemStockRequest {
+
     @NotNull(message = "추가할 재고량을 입력해주세요")
     private int addStock;
 }

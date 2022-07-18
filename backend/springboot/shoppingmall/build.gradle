@@ -39,8 +39,6 @@ dependencies {
 
 	implementation 'org.springframework.security:spring-security-test'
 
-	testImplementation 'org.mockito:mockito-inline:3.6.0'
-
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'

@@ -37,6 +37,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -67,6 +68,7 @@ public class Order {
     }
 
     public static Order createOrder(User user, Delivery delivery, List<OrderItem> orderItems) {
+
         Order order = Order.builder()
                 .user(user)
                 .delivery(delivery)

@@ -48,7 +48,7 @@ public class FindCouponGroupResponse {
                     .id(userCoupon.getId())
                     .name(userCoupon.getCoupon().getCouponName())
                     .discountType(userCoupon.getCoupon().getDiscountType())
-                    .discountAmount(userCoupon.getCoupon().getDiscountAmount())
+                    .discountAmount(userCoupon.getCoupon().getDiscountAmount() + userCoupon.getCoupon().getUnit())
                     .expirationDate(userCoupon.getExpirationDate())
                     .build();
         }

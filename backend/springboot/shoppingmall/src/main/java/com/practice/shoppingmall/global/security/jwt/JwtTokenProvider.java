@@ -1,20 +1,16 @@
 package com.practice.shoppingmall.global.security.jwt;
 
 
-import com.practice.shoppingmall.domain.refreshtoken.domain.RefreshToken;
-import com.practice.shoppingmall.domain.refreshtoken.domain.repository.RefreshTokenRepository;
-import com.practice.shoppingmall.domain.user.exception.ExpiredTokenException;
-import com.practice.shoppingmall.domain.user.exception.InvalidTokenException;
-import com.practice.shoppingmall.domain.user.presentation.dto.response.TokenResponse;
-import com.practice.shoppingmall.global.security.auth.CustomUserDetailsService;
+import com.practice.shoppingmall.domain.auth.domain.RefreshToken;
+import com.practice.shoppingmall.domain.auth.domain.repository.RefreshTokenRepository;
+import com.practice.shoppingmall.domain.auth.exception.ExpiredTokenException;
+import com.practice.shoppingmall.domain.auth.exception.InvalidTokenException;
+import com.practice.shoppingmall.global.security.auth.AuthDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,79 +18,74 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Key;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenProvider implements InitializingBean {
+public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
 
-    private final CustomUserDetailsService customUserDetailsService;
-
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private Key key;
-
-    @Override
-    public void afterPropertiesSet() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
-        this.key = Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    public TokenResponse createTokens(String username) {
-        return new TokenResponse(createAccessToken(username), createRefreshToken(username));
-    }
+    private final AuthDetailsService authDetailsService;
 
     public String createAccessToken(String username) {
 
-        return Jwts.builder()
-                .setSubject(username)
-                .claim("type", "access")
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccess() * 1000))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+        return createToken(username, "access", jwtProperties.getAccessExp());
     }
 
-    private String createRefreshToken(String username) {
+    public String createRefreshToken(String username) {
 
-        String refreshToken = Jwts.builder()
-                .setSubject(username)
-                .claim("type", "refresh")
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefresh() * 1000))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+        String refreshToken = createToken(username, "refresh", jwtProperties.getRefreshExp());
 
         refreshTokenRepository.save(RefreshToken.builder()
                 .username(username)
                 .refreshToken(refreshToken)
-                .expiration(jwtProperties.getRefresh() * 1000).build());
+                .expiration(jwtProperties.getRefreshExp() * 1000)
+                .build());
 
         return refreshToken;
     }
 
+    private String createToken(String username, String typ, Long exp) {
+
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("typ", typ)
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .setExpiration(new Date(System.currentTimeMillis() + exp * 1000))
+                .setIssuedAt(new Date())
+                .compact();
+    }
+
     public Authentication getAuthentication(String token) {
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(getId(token));
+        if(isRefreshToken(token))
+            throw InvalidTokenException.EXCEPTION;
+
+        UserDetails userDetails = authDetailsService.loadUserByUsername(getId(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    public boolean isRefreshToken(String token) {
+        return getClaims(token).get("typ").equals("refresh");
     }
 
     public String getId(String token) {
         return getClaims(token).getSubject();
     }
 
-    public boolean isRefreshToken(String token) {
-        return getClaims(token).get("type").equals("refresh");
+    public ZonedDateTime getExpiredTime() {
+        return ZonedDateTime.now().plusSeconds(jwtProperties.getAccessExp());
     }
 
     private Claims getClaims(String token) {
         try {
             return Jwts
                     .parser()
-                    .setSigningKey(key)
+                    .setSigningKey(jwtProperties.getSecretKey())
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
@@ -105,7 +96,9 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public String resolveToken(HttpServletRequest request) {
+
         String bearerToken = request.getHeader(jwtProperties.getHeader());
+
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.getPrefix())
                 && bearerToken.length() > jwtProperties.getPrefix().length() + 1) {
             return bearerToken.substring(jwtProperties.getPrefix().length() + 1);

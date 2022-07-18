@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ModifyItemRequest {
+
     @NotNull(message = "상품 ID를 입력해주세요")
     private Long itemId;
 

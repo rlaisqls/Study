@@ -6,7 +6,12 @@ import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItem
 import com.practice.shoppingmall.domain.item.presentation.dto.response.CreateItemResponse;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemInfoResponse;
 import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemListResponse;
-import com.practice.shoppingmall.domain.item.service.ItemService;
+import com.practice.shoppingmall.domain.item.service.AddItemStockService;
+import com.practice.shoppingmall.domain.item.service.CreateItemService;
+import com.practice.shoppingmall.domain.item.service.DeleteItemService;
+import com.practice.shoppingmall.domain.item.service.ModifyItemService;
+import com.practice.shoppingmall.domain.item.service.QueryItemInfo;
+import com.practice.shoppingmall.domain.item.service.QueryItemListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,36 +29,47 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 public class ItemController {
-    private final ItemService itemService;
+
+    private final AddItemStockService addItemStockService;
+
+    private final CreateItemService createItemService;
+
+    private final DeleteItemService deleteItemService;
+
+    private final ModifyItemService modifyItemService;
+
+    private final QueryItemInfo queryItemInfoService;
+
+    private final QueryItemListService queryItemListService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/item")
     public CreateItemResponse createItem(@Valid @RequestBody CreateItemRequest request){
-        return itemService.createItem(request);
+        return createItemService.execute(request);
     }
 
     @PatchMapping("/item")
     public void patchItem(@Valid @RequestBody ModifyItemRequest request){
-        itemService.modifyItem(request);
+        modifyItemService.execute(request);
     }
 
     @DeleteMapping("/item/{itemId}")
     public void deleteItem(@PathVariable Long itemId){
-        itemService.deleteItem(itemId);
+        deleteItemService.execute(itemId);
     }
 
     @PutMapping("/item/{itemId}")
     public void addItemStock(@PathVariable Long itemId, @Valid @RequestBody AddItemStockRequest request){
-        itemService.addItemStock(itemId, request);
+        addItemStockService.execute(itemId, request);
     }
 
     @GetMapping("/item")
     public FindItemListResponse findItemGroup(){
-        return itemService.findItemList();
+        return queryItemListService.execute();
     }
 
     @GetMapping("/item/{itemId}")
     public FindItemInfoResponse findItemInfo(@PathVariable Long itemId){
-        return itemService.findItemInfo(itemId);
+        return queryItemInfoService.execute(itemId);
     }
 }
