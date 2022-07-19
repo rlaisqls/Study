@@ -13,10 +13,14 @@ import lombok.Setter;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +37,28 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @NotNull
+    @Size(max = 15)
+    @Column(unique = true)
     private String username;
 
+    @NotNull
+    @Size(max = 60)
+    @Column(unique = true)
     private String email;
 
+    @NotNull
+    @Size(max = 30)
     private String password;
 
+    @NotNull
+    @Size(max = 60)
     private String address;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private Authority authority;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")

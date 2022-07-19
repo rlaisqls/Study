@@ -26,6 +26,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +58,12 @@ public class Order {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    private LocalDateTime orderDate;
+    @NotNull
+    private LocalDateTime orderDateTime;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(length = 10)
     private OrderStatus orderStatus;
 
     public void addOrderItem(OrderItem orderItem) {
@@ -74,7 +78,7 @@ public class Order {
                 .delivery(delivery)
                 .orderItems(new ArrayList<>())
                 .orderStatus(OrderStatus.ORDER)
-                .orderDate(LocalDateTime.now())
+                .orderDateTime(LocalDateTime.now())
                 .build();
 
         for (OrderItem orderItem : orderItems) {
@@ -91,7 +95,7 @@ public class Order {
         }
 
         this.orderStatus = OrderStatus.CANCEL;
-        for (OrderItem orderItem :this.orderItems) {
+        for (OrderItem orderItem : this.orderItems) {
             orderItem.cancel();
         }
     }

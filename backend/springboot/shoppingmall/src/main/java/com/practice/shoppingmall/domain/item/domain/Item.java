@@ -1,6 +1,7 @@
 package com.practice.shoppingmall.domain.item.domain;
 
 import com.practice.shoppingmall.domain.item.exception.NotEnoughStockException;
+import com.practice.shoppingmall.domain.item.presentation.dto.request.ModifyItemRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Getter
@@ -24,10 +27,14 @@ public class Item {
     @Column(name = "item_id")
     private Long id;
 
+    @NotNull
+    @Size(max = 30)
     private String name;
 
+    @NotNull
     private int price;
 
+    @NotNull
     private int stock;
 
     public void addStock(int quantity){
@@ -42,8 +49,8 @@ public class Item {
         this.stock = restStock;
     }
 
-    public void modifyInfo(String name, int price) {
-        this.name = name;
-        this.price = price;
+    public void modifyInfo(ModifyItemRequest request) {
+        this.name = request.getItemName();
+        this.price = request.getPrice();
     }
 }

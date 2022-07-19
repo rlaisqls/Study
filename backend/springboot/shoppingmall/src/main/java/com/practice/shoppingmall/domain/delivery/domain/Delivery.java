@@ -17,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Getter
@@ -32,9 +34,13 @@ public class Delivery {
     @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
     private Order orders;
 
+    @NotNull
+    @Size(max = 60)
     private String address;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(length = 10)
     private DeliveryStatus deliveryStatus;
 
     public static Delivery start(User user){
