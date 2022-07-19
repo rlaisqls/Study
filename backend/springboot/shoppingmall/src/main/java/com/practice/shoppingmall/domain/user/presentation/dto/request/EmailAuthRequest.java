@@ -7,15 +7,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class EmailAuthenticationRequest {
+public class EmailAuthRequest {
 
-    @Email(message = "이메일 형식이 올바르지 않습니다")
-    @NotNull(message = "이메일을 반드시 입력해야 합니다")
+    @NotBlank(message = "email은 Null 또는 공백 또는 띄어쓰기를 허용하지 않습니다.")
+    @Email(message = "email 형식이 올바르지 않습니다")
     private String email;
 }

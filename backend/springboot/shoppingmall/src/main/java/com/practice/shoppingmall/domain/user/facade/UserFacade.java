@@ -20,7 +20,6 @@ public class UserFacade {
     }
 
     public User getUserByUsername(String username) {
-        System.out.println("username = " + username);
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> UserNotFoundException.EXCEPTION);
     }
@@ -30,8 +29,8 @@ public class UserFacade {
                 .orElseThrow(() -> UserNotFoundException.EXCEPTION);
     }
 
-    public void checkUserExists(String username, String email) {
-        if(userRepository.findByUsernameOrEmail(username, email).isPresent())
+    public void checkUserExists(String username) {
+        if(userRepository.findByUsername(username).isPresent())
             throw UserAlreadyExistException.EXCEPTION;
     }
 }

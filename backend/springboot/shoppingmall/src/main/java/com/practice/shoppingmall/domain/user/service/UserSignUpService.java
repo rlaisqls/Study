@@ -1,5 +1,6 @@
 package com.practice.shoppingmall.domain.user.service;
 
+import com.practice.shoppingmall.domain.user.domain.Authority;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
 import com.practice.shoppingmall.domain.user.exception.UnVerifiedAuthCodeException;
@@ -29,7 +30,7 @@ public class UserSignUpService {
         String password = passwordEncoder.encode(request.getPassword());
         String address = request.getAddress();
 
-        userFacade.checkUserExists(username, email);
+        userFacade.checkUserExists(username);
 
         if(!authCodeFacade.isVerified(email))
             throw UnVerifiedAuthCodeException.EXCEPTION;
@@ -39,6 +40,7 @@ public class UserSignUpService {
                 .email(email)
                 .password(password)
                 .address(address)
+                .authority(Authority.USER)
                 .build());
 
         return new SignUpUserResponse(user.getId());

@@ -3,7 +3,7 @@ package com.practice.shoppingmall.domain.order.service;
 import com.practice.shoppingmall.domain.order.domain.Order;
 import com.practice.shoppingmall.domain.order.domain.repository.OrderRepository;
 import com.practice.shoppingmall.domain.order.exception.OrderNotFoundException;
-import com.practice.shoppingmall.domain.order.presentation.dto.response.FindOrderInfoResponse;
+import com.practice.shoppingmall.domain.order.presentation.dto.response.QueryOrderInfoResponse;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.exception.ForbiddenUserException;
 import com.practice.shoppingmall.domain.user.facade.UserFacade;
@@ -19,7 +19,7 @@ public class QueryOrderInfoService {
 
     private final OrderRepository orderRepository;
 
-    public FindOrderInfoResponse execute(Long id) {
+    public QueryOrderInfoResponse execute(Long id) {
 
         User user = userFacade.getCurrentUser();
 
@@ -28,6 +28,6 @@ public class QueryOrderInfoService {
 
         if (order.getUser() != user) throw ForbiddenUserException.EXCEPTION;
 
-        return FindOrderInfoResponse.of(order);
+        return QueryOrderInfoResponse.of(order);
     }
 }

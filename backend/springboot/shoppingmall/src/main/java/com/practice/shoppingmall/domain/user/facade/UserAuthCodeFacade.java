@@ -3,12 +3,12 @@ package com.practice.shoppingmall.domain.user.facade;
 import com.practice.shoppingmall.domain.user.domain.AuthCode;
 import com.practice.shoppingmall.domain.user.domain.repository.AuthCodeRepository;
 import com.practice.shoppingmall.domain.user.exception.BadAuthCodeException;
-import com.practice.shoppingmall.domain.user.exception.MailSendFailException;
 import com.practice.shoppingmall.global.util.JmsUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
 import java.util.Random;
 
 @RequiredArgsConstructor
@@ -24,15 +24,7 @@ public class UserAuthCodeFacade {
 
     public static final Random RANDOM = new Random();
 
-    public void sendEmail(String email) {
-        try {
-            sendMailLogic(email);
-        } catch (Exception e) {
-            throw MailSendFailException.EXCEPTION;
-        }
-    }
-
-    private void sendMailLogic(String email) throws Exception {
+    public void sendEmail(String email) throws MessagingException {
 
         String code = createRandomCode();
         AuthCode authCode = getAuthCodeByIdOrCreate(email, code);

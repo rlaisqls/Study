@@ -33,7 +33,7 @@ public class ClaimCouponService {
                 .builder()
                 .user(user)
                 .coupon(coupon)
-                .expirationDate(LocalDateTime.now().plusMinutes(coupon.getValidityPeriod()))
+                .expirationDateTime(LocalDateTime.now().plusMinutes(coupon.getValidityPeriod()))
                 .build()
         );
     }

@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Builder
@@ -15,15 +17,16 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateCouponRequest {
 
-    @NotNull
-    private String name;
+    @NotBlank(message = "couponName는 Null 또는 공백 또는 띄어쓰기를 허용하지 않습니다.")
+    @Length(min = 1, max = 30, message = "couponName는 30자 이하여야 합니다.")
+    private String couponName;
 
-    @NotNull
+    @NotNull(message = "discountType는 null을 허용하지 않습니다")
     private CouponDiscountType discountType;
 
-    @NotNull
+    @NotNull(message = "discountAmount는 null을 허용하지 않습니다")
     private Integer discountAmount;
 
-    @NotNull
-    private Long validityPeriod;
+    @NotNull(message = "validityPeriod는 null을 허용하지 않습니다")
+    private Integer validityPeriod;
 }

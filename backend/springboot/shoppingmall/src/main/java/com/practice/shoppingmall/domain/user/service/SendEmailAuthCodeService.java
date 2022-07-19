@@ -1,6 +1,5 @@
 package com.practice.shoppingmall.domain.user.service;
 
-import com.practice.shoppingmall.domain.user.domain.repository.AuthCodeRepository;
 import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
 import com.practice.shoppingmall.domain.user.exception.UserAlreadyExistException;
 import com.practice.shoppingmall.domain.user.facade.UserAuthCodeFacade;
@@ -9,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Random;
+import javax.mail.MessagingException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,12 +16,10 @@ public class SendEmailAuthCodeService {
 
     private final UserAuthCodeFacade authCodeFacade;
 
-    private final AuthCodeRepository authCodeRepository;
-
     private final UserRepository userRepository;
 
     @Transactional
-    public void execute(SendMailRequest request){
+    public void execute(SendMailRequest request) throws MessagingException {
 
         String email = request.getEmail();
 

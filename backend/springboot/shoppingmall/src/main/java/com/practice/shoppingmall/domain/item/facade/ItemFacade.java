@@ -1,23 +1,19 @@
-package com.practice.shoppingmall.domain.item.service;
+package com.practice.shoppingmall.domain.item.facade;
 
 import com.practice.shoppingmall.domain.item.domain.Item;
 import com.practice.shoppingmall.domain.item.domain.repository.ItemRepository;
 import com.practice.shoppingmall.domain.item.exception.ItemNotFoundException;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemInfoResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Service
-public class QueryItemInfo {
+@Component
+public class ItemFacade {
 
     private final ItemRepository itemRepository;
 
-    public FindItemInfoResponse execute(Long id) {
-
-        Item item = itemRepository.findById(id)
+    public Item getItemById(Long itemId) {
+        return itemRepository.findById(itemId)
                 .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
-
-        return FindItemInfoResponse.of(item);
     }
 }

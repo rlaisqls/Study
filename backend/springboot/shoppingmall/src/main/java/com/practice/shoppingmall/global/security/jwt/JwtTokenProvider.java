@@ -65,7 +65,7 @@ public class JwtTokenProvider {
         if(isRefreshToken(token))
             throw InvalidTokenException.EXCEPTION;
 
-        UserDetails userDetails = authDetailsService.loadUserByUsername(getId(token));
+        UserDetails userDetails = authDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
@@ -73,7 +73,7 @@ public class JwtTokenProvider {
         return getClaims(token).get("typ").equals("refresh");
     }
 
-    public String getId(String token) {
+    public String getUsername(String token) {
         return getClaims(token).getSubject();
     }
 

@@ -3,7 +3,7 @@ package com.practice.shoppingmall.domain.coupon.service;
 import com.practice.shoppingmall.domain.coupon.domain.UserCoupon;
 import com.practice.shoppingmall.domain.coupon.domain.repository.UserCouponRepository;
 import com.practice.shoppingmall.domain.coupon.facade.CouponFacade;
-import com.practice.shoppingmall.domain.coupon.presentation.dto.response.FindCouponGroupResponse;
+import com.practice.shoppingmall.domain.coupon.presentation.dto.response.QueryUserCouponListResponse;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class QueryMyCouponListService {
 
     private final CouponFacade couponFacade;
 
-    public FindCouponGroupResponse execute() {
+    public QueryUserCouponListResponse execute() {
 
         User user = userFacade.getCurrentUser();
 
@@ -31,6 +31,6 @@ public class QueryMyCouponListService {
                 .filter(couponFacade::validateCoupon)
                 .collect(Collectors.toList());
 
-        return FindCouponGroupResponse.of(userCoupons);
+        return QueryUserCouponListResponse.of(userCoupons);
     }
 }

@@ -39,5 +39,5 @@ public class UserCoupon {
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
 
-    private LocalDateTime expirationDate;
+    private LocalDateTime expirationDateTime;
 }

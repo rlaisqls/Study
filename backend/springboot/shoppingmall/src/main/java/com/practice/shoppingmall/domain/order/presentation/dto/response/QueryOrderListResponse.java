@@ -6,18 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public class FindOrderListResponse {
+public class QueryOrderListResponse {
     List<FindOrderResponse> orderListResponse;
 
-    public static FindOrderListResponse of(List<Order> orders) {
+    public static QueryOrderListResponse of(List<Order> orders) {
 
-        return new FindOrderListResponse(orders
+        return new QueryOrderListResponse(orders
                 .stream()
                 .map(FindOrderResponse::of)
                 .collect(Collectors.toList()));
@@ -31,9 +31,11 @@ public class FindOrderListResponse {
 
         private OrderStatus orderStatus;
 
+        private LocalDate orderDate;
+
         private String representativeItemName;
 
-        private LocalDateTime orderDate;
+        private int totalItemCount;
 
         public static FindOrderResponse of(Order order){
 
@@ -41,8 +43,9 @@ public class FindOrderListResponse {
                     .builder()
                     .orderId(order.getId())
                     .representativeItemName(order.getOrderItems().get(0).getItem().getName())
+                    .totalItemCount(order.getOrderItems().size())
                     .orderStatus(order.getOrderStatus())
-                    .orderDate(order.getOrderDate())
+                    .orderDate(order.getOrderDateTime().toLocalDate())
                     .build();
         }
     }

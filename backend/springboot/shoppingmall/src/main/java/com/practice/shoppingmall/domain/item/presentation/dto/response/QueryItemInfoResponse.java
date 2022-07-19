@@ -6,21 +6,21 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class FindItemInfoResponse {
+public class QueryItemInfoResponse {
 
     private Long itemId;
 
     private String itemName;
 
-    private Integer price;
+    private int price;
 
-    private Integer stock;
+    private int stock;
 
     private Boolean isSoldOut;
 
-    public static FindItemInfoResponse of (Item item) {
+    public static QueryItemInfoResponse of (Item item) {
 
-        return FindItemInfoResponse
+        return QueryItemInfoResponse
                 .builder()
                 .itemId(item.getId())
                 .itemName(item.getName())

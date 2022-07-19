@@ -16,7 +16,7 @@ public class CouponFacade {
 
     public Boolean validateCoupon(UserCoupon userCoupon) {
 
-        if (LocalDateTime.now().isAfter(userCoupon.getExpirationDate())) {
+        if (LocalDateTime.now().isAfter(userCoupon.getExpirationDateTime())) {
             System.out.println(userCoupon.getCoupon().getCouponName());
             userCouponRepository.delete(userCoupon);
             return false;

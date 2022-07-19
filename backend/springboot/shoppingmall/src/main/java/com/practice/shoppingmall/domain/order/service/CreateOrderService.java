@@ -12,7 +12,6 @@ import com.practice.shoppingmall.domain.order.domain.Order;
 import com.practice.shoppingmall.domain.order.domain.OrderItem;
 import com.practice.shoppingmall.domain.order.domain.repository.OrderRepository;
 import com.practice.shoppingmall.domain.order.presentation.dto.request.OrderItemRequest;
-import com.practice.shoppingmall.domain.order.presentation.dto.request.OrderRequest;
 import com.practice.shoppingmall.domain.order.presentation.dto.response.CreateOrderResponse;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.facade.UserFacade;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class DoOrderService {
+public class CreateOrderService {
 
     private final UserFacade userFacade;
 
@@ -38,13 +37,13 @@ public class DoOrderService {
     private final ItemRepository itemRepository;
 
     @Transactional
-    public CreateOrderResponse execute(OrderRequest request) {
+    public CreateOrderResponse execute(List<OrderItemRequest> requests) {
 
         User user = userFacade.getCurrentUser();
 
         Delivery delivery = Delivery.start(user);
 
-        List<OrderItem> orderItems = request.getOrderItems()
+        List<OrderItem> orderItems = requests
                 .stream()
                 .map(this::createOrderItem)
                 .collect(Collectors.toList());

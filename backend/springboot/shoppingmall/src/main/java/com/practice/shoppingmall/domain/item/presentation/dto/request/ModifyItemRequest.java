@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Builder
@@ -14,12 +16,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ModifyItemRequest {
 
-    @NotNull(message = "상품 ID를 입력해주세요")
-    private Long itemId;
-
-    @NotNull(message = "수정할 이름을 입력해주세요")
+    @NotBlank(message = "item_name는 Null 또는 공백 또는 띄어쓰기를 허용하지 않습니다.")
+    @Length(min = 1, max = 30, message = "itemName는 30자 이하여야 합니다.")
     private String itemName;
 
-    @NotNull
+    @NotNull(message = "price는 null을 허용하지 않습니다.")
     private int price;
 }

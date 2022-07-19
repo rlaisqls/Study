@@ -1,40 +1,45 @@
 package com.practice.shoppingmall.domain.order.presentation.dto.response;
 
-import com.practice.shoppingmall.domain.delivery.domain.Delivery;
 import com.practice.shoppingmall.domain.order.domain.Order;
 import com.practice.shoppingmall.domain.order.domain.OrderItem;
+import com.practice.shoppingmall.domain.order.domain.OrderStatus;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @Builder
-public class FindOrderInfoResponse {
+public class QueryOrderInfoResponse {
 
-    private String orderStatus;
+    private long orderId;
 
-    private String orderDate;
+    private OrderStatus orderStatus;
+
+    private LocalDateTime orderDateTime;
 
     private List<OrderItemResponse> orderItems;
 
-    private Delivery delivery;
+    private long deliveryId;
 
     private int totalPrice;
 
-    public static FindOrderInfoResponse of(Order order) {
+    public static QueryOrderInfoResponse of(Order order) {
 
         List<OrderItemResponse> orderItemList = order.getOrderItems()
                 .stream()
                 .map(OrderItemResponse::of)
                 .collect(Collectors.toList());
 
-        return FindOrderInfoResponse
+        return QueryOrderInfoResponse
                 .builder()
-                .orderStatus(order.getOrderStatus().toString())
-                .orderDate(order.getOrderDate().toString())
+                .orderId(order.getId())
+                .orderStatus(order.getOrderStatus())
+                .orderDateTime(order.getOrderDateTime())
                 .orderItems(orderItemList)
+                .deliveryId(order.getDelivery().getId())
                 .totalPrice(order.getTotalPrice())
                 .build();
     }
@@ -43,7 +48,7 @@ public class FindOrderInfoResponse {
     @Builder
     private static class OrderItemResponse {
         private String itemName;
-        private Integer count;
+        private int count;
 
         public static OrderItemResponse of(OrderItem orderItem) {
 

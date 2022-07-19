@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.shoppingmall.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,23 +31,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         httpSecurity
                 .csrf().disable()
-                .exceptionHandling()
-
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin()
-
-                .and()
+                .cors().and()
+                .formLogin().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/user","/board").hasRole("USER")
-                .antMatchers("/admin").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                .antMatchers(HttpMethod.POST, "/users/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/coupons").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/items").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/items").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/items/{itemId}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/items/**").permitAll()
+
+                .anyRequest().authenticated()
 
                 .and()
                 .apply(new FilterConfig(jwtTokenProvider, objectMapper));

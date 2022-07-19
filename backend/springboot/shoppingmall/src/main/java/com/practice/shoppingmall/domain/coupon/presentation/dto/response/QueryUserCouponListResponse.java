@@ -12,17 +12,17 @@ import java.util.stream.Collectors;
 
 @Getter
 @Builder
-public class FindCouponGroupResponse {
+public class QueryUserCouponListResponse {
     private List<FindCouponResponse> CouponList;
 
-    public static FindCouponGroupResponse of(List<UserCoupon> userCoupons) {
+    public static QueryUserCouponListResponse of(List<UserCoupon> userCoupons) {
 
         List<FindCouponResponse> findCouponResponses = userCoupons
                 .stream()
                 .map(FindCouponResponse::of)
                 .collect(Collectors.toList());
 
-        return FindCouponGroupResponse
+        return QueryUserCouponListResponse
                 .builder()
                 .CouponList(findCouponResponses)
                 .build();
@@ -31,25 +31,25 @@ public class FindCouponGroupResponse {
     @Getter
     @Builder
     private static class FindCouponResponse {
-        private Long id;
+        private Long couponId;
 
-        private String name;
+        private String couponName;
 
         private CouponDiscountType discountType;
 
         private String discountAmount;
 
-        private LocalDateTime expirationDate;
+        private LocalDateTime expirationDateTime;
 
         public static FindCouponResponse of(UserCoupon userCoupon) {
 
             return FindCouponResponse
                     .builder()
-                    .id(userCoupon.getId())
-                    .name(userCoupon.getCoupon().getCouponName())
+                    .couponId(userCoupon.getId())
+                    .couponName(userCoupon.getCoupon().getCouponName())
                     .discountType(userCoupon.getCoupon().getDiscountType())
                     .discountAmount(userCoupon.getCoupon().getDiscountAmount() + userCoupon.getCoupon().getUnit())
-                    .expirationDate(userCoupon.getExpirationDate())
+                    .expirationDateTime(userCoupon.getExpirationDateTime())
                     .build();
         }
     }

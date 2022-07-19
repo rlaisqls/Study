@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class QueryUserResponse {
+public class QueryUserInfoResponse {
 
-    private Long accountId;
+    private Long userId;
 
     private String username;
 

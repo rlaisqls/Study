@@ -14,6 +14,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DeleteItemRequest {
 
-    @NotNull(message = "상품 ID를 입력해주세요")
+    @NotNull(message = "item_id는 null을 허용하지 않습니다")
     private Long itemId;
 }

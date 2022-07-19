@@ -10,17 +10,17 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public class FindItemListResponse {
+public class QueryItemListResponse {
     List<FindItemResponse> itemResponseList;
 
-    public static FindItemListResponse of(List<Item> itemList) {
+    public static QueryItemListResponse of(List<Item> itemList) {
 
         List<FindItemResponse> itemResponseList = itemList
                 .stream()
                 .map(FindItemResponse::of)
                 .collect(Collectors.toList());
 
-        return new FindItemListResponse(itemResponseList);
+        return new QueryItemListResponse(itemResponseList);
     }
 
     @Getter

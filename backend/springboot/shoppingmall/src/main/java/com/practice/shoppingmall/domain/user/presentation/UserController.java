@@ -4,7 +4,7 @@ import com.practice.shoppingmall.domain.user.presentation.dto.request.LoginUserR
 import com.practice.shoppingmall.domain.user.presentation.dto.request.PasswordChangeRequest;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.SendMailRequest;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.SignUpUserRequest;
-import com.practice.shoppingmall.domain.user.presentation.dto.response.QueryUserResponse;
+import com.practice.shoppingmall.domain.user.presentation.dto.response.QueryUserInfoResponse;
 import com.practice.shoppingmall.domain.user.presentation.dto.response.SignUpUserResponse;
 import com.practice.shoppingmall.domain.user.presentation.dto.response.TokenResponse;
 import com.practice.shoppingmall.domain.user.service.ChangePasswordService;
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -42,26 +43,16 @@ public class UserController {
 
     private final UserTokenRefreshService userTokenRefreshService;
 
+    private final ChangePasswordService changePasswordService;
+
     private final QueryMyInfoService queryMyInfoService;
 
     private final QueryUserInfoService queryUserInfoService;
 
-    private final ChangePasswordService changePasswordService;
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/mail")
-    public void mail(@Valid @RequestBody SendMailRequest request) {
+    public void mail(@Valid @RequestBody SendMailRequest request) throws MessagingException {
         sendEmailAuthCodeService.execute(request);
-    }
-
-    @GetMapping
-    public QueryUserResponse queryMyInformation() {
-        return queryMyInfoService.execute();
-    }
-
-    @GetMapping("/{user-id}")
-    public QueryUserResponse queryMyInformation(@PathVariable("user-id") Long userId) {
-        return queryMyInfoService.execute();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -75,14 +66,26 @@ public class UserController {
         return userLoginService.execute(request);
     }
 
+    @PutMapping("/auth")
+    public TokenResponse tokenRefresh(@RequestHeader("X-Refresh-Token") String refreshToken) {
+        return userTokenRefreshService.execute(refreshToken);
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/password")
     public void changePassword(@Valid @RequestBody PasswordChangeRequest request){
         changePasswordService.execute(request);
     }
 
-    @PutMapping("/auth")
-    public TokenResponse reissue(@RequestHeader("X-Refresh-Token") String refreshToken) {
-        return userTokenRefreshService.execute(refreshToken);
+    @GetMapping
+    public QueryUserInfoResponse queryMyInformation() {
+        return queryMyInfoService.execute();
     }
+
+    @GetMapping("/{user-id}")
+    public QueryUserInfoResponse queryUserInformation(@PathVariable("user-id") Long userId) {
+        return queryUserInfoService.execute(userId);
+    }
+
+
 }

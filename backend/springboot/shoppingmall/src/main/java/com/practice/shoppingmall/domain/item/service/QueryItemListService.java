@@ -2,7 +2,7 @@ package com.practice.shoppingmall.domain.item.service;
 
 import com.practice.shoppingmall.domain.item.domain.Item;
 import com.practice.shoppingmall.domain.item.domain.repository.ItemRepository;
-import com.practice.shoppingmall.domain.item.presentation.dto.response.FindItemListResponse;
+import com.practice.shoppingmall.domain.item.presentation.dto.response.QueryItemListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +14,10 @@ public class QueryItemListService {
 
     private final ItemRepository itemRepository;
 
-    public FindItemListResponse execute() {
+    public QueryItemListResponse execute() {
 
         List<Item> itemList = itemRepository.findBy();
 
-        return FindItemListResponse.of(itemList);
+        return QueryItemListResponse.of(itemList);
     }
 }

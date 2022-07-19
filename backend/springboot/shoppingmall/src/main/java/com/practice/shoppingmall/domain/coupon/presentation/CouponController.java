@@ -2,7 +2,7 @@ package com.practice.shoppingmall.domain.coupon.presentation;
 
 import com.practice.shoppingmall.domain.coupon.presentation.dto.request.CreateCouponRequest;
 import com.practice.shoppingmall.domain.coupon.presentation.dto.response.CreateCouponResponse;
-import com.practice.shoppingmall.domain.coupon.presentation.dto.response.FindCouponGroupResponse;
+import com.practice.shoppingmall.domain.coupon.presentation.dto.response.QueryUserCouponListResponse;
 import com.practice.shoppingmall.domain.coupon.service.ClaimCouponService;
 import com.practice.shoppingmall.domain.coupon.service.CreateCouponService;
 import com.practice.shoppingmall.domain.coupon.service.QueryMyCouponListService;
@@ -13,36 +13,38 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
+@RequestMapping("/coupons")
 public class CouponController {
 
-    private final ClaimCouponService claimCouponService;
-
     private final CreateCouponService createCouponService;
+
+    private final ClaimCouponService claimCouponService;
 
     private final QueryMyCouponListService queryMyCouponListService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/coupon")
-    public CreateCouponResponse claimCoupon(@Valid @RequestBody CreateCouponRequest request){
+    @PostMapping
+    public CreateCouponResponse createCoupon(@Valid @RequestBody CreateCouponRequest request){
         return createCouponService.execute(request);
     }
 
-    @GetMapping("/coupon")
-    public FindCouponGroupResponse findMyCoupons(){
-        return queryMyCouponListService.execute();
-    }
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/coupon/{couponId}")
+    @PutMapping("/{couponId}")
     public void claimCoupon(@PathVariable Long couponId){
         claimCouponService.execute(couponId);
+    }
+
+    @GetMapping
+    public QueryUserCouponListResponse findMyCoupons(){
+        return queryMyCouponListService.execute();
     }
 
 }
