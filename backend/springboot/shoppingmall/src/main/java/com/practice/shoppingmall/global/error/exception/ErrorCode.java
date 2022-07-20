@@ -28,7 +28,10 @@ public enum ErrorCode {
     USER_ALREADY_EXISTS(409, "User Already Exists"),
     USER_NOT_FOUND(404, "User Not Found"),
     PASSWORD_MISMATCH(401, "Password Mismatch"),
-    UNVERIFIED_AUTH_CODE(401, "UnVerified Auth Code"),
+
+    MAIL_SEND_FAIL(404, "Mail Send Fail"),
+    UNVERIFIED_EMAIL(401, "UnVerified Email"),
+    BAD_AUTHENTICATION_CODE(401, "Bad Authentication Code"),
 
     //토큰
     EXPIRED_TOKEN(401 , "Expired Token"),
@@ -38,9 +41,6 @@ public enum ErrorCode {
     //요청 형식 오류
     INVALID_PARAMETER(400, "Invalid Parameter"),
     METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
-
-    BAD_AUTHENTICATION_CODE(400, "Bad Authentication Code"),
-    MAIL_SEND_FAIL(404, "Mail Send Fail"),
 
     INTERNAL_SERVER_ERROR(500,"Server Error");
 
