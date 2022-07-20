@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.mail.MessagingException;
 import java.util.Random;
 
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class UserAuthCodeFacade {
 
     public static final Random RANDOM = new Random();
 
-    public void sendEmail(String email) throws MessagingException {
+    public void sendEmail(String email){
 
         String code = createRandomCode();
         AuthCode authCode = getAuthCodeByIdOrCreate(email, code);
