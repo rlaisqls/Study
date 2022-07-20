@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CreateOrderResponse {
-    Long id;
+    Long orderId;
     int totalPrice;
 }

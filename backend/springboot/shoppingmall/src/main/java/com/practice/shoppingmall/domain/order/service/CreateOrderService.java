@@ -52,7 +52,7 @@ public class CreateOrderService {
 
         return CreateOrderResponse
                 .builder()
-                .id(order.getId())
+                .orderId(order.getId())
                 .totalPrice(order.getTotalPrice())
                 .build();
     }
@@ -87,9 +87,8 @@ public class CreateOrderService {
 
         UserCoupon userCoupon = couponFacade.getUserCoupon(userCouponId, user);
 
-        if (!couponFacade.validateCoupon(userCoupon)) {
+        if (!couponFacade.validateCoupon(userCoupon))
             throw InvalidCouponException.EXCEPTION;
-        }
 
         return userCoupon;
     }
