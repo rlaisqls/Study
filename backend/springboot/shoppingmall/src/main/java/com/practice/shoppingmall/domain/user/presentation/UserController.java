@@ -4,6 +4,7 @@ import com.practice.shoppingmall.domain.user.presentation.dto.request.LoginUserR
 import com.practice.shoppingmall.domain.user.presentation.dto.request.PasswordChangeRequest;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.SendMailRequest;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.SignUpUserRequest;
+import com.practice.shoppingmall.domain.user.presentation.dto.request.VerifyAuthCodeRequest;
 import com.practice.shoppingmall.domain.user.presentation.dto.response.QueryUserInfoResponse;
 import com.practice.shoppingmall.domain.user.presentation.dto.response.SignUpUserResponse;
 import com.practice.shoppingmall.domain.user.presentation.dto.response.TokenResponse;
@@ -14,6 +15,7 @@ import com.practice.shoppingmall.domain.user.service.SendEmailAuthCodeService;
 import com.practice.shoppingmall.domain.user.service.UserLoginService;
 import com.practice.shoppingmall.domain.user.service.UserSignUpService;
 import com.practice.shoppingmall.domain.user.service.UserTokenRefreshService;
+import com.practice.shoppingmall.domain.user.service.VerifyAuthCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -36,6 +37,8 @@ import javax.validation.Valid;
 public class UserController {
 
     private final SendEmailAuthCodeService sendEmailAuthCodeService;
+
+    private final VerifyAuthCodeService verifyAuthCodeService;
 
     private final UserSignUpService userSignUpService;
 
@@ -50,9 +53,15 @@ public class UserController {
     private final QueryUserInfoService queryUserInfoService;
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/mail")
-    public void mail(@Valid @RequestBody SendMailRequest request) throws MessagingException {
+    @PostMapping("/mail/verify")
+    public void sendEmailAuthCode(@Valid @RequestBody SendMailRequest request){
         sendEmailAuthCodeService.execute(request);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/mail/verify")
+    public void verifyAuthCode(@Valid @RequestBody VerifyAuthCodeRequest request) {
+        verifyAuthCodeService.execute(request);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
