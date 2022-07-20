@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class QueryItemListResponse {
-    List<FindItemResponse> itemResponseList;
+    List<FindItemResponse> itemList;
 
     public static QueryItemListResponse of(List<Item> itemList) {
 

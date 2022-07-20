@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class QueryOrderListResponse {
-    List<FindOrderResponse> orderListResponse;
+    List<FindOrderResponse> orderList;
 
     public static QueryOrderListResponse of(List<Order> orders) {
 
