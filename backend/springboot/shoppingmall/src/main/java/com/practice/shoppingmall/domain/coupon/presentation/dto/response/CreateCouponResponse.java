@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CreateCouponResponse {
-    Long id;
+    Long couponId;
 }
