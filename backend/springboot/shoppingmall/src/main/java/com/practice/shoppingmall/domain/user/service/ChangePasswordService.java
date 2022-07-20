@@ -2,15 +2,15 @@ package com.practice.shoppingmall.domain.user.service;
 
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
-import com.practice.shoppingmall.domain.user.exception.BadUserInformationException;
+import com.practice.shoppingmall.domain.user.exception.PasswordMismatchException;
 import com.practice.shoppingmall.domain.user.facade.UserFacade;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.PasswordChangeRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class ChangePasswordService {
 
     private final PasswordEncoder passwordEncoder;
@@ -22,7 +22,7 @@ public class ChangePasswordService {
         User user = userFacade.getCurrentUser();
 
         if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
-            throw BadUserInformationException.EXCEPTION;
+            throw PasswordMismatchException.EXCEPTION;
 
         user.changePassword(passwordEncoder.encode(request.getNewPassword()));
 

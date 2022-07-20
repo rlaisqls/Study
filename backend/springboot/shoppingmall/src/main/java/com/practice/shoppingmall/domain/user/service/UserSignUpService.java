@@ -3,7 +3,7 @@ package com.practice.shoppingmall.domain.user.service;
 import com.practice.shoppingmall.domain.user.domain.Authority;
 import com.practice.shoppingmall.domain.user.domain.User;
 import com.practice.shoppingmall.domain.user.domain.repository.UserRepository;
-import com.practice.shoppingmall.domain.user.exception.UnVerifiedAuthCodeException;
+import com.practice.shoppingmall.domain.user.exception.UnVerifiedEmailException;
 import com.practice.shoppingmall.domain.user.facade.UserAuthCodeFacade;
 import com.practice.shoppingmall.domain.user.facade.UserFacade;
 import com.practice.shoppingmall.domain.user.presentation.dto.request.SignUpUserRequest;
@@ -13,8 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class UserSignUpService {
 
     private final PasswordEncoder passwordEncoder;
@@ -30,10 +30,10 @@ public class UserSignUpService {
         String password = passwordEncoder.encode(request.getPassword());
         String address = request.getAddress();
 
-        userFacade.checkUserExists(username);
+        userFacade.checkUserNameExists(username);
 
         if(!authCodeFacade.isVerified(email))
-            throw UnVerifiedAuthCodeException.EXCEPTION;
+            throw UnVerifiedEmailException.EXCEPTION;
 
         User user = userRepository.save(User.builder()
                 .username(username)

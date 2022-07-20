@@ -8,10 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
-
-@Service
 @RequiredArgsConstructor
+@Service
 public class SendEmailAuthCodeService {
 
     private final UserAuthCodeFacade authCodeFacade;
@@ -19,7 +17,7 @@ public class SendEmailAuthCodeService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void execute(SendMailRequest request) throws MessagingException {
+    public void execute(SendMailRequest request){
 
         String email = request.getEmail();
 
