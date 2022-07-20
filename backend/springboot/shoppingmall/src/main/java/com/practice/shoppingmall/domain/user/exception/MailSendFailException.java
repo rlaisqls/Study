@@ -5,7 +5,8 @@ import com.practice.shoppingmall.global.error.exception.ErrorCode;
 
 public class MailSendFailException extends BusinessException {
     public static final BusinessException EXCEPTION = new MailSendFailException();
-    private MailSendFailException(){
+
+    private MailSendFailException() {
         super(ErrorCode.MAIL_SEND_FAIL);
     }
 }
