@@ -39,11 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/users/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/coupons").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/users/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/coupons").hasAuthority("ADMIN")
 
-                .antMatchers(HttpMethod.POST, "/items").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PATCH, "/items").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/items/{itemId}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/items").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/items").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/items/{itemId}").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, "/items/**").permitAll()
 
                 .anyRequest().authenticated()
