@@ -1,0 +1,5 @@
+server :
+  port : 8080
+
+socketio :
+  port :  8081
