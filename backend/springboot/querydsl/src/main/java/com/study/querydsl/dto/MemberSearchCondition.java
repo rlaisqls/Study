@@ -15,4 +15,5 @@ public class MemberSearchCondition {
     private String teamName;
     private Integer ageGoe;
     private Integer ageLoe;
+
 }
