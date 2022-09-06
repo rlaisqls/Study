@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/star
+    username: root
+    password: Mydptmzbdpf!1
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      format_sql: true
+      generate-ddl: false
+    generate-ddl: true
+    defer-datasource-initialization: true
