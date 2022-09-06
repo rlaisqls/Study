@@ -4,9 +4,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +36,8 @@ public class Team {
     @JoinColumn(name = "member_id")
     private Member leader;
 
-    @OneToMany(mappedBy = "team")
+    @BatchSize(size = 2)
+    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
     private List<Member> members = new ArrayList<>();
 
     public Team(String name) {
