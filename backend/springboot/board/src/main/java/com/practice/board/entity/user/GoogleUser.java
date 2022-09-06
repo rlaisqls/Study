@@ -16,13 +16,6 @@ import javax.persistence.ManyToOne;
 @Getter
 public class GoogleUser extends User {
 
-    @ManyToOne
-    @JoinColumn(name = "user_uuid")
-    private User user;
     private String oauthId;
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
 }

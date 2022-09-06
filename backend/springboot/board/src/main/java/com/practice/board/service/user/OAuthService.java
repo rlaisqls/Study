@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
+public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
     private final LoginService loginService;
@@ -31,8 +31,11 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
-                .getUserInfoEndpoint().getUserNameAttributeName();
+        String userNameAttributeName = userRequest
+                .getClientRegistration()
+                .getProviderDetails()
+                .getUserInfoEndpoint()
+                .getUserNameAttributeName();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         User user = GoogleUser.builder()
@@ -43,7 +46,9 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
                 .activated(true)
                 .build();
 
-        if (!userRepository.findByEmail(user.getEmail()).isPresent()) userRepository.save(user);
+        if (!userRepository.findByEmail(user.getEmail()).isPresent()) {
+            userRepository.save(user);
+        }
 
         loginService.login(user);
 

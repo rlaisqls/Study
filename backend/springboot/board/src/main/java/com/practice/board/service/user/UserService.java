@@ -68,8 +68,9 @@ public class UserService {
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
             throw PasswordMismatchException.EXCEPTION;
 
-        GeneralUser newUser = new GeneralUser(user, passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(newUser);
+        user.updateUser(request.getNewPassword());
+
+        userRepository.save(user);
 
     }
 

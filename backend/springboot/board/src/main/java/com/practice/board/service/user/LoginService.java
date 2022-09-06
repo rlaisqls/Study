@@ -28,6 +28,9 @@ public class LoginService {
                         .expiration(jwtProperties.getRefresh())
                         .build());
 
+        System.out.println("user.getEmail() = " + user.getEmail());
+        System.out.println("refreshToken = " + refreshToken);
+
         return TokensResponse.builder()
                 .accessToken(jwtTokenProvider.createAccessToken(String.valueOf(user.getUuid())))
                 .refreshToken(refreshToken.getRefreshToken())

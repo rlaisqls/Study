@@ -2,6 +2,7 @@ package com.practice.board.entity.user;
 
 import com.practice.board.entity.user.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,8 +20,11 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @Getter
 public class GeneralUser extends User {
-    @ManyToOne
-    @JoinColumn(name = "user_uuid")
-    private User user;
+
     private String password;
+
+    public void updateUser(String password) {
+        this.password = password;
+    }
+
 }

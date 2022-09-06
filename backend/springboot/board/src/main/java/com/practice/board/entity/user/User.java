@@ -25,8 +25,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
+
     @Id
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(name = "user_uuid", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private UUID uuid;
