@@ -12,7 +12,7 @@ import java.util.Collections;
 @AllArgsConstructor
 public class AuthDetails implements UserDetails {
 
-    private final String accountId;
+    private final String email;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -26,7 +26,7 @@ public class AuthDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return accountId;
+        return email;
     }
 
     @Override

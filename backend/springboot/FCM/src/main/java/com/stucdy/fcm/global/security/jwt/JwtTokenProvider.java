@@ -1,5 +1,6 @@
 package com.stucdy.fcm.global.security.jwt;
 
+import com.corundumstudio.socketio.SocketIOClient;
 import com.stucdy.fcm.domain.auth.domain.RefreshToken;
 import com.stucdy.fcm.domain.auth.domain.repository.RefreshTokenRepository;
 import com.stucdy.fcm.global.exception.ExpiredTokenException;
@@ -27,16 +28,16 @@ public class JwtTokenProvider{
     private final AuthDetailsService authDetailsService;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public String createAccessToken(String accountId) {
-        return createToken(accountId, "access", jwtProperties.getAccessExp());
+    public String createAccessToken(String email) {
+        return createToken(email, "access", jwtProperties.getAccessExp());
     }
 
-    public String createRefreshToken(String accountId) {
+    public String createRefreshToken(String email) {
 
-        String refreshToken = createToken(accountId, "refresh", jwtProperties.getRefreshExp());
+        String refreshToken = createToken(email, "refresh", jwtProperties.getRefreshExp());
 
         refreshTokenRepository.save(RefreshToken.builder()
-                .accountId(accountId)
+                .email(email)
                 .token(refreshToken)
                 .expiration(jwtProperties.getRefreshExp() * 1000)
                 .build());
@@ -44,9 +45,9 @@ public class JwtTokenProvider{
         return refreshToken;
     }
 
-    private String createToken(String accountId, String typ, Long exp) {
+    private String createToken(String email, String typ, Long exp) {
         return Jwts.builder()
-                .setSubject(accountId)
+                .setSubject(email)
                 .claim("typ", typ)
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .setExpiration(new Date(System.currentTimeMillis() + exp * 1000))
@@ -56,11 +57,11 @@ public class JwtTokenProvider{
 
     public Authentication getAuthentication(String token) {
 
-        UserDetails userDetails = authDetailsService.loadUserByUsername(getAccountId(token));
+        UserDetails userDetails = authDetailsService.loadUserByUsername(getEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    private String getAccountId(String token) {
+    private String getEmail(String token) {
         return getClaims(token).getSubject();
     }
 
@@ -81,6 +82,7 @@ public class JwtTokenProvider{
     public String resolveToken(HttpServletRequest request) {
 
         String bearerToken = request.getHeader(jwtProperties.getHeader());
+
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.getPrefix())
                 && bearerToken.length() > jwtProperties.getPrefix().length() + 1) {
             return bearerToken.substring(jwtProperties.getPrefix().length() + 1);
@@ -88,4 +90,14 @@ public class JwtTokenProvider{
         return null;
     }
 
+    public String resolveToken(SocketIOClient socketIOClient) {
+
+        String bearerToken = socketIOClient.getHandshakeData().getHttpHeaders().get(jwtProperties.getHeader());
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.getPrefix())
+                && bearerToken.length() > jwtProperties.getPrefix().length() + 1) {
+            return bearerToken.substring(jwtProperties.getPrefix().length() + 1);
+        }
+        return null;
+    }
 }
