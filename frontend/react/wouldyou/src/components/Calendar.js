@@ -6,15 +6,13 @@ import axios from 'axios';
 
 const getMoonAge = (day) => {
 
-    console.log(day + " " + day.year + " " + day.month + " " + day.date);
-
-    const response = axios.get(`http://localhost:8080/LunPhInfoService/getLunPhInfo?solYear=${day.year}&solMonth=${day.month}&solDay=${day.date}`)
+    const response = axios.get(`http://localhost:8080/LunPhInfoService/getLunPhInfo?solYear=${day.getFullYear()}&solMonth=${day.getMonth()+1}&solDay=${day.getDate()}`)
         .then(function (res) {
             const dataSet = res.data;
             return dataSet.result;
         });
-    return response;
 
+    return response;
 }
 
 function Calendar({ today, selectDate, setSelectDate }) {
@@ -24,12 +22,28 @@ function Calendar({ today, selectDate, setSelectDate }) {
         today.getFullYear(),
         today.getMonth() + 1,
     ]);
-    const [moonAge, setMoonAge] = useState("🌔");
+    const [moonAge, setMoonAge] = useState();
+    
+    useEffect(() => {
+        getMoonAge(selectDate).then(m => {setMoonAge(m);});
+    }, [selectDate]);
+
+    useEffect(() => {
+        window.addEventListener("click", clickModalOutside);
+    }, []);
+
+    const clickModalOutside = event => {
+        if (modalRef.current != null && modalRef.current.contains(event.target)) {
+            setOpen(true);
+        } else {
+            setOpen(false);
+        }
+    };
 
     const getFullMonth = (yearMonth) => {
-        const curMonthStart = new Date(yearMonth[0], yearMonth[1] - 1); //Date 객체로 생성
-        const preMonthEnd = new Date(yearMonth[0], yearMonth[1] - 1, 0).getDate(); //이전달 끝나는 날
-        const curStartDate = curMonthStart.getDay(); //이번달 시작 요일 -> 일요일 0 ~ 토요일 6
+        const curMonthStart = new Date(yearMonth[0], yearMonth[1] - 1);
+        const preMonthEnd = new Date(yearMonth[0], yearMonth[1] - 1, 0).getDate();
+        const curStartDate = curMonthStart.getDay();
         const curEndDate = new Date(yearMonth[0], yearMonth[1], 0).getDate();
         let list = [[]];
 
@@ -73,7 +87,7 @@ function Calendar({ today, selectDate, setSelectDate }) {
         return list;
     };
 
-    const calendarHandel = (arrow) => {
+    const calendarHandle = (arrow) => {
         let year = yearMonth[0];
         let month = yearMonth[1];
         switch (arrow) {
@@ -94,23 +108,8 @@ function Calendar({ today, selectDate, setSelectDate }) {
     };
 
     const selectDateHandle = (day) => {
-        getMoonAge(day).then(m => {
-            setMoonAge(m);
-        })
         setSelectDate(day.dateObj);
     };
-
-    const clickModalOutside = event => {
-        if (modalRef.current != null && modalRef.current.contains(event.target)) {
-            setOpen(true);
-        } else {
-            setOpen(false);
-        }
-    };
-
-    useEffect(() => {
-        window.addEventListener("click", clickModalOutside);
-    }, []);
 
     return (
         <Wrapper ref={modalRef}>
@@ -124,14 +123,14 @@ function Calendar({ today, selectDate, setSelectDate }) {
                 <>
                     <CalendarContainer>
                         <Header>
-                            <HeaderArrow onClick={() => calendarHandel("pre")}>
+                            <HeaderArrow onClick={() => calendarHandle("pre")}>
                                 <FaCaretLeft/>
                             </HeaderArrow>
                             <HeaderText>
                                 {yearMonth[0]}.
                                 {yearMonth[1] < 10 ? `0${yearMonth[1]}` : yearMonth[1]}
                             </HeaderText>
-                            <HeaderArrow onClick={() => calendarHandel("next")}>
+                            <HeaderArrow onClick={() => calendarHandle("next")}>
                                 <FaCaretRight />
                             </HeaderArrow>
                         </Header>
@@ -156,8 +155,7 @@ function Calendar({ today, selectDate, setSelectDate }) {
                         </DateGrid>
                     </CalendarContainer>
                 </>
-            )
-            }
+            )}
         </Wrapper>
     );
 }
