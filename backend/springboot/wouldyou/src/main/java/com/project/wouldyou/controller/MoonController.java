@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-/*
+import org.w3c.dom.Document;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -14,18 +15,16 @@ import javax.xml.xpath.XPathFactory;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-*/
+
 @RestController
 public class MoonController {
 
-    @CrossOrigin("http://localhost:3000")
+    @CrossOrigin
     @GetMapping("/LunPhInfoService/getLunPhInfo")
     public MoonResponse moon(@RequestParam Integer solYear,
                      @RequestParam Integer solMonth,
                      @RequestParam Integer solDay) throws Exception {
 
-        return new MoonResponse("\uD83C\uDF15");
-/*
         String requestUrl = "http://apis.data.go.kr/B090041/openapi/service/LunPhInfoService/getLunPhInfo?" +
                 "solYear=" + solYear + "&" +
                 "solMonth=" + String.format("%02d", solMonth) + "&" +
@@ -40,11 +39,9 @@ public class MoonController {
         XPath xpath = XPathFactory.newInstance().newXPath();
         String res = (String) xpath.evaluate("/response/body/items/item/lunAge", doc, XPathConstants.STRING);
 
-        System.out.println("res = " + res);
-
         if(res.length()<1) return new MoonResponse("\uD83C\uDF14");
 
-        Double doubleResponse = Double.parseDouble(res);
+        double doubleResponse = Double.parseDouble(res);
 
         if(Double.parseDouble(res) < 4.0) {
             return new MoonResponse("\uD83C\uDF11");
@@ -78,7 +75,7 @@ public class MoonController {
 
         doc = objDocumentBuilder.parse(stream);
 
-        return doc;*/
+        return doc;
     }
 
 }

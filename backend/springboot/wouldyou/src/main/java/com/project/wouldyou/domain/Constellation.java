@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class Constellation {
     private String culmination;
 
     @Column
-    private String season;
+    private LocalDateTime culminationDatetime;
 
     @Column(columnDefinition = "TEXT")
     private String description;

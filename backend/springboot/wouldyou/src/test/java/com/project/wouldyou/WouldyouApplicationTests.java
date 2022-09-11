@@ -1,9 +1,10 @@
 package com.project.wouldyou;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 class WouldyouApplicationTests {
 
 	@Test

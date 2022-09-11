@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface ConstellationRepository extends JpaRepository<Constellation, Integer> {
 
-    List<Constellation> findBySeasonOrSeason(String season1, String season2);
+    List<Constellation> findBy();
+
+    Constellation findByNameStartingWith(String name);
 }
