@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Header from "./components/Header"
 import Calendar from "./components/Calendar";
-import Constellation from "./components/constellation/Constellation"
+import ConstellationSearch from "./components/constellation/ConstellationSearch";
+import Constellation from "./components/constellation/Constellation";
 import ConstellationView from "./components/constellation/ConstellationView";
 import "./styles/font.css";
 
@@ -19,15 +20,21 @@ function App() {
                 selectDate={selectDate}
                 setSelectDate={setSelectDate}
             />
+
             <ConstellationView
                 selectDate={selectDate}
                 selectConstellation={selectConstellation}
+                setSelectConstellation={setSelectConstellation}
+            />
+            <ConstellationSearch
+                selectDate={selectDate}
                 setSelectConstellation={setSelectConstellation}
             />
             <Constellation
                 selectDate={selectDate}
                 setSelectConstellation={setSelectConstellation}
             />
+
         </>
     );
 }

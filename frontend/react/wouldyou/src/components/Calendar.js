@@ -166,90 +166,90 @@ const Wrapper = styled.div`
 `;
 
 const OpenButton = styled.div`
-  width: 70px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid lightgray;
-  border-radius: 10px;
-  font-size: 17px;
-  color: gray;
-  cursor: pointer;
-  position: relative;
-  ${({ isOpen, setOpen }) =>
+    width: 70px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    font-size: 17px;
+    color: gray;
+    cursor: pointer;
+    position: relative;
+    ${({ isOpen, setOpen }) =>
         isOpen &&
         css`
-      color: white;
-      background-color: darkgray;
+        color: white;
+        background-color: darkgray;
     `}
 `;
 
 const RowBox = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 `;
 
 const ValueViewer = styled.div`
-  font-size: 17px;
-  margin-left: 20px;
+    font-size: 17px;
+    margin-left: 20px;
 `;
 
 const CalendarContainer = styled.div`
-  margin-top: 0px;
-  background-color: white;
-  position: absolute;
-  z-index: 10;
-  border: 1px solid lightgray;
-  border-radius: 10px;
-  padding: 10px;
-  width: 350px;
-  display: flex;
-  flex-direction: column;
+    margin-top: 0px;
+    background-color: white;
+    position: absolute;
+    z-index: 10;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    padding: 10px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
 `;
 
 const Header = styled.div`
-  width: 100%;
-  height: 20px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 10px 0;
-  font-size: 20px;
+    width: 100%;
+    height: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 20px;
 `;
 
 const HeaderArrow = styled.div`
-  cursor: pointer;
-  :hover {
-    color: darkgray;
-  }
+    cursor: pointer;
+    :hover {
+        color: darkgray;
+    }
 `;
 
 const HeaderText = styled.div``;
 
 const DateGrid = styled.div`
-  width: 100%;
-  height: 350px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-auto-rows: 45px;
-  column-gap: 5px;
-  row-gap: 5px;
+    width: 100%;
+    height: 350px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 45px;
+    column-gap: 5px;
+    row-gap: 5px;
 `;
 
 const DateBox = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #264167;
-  border-radius: 50%;
-  border: 1px solid white;
-  cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #264167;
+    border-radius: 50%;
+    border: 1px solid white;
+    cursor: pointer;
 
-  ${({ current }) =>
+    ${({ current }) =>
         !current
             ? css`
                 color: #DDDDDD;
@@ -262,7 +262,7 @@ const DateBox = styled.div`
                 border: 1px solid lightgray;
             }
         `}
-  ${({ selcted }) =>
+    ${({ selcted }) =>
         selcted &&
         css`
         margin:15%;
@@ -272,23 +272,25 @@ const DateBox = styled.div`
         color: white;
     `}
 `;
+
 const WeekGrid = styled.div`
-  width: 350px;
-  height: 18px;
-  margin-bottom: 3px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  column-gap: 0px;
+    width: 350px;
+    height: 18px;
+    margin-bottom: 3px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    column-gap: 0px;
 `;
+
 const WeekBox = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  background-color: #0078D7;
-  color: white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    background-color: #0078D7;
+    color: white;
 `;
 
 export default Calendar;

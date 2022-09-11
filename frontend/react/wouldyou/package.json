@@ -2,6 +2,7 @@
   "name": "wouldyou",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://rlaisqls.github.io/wouldyou",
   "dependencies": {
     "@iconify/react": "^3.2.2",
     "@testing-library/jest-dom": "^5.16.5",

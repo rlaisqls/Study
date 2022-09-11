@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import axios from 'axios';
 
-const getConstellation = (day) => {
+const getConstellationByDate = (day) => {
 
-    const response = axios.get(`http://localhost:8080/ConstellationService/getConstellation/one?solMonth=${day.getMonth()}`)
+    const response = axios.get(`http://localhost:8080/ConstellationService/getConstellation/one?solMonth=${day.getMonth()}&solDay=${day.getDate()}`)
         .then(function (res) {
             return res.data;
         });
@@ -15,7 +15,7 @@ const getConstellation = (day) => {
 function ConstellationView({ selectDate, selectConstellation, setSelectConstellation}) {
 
     useEffect(() => {
-        getConstellation(selectDate).then(r => setSelectConstellation(r));
+        getConstellationByDate(selectDate).then(r => setSelectConstellation(r));
     }, []);
 
     return (
@@ -26,12 +26,13 @@ function ConstellationView({ selectDate, selectConstellation, setSelectConstella
                         <Container>
                             <ConstellationImage src={selectConstellation.image} />
                             <ConstellationTitle>{selectConstellation.name}</ConstellationTitle>
+                            <ConstellationEgTitle>({selectConstellation.englishName}, {selectConstellation.scientificName})</ConstellationEgTitle>
                             <ConstellationInfo>
-                                ({selectConstellation.englishName}, {selectConstellation.scientificName})<br></br>
-                                자오선통과 {selectConstellation.culmination}<br></br>
-                                위치 {selectConstellation.location}
+                                자오선통과 - {selectConstellation.culmination}<br></br>
+                                남중시각 - {selectConstellation.midnightTime}<br></br>
+                                위치 - {selectConstellation.location}
                             </ConstellationInfo>
-                            <ConstellationDescription dangerouslySetInnerHTML={{ __html: selectConstellation.description }}>
+                            <ConstellationDescription dangerouslySetInnerHTML={{ __html: '&nbsp' + selectConstellation.description.replace(/<br>/g, '<br>&nbsp')}}>
                             </ConstellationDescription>
                         </Container>
                     </Wrapper>
@@ -75,13 +76,19 @@ const ConstellationImage = styled.img`
 
 const ConstellationTitle = styled.span`
     font-size: 35px;
+    line-height: 170%;
+`;
+
+const ConstellationEgTitle = styled.span`
+    font-size: 23px;
 `;
 
 const ConstellationInfo = styled.div`
-    font-size: 20px;
+    font-size: 19px;
 `;
 
 const ConstellationDescription = styled.div`
+    text-align: justify;
     margin-top: 15px;
     line-height: 180%;
     font-size: 17px;

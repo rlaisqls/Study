@@ -2,9 +2,9 @@ import React, { useEffect,  useState } from "react";
 import styled from "styled-components";
 import axios from 'axios';
 
-const getConstellations = (day) => {
+const getConstellationsByDate = (day) => {
 
-    const response = axios.get(`http://localhost:8080/ConstellationService/getConstellation?solMonth=${day.getMonth()}`)
+    const response = axios.get(`http://localhost:8080/ConstellationService/getConstellation?solMonth=${day.getMonth()}&solDay=${day.getDate()}`)
         .then(function (res) {
             const dataSet = res.data;
             return dataSet.result;
@@ -18,7 +18,7 @@ function Constellation({ selectDate, setSelectConstellation }) {
     const [res, setRes] = useState([]);
 
     useEffect(() => {
-        getConstellations(selectDate).then(r => setRes(r));
+        getConstellationsByDate(selectDate).then(r => setRes(r));
     }, [selectDate]);
 
     return (
@@ -35,7 +35,10 @@ function Constellation({ selectDate, setSelectConstellation }) {
                                             <ConstellationImage src={data.image}/>
                                             <ConstellationTitle>{data.name}</ConstellationTitle>
                                             <ConstellationEgTitle>({data.englishName}, {data.scientificName})</ConstellationEgTitle>
-                                            <ConstellationCulmination>자오선통과 {data.culmination}</ConstellationCulmination>
+                                            <ConstellationCulmination>
+                                                자오선통과 {data.culmination}<br></br>
+                                                남중시각 {data.midnightTime}
+                                            </ConstellationCulmination>
                                         </ConstellationTableCell>
                                     </td>
                                 </tr>
@@ -50,7 +53,7 @@ function Constellation({ selectDate, setSelectConstellation }) {
 
 const Wrapper = styled.div`
     display: inline-block;
-    height: 370px;
+    height: 565px;
     margin: 5px 1%;
     width: 33%;
 `;
@@ -61,7 +64,7 @@ const Title = styled.span`
 `;
 
 const Container = styled.div`
-    height: 330px;
+    height: 525px;
     background-color: white;
     border: 2px solid #DDDDDD;
     border-radius: 5px;
@@ -91,7 +94,6 @@ const ConstellationTableCell = styled.div`
     margin: 1% 2%;
     border: 2px solid #DDDDDD;
     border-radius: 5px;
-
     :hover {
         background-color: #EEEEEE;
     }
