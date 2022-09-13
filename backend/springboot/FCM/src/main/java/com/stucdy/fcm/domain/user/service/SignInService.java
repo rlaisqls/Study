@@ -2,9 +2,8 @@ package com.stucdy.fcm.domain.user.service;
 
 import com.stucdy.fcm.domain.auth.presentation.dto.TokenResponse;
 import com.stucdy.fcm.domain.user.domain.User;
-import com.stucdy.fcm.domain.user.domain.repository.UserRepository;
 import com.stucdy.fcm.domain.user.exception.PasswordMismatchException;
-import com.stucdy.fcm.domain.user.exception.UserNotFoundException;
+import com.stucdy.fcm.domain.user.facade.UserFacade;
 import com.stucdy.fcm.domain.user.presentation.dto.request.SignInRequest;
 import com.stucdy.fcm.global.security.jwt.JwtProperties;
 import com.stucdy.fcm.global.security.jwt.JwtTokenProvider;
@@ -15,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class SignInService {
 
-    private final UserRepository userRepository;
+    private final UserFacade userFacade;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;
@@ -30,8 +29,7 @@ public class SignInService {
         String email = request.getEmail();
         String password = request.getPassword();
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+        User user = userFacade.getUserByEmail(email);
 
         if(!passwordEncoder.matches(password, user.getPassword()))
             throw PasswordMismatchException.EXCEPTION;

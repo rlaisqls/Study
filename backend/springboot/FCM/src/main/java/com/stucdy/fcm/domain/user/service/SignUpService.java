@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class SignUpService {
 
     private final UserRepository userRepository;

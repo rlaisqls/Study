@@ -34,7 +34,7 @@ public class Project {
     private String description;
 
     @Column
-    private String projectLogoImage;
+    private String logoImage;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -43,15 +43,21 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private List<ProjectUser> projectUsers;
 
-    public void addProjectUsers(ProjectUser projectUser) {
-        this.projectUsers.add(projectUser);
+    public void addProjectUsers(User user) {
+        this.projectUsers.add(ProjectUser
+                .builder()
+                .project(this)
+                .user(user)
+                .build()
+        );
     }
 
     @Builder
-    public Project(String name, String description, String projectLogoImage, User projectManager) {
+    public Project(String name, String description, String logoImage, User projectManager) {
         this.name = name;
         this.description = description;
-        this.projectLogoImage = projectLogoImage;
+        this.logoImage = logoImage;
         this.projectManager = projectManager;
     }
+
 }

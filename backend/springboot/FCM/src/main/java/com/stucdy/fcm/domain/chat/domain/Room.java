@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -57,5 +56,11 @@ public class Room {
                 .room(this)
                 .user(user)
                 .build());
+    }
+
+    @Builder
+    public Room(RoomType roomType, Project project) {
+        this.roomType = roomType;
+        this.project = project;
     }
 }

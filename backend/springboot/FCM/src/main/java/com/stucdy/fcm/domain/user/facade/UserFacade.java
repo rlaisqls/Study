@@ -15,6 +15,16 @@ public class UserFacade {
 
     private final UserRepository userRepository;
 
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+    }
+
     public User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return getUserByEmail(email);
@@ -23,11 +33,4 @@ public class UserFacade {
     public User getCurrentUser(SocketIOClient socketIOClient) {
         return getUserByEmail(SocketUtil.getEmail(socketIOClient));
     }
-
-    public User getUserByEmail(String accountId) {
-        return userRepository.findByEmail(accountId)
-                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
-    }
-
-
 }

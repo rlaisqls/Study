@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class QueryProjectService {
+public class QueryProjectInfoService {
 
     private final ProjectRepository projectRepository;
     private final ProjectFacade projectFacade;
