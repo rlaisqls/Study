@@ -8,6 +8,6 @@ class FcmApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("김은빈".matches("^*+^은빈*+^*$"));
     }
-
 }
