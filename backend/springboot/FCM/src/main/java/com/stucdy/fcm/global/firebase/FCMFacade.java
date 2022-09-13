@@ -7,21 +7,19 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.stucdy.fcm.domain.chat.domain.Chat;
 import com.stucdy.fcm.domain.chat.domain.Room;
+import com.stucdy.fcm.domain.project.domain.Project;
+import com.stucdy.fcm.domain.project.domain.ProjectInvitation;
 import com.stucdy.fcm.domain.user.domain.User;
 import com.stucdy.fcm.global.exception.FCMException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class FCMFacade {
 
     @Async
-
-    @Transactional
     public void sendNotification(User user, Chat chat) {
 
         Room room = chat.getRoom();
@@ -33,7 +31,7 @@ public class FCMFacade {
                 .setNotification(
                         Notification
                                 .builder()
-                                .setTitle(room.getRoomName() + "" + chat.getUser().getUsername())
+                                .setTitle(room.getRoomName(chat) + " " + chat.getUser().getName())
                                 .setBody(chat.getMessage())
                                 .build())
                 .build();
@@ -41,34 +39,46 @@ public class FCMFacade {
         FirebaseMessaging.getInstance().sendAsync(message);
     }
 
-    public void subscribeTopic(List<User> userList, Long roomId) {
-        subscribeTopicInFirebase(userList, roomId, true);
+    @Async
+    public void sendNotification(User user, ProjectInvitation projectInvitation) {
+
+        Project project = projectInvitation.getProject();
+
+        Message message = Message
+                .builder()
+                .setToken(user.getDeviceToken())
+                .setNotification(
+                        Notification
+                                .builder()
+                                .setImage(project.getLogoImage())
+                                .setTitle(project.getName()  + "에 초대받았습니다")
+                                .setBody("초대를 수락하고 프로젝트에 참여해보세요!")
+                                .build())
+                .build();
+
+        FirebaseMessaging.getInstance().sendAsync(message);
     }
 
-    public void unsubscribeTopic(List<User> userList, Long roomId) {
-        subscribeTopicInFirebase(userList, roomId, false);
+    public void subscribeTopic(User user, Long roomId) {
+        subscribeTopicInFirebase(user, roomId, true);
     }
 
-    private void subscribeTopicInFirebase(List<User> userList, Long roomId, boolean isSubscribing) {
+    public void unsubscribeTopic(User user, Long roomId) {
+        subscribeTopicInFirebase(user, roomId, false);
+    }
 
-        List<String> deviceTokenList = userList
-                .stream()
-                .map(User::getDeviceToken)
-                .collect(Collectors.toList());
+    private void subscribeTopicInFirebase(User user, Long roomId, boolean isSubscribing) {
 
-        for (int i = 0; i < userList.size(); i++) {
+        FirebaseMessaging instance = FirebaseMessaging.getInstance(FirebaseApp.getInstance());
 
-            FirebaseMessaging instance = FirebaseMessaging.getInstance(FirebaseApp.getInstance());
-
-            try {
-                if (isSubscribing) {
-                    instance.subscribeToTopic(deviceTokenList, roomId.toString());
-                } else {
-                    instance.unsubscribeFromTopic(deviceTokenList, roomId.toString());
-                }
-            } catch (Exception e) {
-                throw FCMException.EXCEPTION;
+        try {
+            if (isSubscribing) {
+                instance.subscribeToTopic(List.of(user.getDeviceToken()), roomId.toString());
+            } else {
+                instance.unsubscribeFromTopic(List.of(user.getDeviceToken()), roomId.toString());
             }
+        } catch (Exception e) {
+            throw FCMException.EXCEPTION;
         }
     }
 
