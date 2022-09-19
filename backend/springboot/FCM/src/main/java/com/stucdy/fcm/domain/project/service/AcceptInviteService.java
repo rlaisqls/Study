@@ -7,7 +7,6 @@ import com.stucdy.fcm.domain.project.exception.UserNotInvitedException;
 import com.stucdy.fcm.domain.project.presentation.dto.request.AcceptInviteRequest;
 import com.stucdy.fcm.domain.user.domain.User;
 import com.stucdy.fcm.domain.user.facade.UserFacade;
-import com.stucdy.fcm.global.firebase.FCMFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AcceptInviteService {
 
     private final ProjectInvitationRepository projectInvitationRepository;
-    private final FCMFacade fcmFacade;
     private final UserFacade userFacade;
 
     @Transactional

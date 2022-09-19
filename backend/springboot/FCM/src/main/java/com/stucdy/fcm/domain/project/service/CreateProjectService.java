@@ -1,5 +1,8 @@
 package com.stucdy.fcm.domain.project.service;
 
+import com.stucdy.fcm.domain.chat.domain.Room;
+import com.stucdy.fcm.domain.chat.domain.repository.RoomRepository;
+import com.stucdy.fcm.domain.chat.domain.enums.RoomType;
 import com.stucdy.fcm.domain.project.domain.Project;
 import com.stucdy.fcm.domain.project.domain.repository.ProjectRepository;
 import com.stucdy.fcm.domain.project.presentation.dto.request.CreateProjectRequest;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateProjectService {
 
     private final ProjectRepository projectRepository;
+    private final RoomRepository roomRepository;
     private final UserFacade userFacade;
 
     @Transactional
@@ -27,6 +31,14 @@ public class CreateProjectService {
                 .name(request.getName())
                 .projectManager(user)
                 .build());
+
+        Room room = roomRepository.save(Room
+                .builder()
+                .roomType(RoomType.PROJECT)
+                .project(project)
+                .build());
+
+        room.addRoomUser(user);
 
         return new CreateProjectResponse(project.getId());
     }

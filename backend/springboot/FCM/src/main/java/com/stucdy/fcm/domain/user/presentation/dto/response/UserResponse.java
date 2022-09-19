@@ -11,7 +11,7 @@ public class UserResponse {
 
     private Long userId;
     private String userName;
-    private String userProfileImage;
+    private String profileImageUrl;
 
     public static UserResponse of(User user) {
 
@@ -19,7 +19,7 @@ public class UserResponse {
                 .builder()
                 .userId(user.getId())
                 .userName(user.getName())
-                .userProfileImage(user.getProfileImage())
+                .profileImageUrl(user.getProfileImage())
                 .build();
     }
 }
