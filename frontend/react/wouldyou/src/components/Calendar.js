@@ -171,7 +171,7 @@ const OpenButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid lightgray;
+    border: 1px solid #AAAAAA;
     border-radius: 10px;
     font-size: 17px;
     color: gray;
@@ -201,7 +201,7 @@ const CalendarContainer = styled.div`
     background-color: white;
     position: absolute;
     z-index: 10;
-    border: 1px solid lightgray;
+    border: 1px solid #AAAAAA;
     border-radius: 10px;
     padding: 10px;
     width: 350px;

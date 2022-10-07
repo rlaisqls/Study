@@ -5,7 +5,7 @@ import { constellationList } from "../../common/constellationList";
 
 const getConstellationByName = (day, name) => {
 
-    const response = axios.get(`http://52.5.10.3:8080/ConstellationService/getConstellation/name?name=${name}&solMonth=${day.getMonth()}&solDay=${day.getDate()}`)
+    const response = axios.get(`http://localhost:8080/ConstellationService/getConstellation/name?name=${name}&solMonth=${day.getMonth()}&solDay=${day.getDate()}`)
         .then(function (res) {
             return res.data;
         });
